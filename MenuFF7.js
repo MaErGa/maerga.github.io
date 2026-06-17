@@ -1,0 +1,557 @@
+// ============================================================
+// DATOS — editá estos arreglos para poner tu información real.
+// ============================================================
+
+// Proyectos: "link" puede quedar vacío ("") si todavía no lo tenés.
+const proyectos = [
+	{
+		nombre: "RPG 2D — Estilo Dragon Quest / Final Fantasy",
+		descripcion: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
+		link: "https://maerga.itch.io/dragon-quest-mistreal-song"
+	},
+	{
+		nombre: "Pirate Plataformer",
+		descripcion: "Juego de plataformas para la segunda evaluación del curso Programación de Videojuegos con Unity.",
+		link: "https://maerga.itch.io/pirate-plataformer-alpha-version"
+	},
+	{
+		nombre: "",
+		descripcion: "",
+		link: ""
+	}
+];
+
+// Materia: cada habilidad tiene un color (define el orbe, las estrellas
+// y qué slots de Arma/Armadura se iluminan), una valoración de 1 a 5 estrellas
+// y una descripción corta.
+const materias = [
+	{ nombre: "C#", color: "#E6C846", estrellas: 5, descripcion: "Lenguaje principal para toda la lógica de juego en Unity." },
+	{ nombre: "Unity", color: "#32B464", estrellas: 4, descripcion: "Motor usado para desarrollar el RPG 2D y otros proyectos." },
+	{ nombre: "Visual Scripting", color: "#E6C846", estrellas: 3, descripcion: "Sistemas de nodos para prototipar lógica sin escribir código." },
+	{ nombre: "GitHub", color: "#D23232", estrellas: 5, descripcion: "Almacenamiento en la nube y control de versiones de todos mis proyectos." },
+	{ nombre: "Blender", color: "#B464B4", estrellas: 2, descripcion: "Diseño y modelado 3D de entornos y personajes." },
+	{ nombre: "Photoshop", color: "#B464B4", estrellas: 3, descripcion: "Edición de imágenes y assets para la interfaz y los sprites." },
+	{ nombre: "Paquete Office", color: "#4682B4", estrellas: 3, descripcion: "Manejo eficiente de herramientas ofimáticas y gestión de documentos." },
+	{ nombre: "Redes", color: "#4682B4", estrellas: 3, descripcion: "Implantación, configuración y mantenimiento de los elementos de la red local." },
+	{ nombre: "Sistema Microinformático", color: "#4682B4", estrellas: 5, descripcion: "Instalación, configuración y mantenimiento de software, hardware y periféricos." },
+	{ nombre: "Windows", color: "#4682B4", estrellas: 5, descripcion: "Administración de sistemas y creación de particiones en entornos Windows." },
+	{ nombre: "Linux", color: "#4682B4", estrellas: 3, descripcion: "Instalación, configuración y manejo de utilidades básicas en sistemas Linux." }
+
+	
+	
+];
+
+// Slots decorativos de "Arma" y "Armadura". null = slot vacío.
+// "linked:true" dibuja la pequeña barra que conecta con el siguiente slot.
+const slotsArma = [
+	{ color: materias[0].color, linked: true },
+	{ color: materias[0].color, linked: false },
+	{ color: materias[1].color, linked: true },
+	{ color: materias[1].color, linked: false },
+	{ color: null, linked: false },
+	{ color: null, linked: false }
+];
+
+const slotsArmadura = [
+	{ color: materias[1].color, linked: true },
+	{ color: materias[3].color, linked: false },
+	{ color: materias[4].color, linked: false },
+	{ color: null, linked: false },
+	{ color: null, linked: false }
+];
+
+// ============================================================
+// MOTOR GENÉRICO DE PANELES
+// ============================================================
+
+// ============================================================
+// PREFERENCIAS GUARDADAS (color de ventana, sonido, filtro CRT)
+// Se aplican de inmediato para que no haya parpadeos al cargar.
+// ============================================================
+
+const coloresPorDefecto = { r: 0, g: 83, b: 173 }; // mismo azul que el diseño original
+
+function leerPreferencias() {
+	let color = coloresPorDefecto;
+	let sonido = true;
+	let crt = true;
+	try {
+		const guardado = localStorage.getItem('mff7_color');
+		if (guardado) { color = JSON.parse(guardado); }
+		const sGuardado = localStorage.getItem('mff7_sonido');
+		if (sGuardado !== null) { sonido = sGuardado === '1'; }
+		const cGuardado = localStorage.getItem('mff7_crt');
+		if (cGuardado !== null) { crt = cGuardado === '1'; }
+	} catch (e) { /* localStorage no disponible: usamos los valores por defecto */ }
+	return { color: color, sonido: sonido, crt: crt };
+}
+
+function shade(r, g, b, factor) {
+	return 'rgb(' + Math.round(r * factor) + ',' + Math.round(g * factor) + ',' + Math.round(b * factor) + ')';
+}
+
+function aplicarColorVentana(r, g, b) {
+	const root = document.documentElement.style;
+	const esColorPorDefecto = r === coloresPorDefecto.r && g === coloresPorDefecto.g && b === coloresPorDefecto.b;
+
+	if (esColorPorDefecto) {
+		// Es el azul original: dejamos que mande el CSS (los valores hechos a mano
+		// en :root), en vez de recalcularlo con shade(). Así se ve exactamente
+		// como antes de agregar el selector de color.
+		root.removeProperty('--win-c1');
+		root.removeProperty('--win-c2');
+		root.removeProperty('--win-c3');
+		return;
+	}
+
+	root.setProperty('--win-c1', 'rgb(' + r + ',' + g + ',' + b + ')');
+	root.setProperty('--win-c2', shade(r, g, b, 0.45));
+	root.setProperty('--win-c3', shade(r, g, b, 0.10));
+}
+
+function aplicarCrt(activado) {
+	const overlay = document.querySelector('#crtOverlay');
+	if (overlay) { overlay.classList.toggle('on', activado); }
+}
+
+const preferencias = leerPreferencias();
+aplicarColorVentana(preferencias.color.r, preferencias.color.g, preferencias.color.b);
+aplicarCrt(preferencias.crt);
+
+document.addEventListener('DOMContentLoaded', function () {
+
+	const group = document.querySelector('#group');
+
+	// Calcula el rectángulo (en pantalla) que ocupan juntos la tarjeta de
+	// personaje (#section) y la lista del menú (#menu). Los paneles se
+	// posicionan exactamente sobre esa zona, para que parezca que el menú
+	// "se transforma" en el panel, en vez de aparecer en otro lugar.
+	function getCanvasRect() {
+		const r1 = document.querySelector('#section').getBoundingClientRect();
+		const r2 = document.querySelector('#menu').getBoundingClientRect();
+		const left = Math.min(r1.left, r2.left);
+		const top = Math.min(r1.top, r2.top);
+		const right = Math.max(r1.right, r2.right);
+		const bottom = Math.max(r1.bottom, r2.bottom);
+		return { left: left, top: top, width: right - left, height: bottom - top, menuWidth: r2.width };
+	}
+
+	function positionPanel(panelEl, headerEl, headerUseEl) {
+		const rect = getCanvasRect();
+		panelEl.style.left = rect.left + 'px';
+		panelEl.style.top = rect.top + 'px';
+		panelEl.style.width = rect.width + 'px';
+		panelEl.style.height = rect.height + 'px';
+		headerEl.style.width = rect.menuWidth + 'px';
+		if (headerUseEl) {
+			headerUseEl.style.width = (rect.width - rect.menuWidth - 8) + 'px';
+		}
+	}
+
+	// Abre un panel: el menú principal se desvanece y el panel aparece
+	// con el título primero y el resto del contenido un instante después.
+	function openPanel(panelEl, headerEls, contentEls) {
+		positionPanel(panelEl, headerEls[headerEls.length - 1], headerEls.length > 1 ? headerEls[0] : null);
+		group.classList.add('panelOpen');
+		panelEl.classList.add('visible');
+
+		window.requestAnimationFrame(function () {
+			headerEls.forEach(function (el) { el.classList.add('show'); });
+		});
+
+		setTimeout(function () {
+			contentEls.forEach(function (el) { el.classList.add('show'); });
+		}, 180);
+	}
+
+	// Cierra un panel: primero se desvanece el contenido, luego el título,
+	// mientras el menú principal vuelve a aparecer.
+	function closePanel(panelEl, headerEls, contentEls) {
+		contentEls.forEach(function (el) { el.classList.remove('show'); });
+
+		setTimeout(function () {
+			headerEls.forEach(function (el) { el.classList.remove('show'); });
+			group.classList.remove('panelOpen');
+		}, 150);
+
+		setTimeout(function () {
+			panelEl.classList.remove('visible');
+		}, 380);
+	}
+
+	function closeOnEscape(isOpenFn, closeFn) {
+		document.addEventListener('keydown', function (e) {
+			if (e.key === 'Escape' && isOpenFn()) {
+				closeFn();
+			}
+		});
+	}
+
+	// Genera filas de estrellas (★ llenas según "valor", de un máximo de 5).
+	function buildStars(valor, color) {
+		const row = document.createElement('div');
+		row.className = 'starRow';
+		for (let i = 0; i < 5; i++) {
+			const star = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+			star.setAttribute('viewBox', '0 0 24 24');
+			star.setAttribute('class', 'star');
+			const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+			path.setAttribute('d', 'M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 7-6.3-3.9-6.3 3.9 1.7-7L1.99 9.2l7.1-.6z');
+			path.setAttribute('fill', i < valor ? color : '#33415c');
+			star.appendChild(path);
+			row.appendChild(star);
+		}
+		return row;
+	}
+
+	// ----------------------------------------------------------
+	// PANEL: PROYECTOS
+	// ----------------------------------------------------------
+	(function () {
+		const panel = document.querySelector('#panelProyectos');
+		const header = document.querySelector('#proyectosHeader');
+		const headerUse = document.querySelector('#proyectosUse');
+		const card = document.querySelector('#proyectosCard');
+		const description = document.querySelector('#proyectosDescription');
+		const body = document.querySelector('#proyectosBody');
+		const list = document.querySelector('#proyectosList');
+		const selected = document.querySelector('#proyectosSelected');
+		const closeBtn = document.querySelector('#proyectosClose');
+		const menuItem = document.querySelector('#menu li[number="0"]');
+
+		function showProyecto(proyecto) {
+			description.textContent = proyecto.descripcion;
+			selected.innerHTML = '';
+			const titulo = document.createElement('div');
+			titulo.textContent = proyecto.nombre;
+			selected.appendChild(titulo);
+			if (!proyecto.link) {
+				const aviso = document.createElement('div');
+				aviso.style.marginTop = '14px';
+				aviso.style.fontSize = '16px';
+				aviso.style.color = '#8aa0c8';
+				aviso.textContent = 'Próximamente';
+				selected.appendChild(aviso);
+			}
+		}
+
+		function buildList() {
+			list.innerHTML = '';
+			proyectos.forEach(function (proyecto) {
+				const li = document.createElement('li');
+				li.textContent = proyecto.nombre;
+				li.addEventListener('mouseenter', function () { showProyecto(proyecto); });
+				li.addEventListener('click', function () {
+					showProyecto(proyecto);
+					if (proyecto.link) { window.open(proyecto.link, '_blank'); }
+				});
+				list.appendChild(li);
+			});
+		}
+
+		function open() {
+			buildList();
+			description.textContent = 'Pasa el cursor sobre un proyecto para ver más información.';
+			selected.innerHTML = '&nbsp;';
+			openPanel(panel, [headerUse, header], [card, description, body]);
+		}
+
+		function close() {
+			closePanel(panel, [headerUse, header], [card, description, body]);
+		}
+
+		menuItem.addEventListener('click', open);
+		closeBtn.addEventListener('click', close);
+		closeOnEscape(function () { return panel.classList.contains('visible'); }, close);
+	})();
+
+	// ----------------------------------------------------------
+	// PANEL: MATERIA (con ranuras intercambiables)
+	// ----------------------------------------------------------
+	(function () {
+		const panel = document.querySelector('#panelMateria');
+		const header = document.querySelector('#materiaHeader');
+		const card = document.querySelector('#materiaCard');
+		const description = document.querySelector('#materiaDescription');
+		const body = document.querySelector('#materiaBody');
+		const list = document.querySelector('#materiaList');
+		const selected = document.querySelector('#materiaSelected');
+		const closeBtn = document.querySelector('#materiaClose');
+		const menuItem = document.querySelector('#menu li[number="2"]');
+		const slotsArmaEl = document.querySelector('#materiaSlotsArma');
+		const slotsArmaduraEl = document.querySelector('#materiaSlotsArmadura');
+
+		let slotSeleccionado = null; // { datos, el }
+		const hintPorDefecto = 'Tocá una ranura y después una materia para equiparla (o desequipar).';
+
+		function deseleccionarSlot() {
+			if (slotSeleccionado) {
+				slotSeleccionado.el.classList.remove('selected');
+				slotSeleccionado = null;
+			}
+		}
+
+		function refrescarSlotVisual(slot, datos) {
+			slot.classList.toggle('filled', !!datos.color);
+			if (datos.color) {
+				slot.style.background = datos.color;
+				slot.style.color = datos.color;
+				slot.dataset.color = datos.color;
+			} else {
+				slot.style.background = '';
+				slot.style.color = '';
+				delete slot.dataset.color;
+			}
+		}
+
+		function buildSlots(container, slots) {
+			container.innerHTML = '';
+			slots.forEach(function (datos) {
+				const slot = document.createElement('span');
+				slot.className = 'slot' + (datos.linked ? ' linked' : '');
+				refrescarSlotVisual(slot, datos);
+
+				slot.addEventListener('click', function (e) {
+					e.stopPropagation();
+
+					if (slotSeleccionado && slotSeleccionado.el === slot) {
+						// Tocar la ranura ya seleccionada: la desequipa.
+						datos.color = null;
+						refrescarSlotVisual(slot, datos);
+						deseleccionarSlot();
+						description.textContent = hintPorDefecto;
+						return;
+					}
+
+					deseleccionarSlot();
+					slotSeleccionado = { datos: datos, el: slot };
+					slot.classList.add('selected');
+					description.textContent = datos.color
+						? 'Elegí una materia para reemplazarla, o volvé a tocar esta ranura para quitarla.'
+						: 'Elegí una materia de la lista para equiparla en esta ranura.';
+				});
+
+				container.appendChild(slot);
+			});
+		}
+
+		function highlightSlots(color) {
+			document.querySelectorAll('#materiaSlotsArma .slot, #materiaSlotsArmadura .slot').forEach(function (slot) {
+				slot.classList.toggle('highlight', !!color && slot.dataset.color === color);
+			});
+		}
+
+		function showMateria(materia) {
+			selected.innerHTML = '';
+			const row = document.createElement('div');
+			row.className = 'selectedSkill';
+			const orb = document.createElement('span');
+			orb.className = 'orb';
+			orb.style.width = '26px';
+			orb.style.height = '26px';
+			orb.style.background = materia.color;
+			row.appendChild(orb);
+			const nombre = document.createElement('span');
+			nombre.textContent = materia.nombre;
+			row.appendChild(nombre);
+			selected.appendChild(row);
+			selected.appendChild(buildStars(materia.estrellas, materia.color));
+			highlightSlots(materia.color);
+		}
+
+		function buildList() {
+			list.innerHTML = '';
+			materias.forEach(function (materia) {
+				const li = document.createElement('li');
+				const orb = document.createElement('span');
+				orb.className = 'orb';
+				orb.style.background = materia.color;
+				li.appendChild(orb);
+				const nombre = document.createElement('span');
+				nombre.textContent = materia.nombre;
+				li.appendChild(nombre);
+
+				li.addEventListener('mouseenter', function () {
+					description.textContent = materia.descripcion;
+					showMateria(materia);
+				});
+
+				li.addEventListener('click', function () {
+					showMateria(materia);
+					if (slotSeleccionado) {
+						slotSeleccionado.datos.color = materia.color;
+						refrescarSlotVisual(slotSeleccionado.el, slotSeleccionado.datos);
+						description.textContent = materia.nombre + ' equipada.';
+						deseleccionarSlot();
+					} else {
+						description.textContent = materia.descripcion;
+					}
+				});
+
+				list.appendChild(li);
+			});
+		}
+
+		function open() {
+			deseleccionarSlot();
+			buildList();
+			buildSlots(slotsArmaEl, slotsArma);
+			buildSlots(slotsArmaduraEl, slotsArmadura);
+			description.textContent = hintPorDefecto;
+			selected.innerHTML = '&nbsp;';
+			openPanel(panel, [header], [card, description, body]);
+		}
+
+		function close() {
+			deseleccionarSlot();
+			highlightSlots(null);
+			closePanel(panel, [header], [card, description, body]);
+		}
+
+		menuItem.addEventListener('click', open);
+		closeBtn.addEventListener('click', close);
+		closeOnEscape(function () { return panel.classList.contains('visible'); }, close);
+	})();
+
+	// ----------------------------------------------------------
+	// PANEL: CONFIG
+	// ----------------------------------------------------------
+	(function () {
+		const panel = document.querySelector('#panelConfig');
+		const header = document.querySelector('#configHeader');
+		const headerUse = document.querySelector('#configUse');
+		const body = document.querySelector('#configBody');
+		const closeBtn = document.querySelector('#configClose');
+		const menuItem = document.querySelector('#menu li[number="8"]');
+
+		const swatchBtn = document.querySelector('#configSwatchBtn');
+		const colorPicker = document.querySelector('#colorPicker');
+		const resetBtn = document.querySelector('#colorReset');
+		const rngR = document.querySelector('#rngR');
+		const rngG = document.querySelector('#rngG');
+		const rngB = document.querySelector('#rngB');
+		const valR = document.querySelector('#valR');
+		const valG = document.querySelector('#valG');
+		const valB = document.querySelector('#valB');
+		const soundToggle = document.querySelector('#soundToggle');
+		const crtToggle = document.querySelector('#crtToggle');
+
+		const hintPorDefecto = 'Pasa el cursor sobre una opción para ver más información.';
+
+		let colorActual = Object.assign({}, preferencias.color);
+		let sonidoActivado = preferencias.sonido;
+		let crtActivado = preferencias.crt;
+
+		function pad3(n) { return String(n).padStart(3, '0'); }
+
+		function actualizarSliders() {
+			rngR.value = colorActual.r; valR.textContent = pad3(colorActual.r);
+			rngG.value = colorActual.g; valG.textContent = pad3(colorActual.g);
+			rngB.value = colorActual.b; valB.textContent = pad3(colorActual.b);
+		}
+
+		function guardarColor() {
+			try { localStorage.setItem('mff7_color', JSON.stringify(colorActual)); } catch (e) {}
+		}
+
+		function actualizarToggleVisual(toggleEl, valorActivo) {
+			toggleEl.querySelectorAll('span').forEach(function (span) {
+				span.classList.toggle('active', span.dataset.value === valorActivo);
+			});
+		}
+
+		// ---- Color de ventana ----
+		swatchBtn.addEventListener('click', function () {
+			colorPicker.classList.toggle('show');
+			actualizarSliders();
+		});
+
+		[[rngR, 'r', valR], [rngG, 'g', valG], [rngB, 'b', valB]].forEach(function (grupo) {
+			const input = grupo[0], canal = grupo[1], etiqueta = grupo[2];
+			input.addEventListener('input', function () {
+				colorActual[canal] = parseInt(input.value, 10);
+				etiqueta.textContent = pad3(colorActual[canal]);
+				aplicarColorVentana(colorActual.r, colorActual.g, colorActual.b);
+				guardarColor();
+			});
+		});
+
+		resetBtn.addEventListener('click', function () {
+			colorActual = Object.assign({}, coloresPorDefecto);
+			actualizarSliders();
+			aplicarColorVentana(colorActual.r, colorActual.g, colorActual.b);
+			guardarColor();
+		});
+
+		// ---- Sonido ----
+		actualizarToggleVisual(soundToggle, sonidoActivado ? 'on' : 'off');
+		soundToggle.querySelectorAll('span').forEach(function (span) {
+			span.addEventListener('click', function () {
+				sonidoActivado = span.dataset.value === 'on';
+				actualizarToggleVisual(soundToggle, sonidoActivado ? 'on' : 'off');
+				try { localStorage.setItem('mff7_sonido', sonidoActivado ? '1' : '0'); } catch (e) {}
+			});
+		});
+
+		// ---- Efecto CRT ----
+		actualizarToggleVisual(crtToggle, crtActivado ? 'on' : 'off');
+		crtToggle.querySelectorAll('span').forEach(function (span) {
+			span.addEventListener('click', function () {
+				crtActivado = span.dataset.value === 'on';
+				actualizarToggleVisual(crtToggle, crtActivado ? 'on' : 'off');
+				aplicarCrt(crtActivado);
+				try { localStorage.setItem('mff7_crt', crtActivado ? '1' : '0'); } catch (e) {}
+			});
+		});
+
+		// ---- Texto de ayuda según la fila que se sobrevuele ----
+		document.querySelectorAll('#configBody .configRow').forEach(function (fila) {
+			fila.addEventListener('mouseenter', function () {
+				headerUse.textContent = fila.dataset.hint || hintPorDefecto;
+			});
+		});
+
+		function open() {
+			colorPicker.classList.remove('show');
+			headerUse.textContent = hintPorDefecto;
+			actualizarSliders();
+			openPanel(panel, [headerUse, header], [body]);
+		}
+
+		function close() {
+			closePanel(panel, [headerUse, header], [body]);
+		}
+
+		menuItem.addEventListener('click', open);
+		closeBtn.addEventListener('click', close);
+		closeOnEscape(function () { return panel.classList.contains('visible'); }, close);
+	})();
+
+	// ----------------------------------------------------------
+	// RELOJ DE TIEMPO (arranca en 0:00:00 al cargar la página)
+	// ----------------------------------------------------------
+	(function () {
+		const elemento = document.querySelector('#currentTime');
+		if (!elemento) return;
+
+		const inicio = Date.now();
+
+		function dosDigitos(n) { return String(n).padStart(2, '0'); }
+
+		function formatear(totalSegundos) {
+			const horas = Math.floor(totalSegundos / 3600);
+			const minutos = Math.floor((totalSegundos % 3600) / 60);
+			const segundos = totalSegundos % 60;
+			return horas + ':' + dosDigitos(minutos) + ':' + dosDigitos(segundos);
+		}
+
+		function actualizar() {
+			const totalSegundos = Math.floor((Date.now() - inicio) / 1000);
+			elemento.textContent = formatear(totalSegundos);
+		}
+
+		actualizar();
+		setInterval(actualizar, 1000);
+	})();
+
+});

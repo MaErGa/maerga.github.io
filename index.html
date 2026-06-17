@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Portafolio Matías Errico</title>
+	<meta charset="UTF-8">
+	<meta name="description" content ="Menus">
+	<meta name="Keywords"	content="Menu, FF7, Classic">	 
+	<link rel="stylesheet" href="MenuFF7.css">	 
+</head>
+<body>
+	<div id ="screen"></div>
+	<div id="crtOverlay"></div>
+ 	<div id="group">
+		<header id="header">
+			<hgroup>
+				<h1 class = "extra"></h1>
+				<h2 class = "extra"></h2>
+			</hgroup>
+		</header>
+
+		<nav id="nav">
+		</nav>		
+
+		<section id="section">	
+
+			<article id="firstCharacter">
+				<figure class = "photoContainer"><img id = "firstPosition" class="photo" src="./Assets/Imagenes/potrait.png"></figure>
+				<table id = "firstStats" class = "statsTable">
+					<tr>
+						<td COLSPAN="3" id ="firstName">Matías Errico</td>
+					</tr>
+					<tr>
+						<td class="lv">LV</td>
+						<td COLSPAN="2" id="firstLevel">38<span id ="firstStatus"></span></td>
+					</tr>
+					<tr>
+						<td class="hp">HP<div id = "firstHpBar" class ="hpBar"></div><div class = "hpBarFont"></div></td>
+						<td id ="firstHpMin">2.050/</td>
+						<td id ="firstHpMax">2.050</td>
+					</tr>
+					<tr>
+						<td class="mp">MP<div id = "firstMpBar" class ="mpBar"></div><div class = "mpBarFont"></div></td>
+						<td id ="firstMpMin">260/</td>
+						<td id ="firstMpMax">260</td>
+					</tr>
+				</table>
+				<table id ="firstLevels" class = "levelsTable">
+						<tr>
+							<td>Next level<div id ="firstLevelBar" class ="levelBar"></div><div class = "levelBarFont"></div></td>
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td id ="firstLimitLevel">Limit level &nbsp;3<div id ="firstLimitBar" class = "limitBar"></div><div class = "limitBarFont"></div></td>
+						</tr>
+					</table>
+			</article>
+
+			<div id="biografia">
+				Soy Matías
+			</div>
+
+			</section>
+	
+		<aside id="aside">
+			<ul id="menu">				
+				<li number ="0">Proyectos</li>
+				<li number ="1">Historia</li>
+				<li number ="2">Materia</li>
+				<li number ="3">Equipo</li>
+				<li number="4"><a href="Assets/CV/Matías_Errico_CV.pdf" target="_blank" class="enlace-limpio">CV</a></li>
+				<li number="5"><a href="https://maerga.itch.io/" target="_blank" class="enlace-limpio">Itch.io</a></li>
+				<li number="6"><a href="https://github.com/MaErGa" target="_blank" class="enlace-limpio">GitHub</a></li>
+				<li number="7"><a href="https://www.linkedin.com/in/matias-errico-garcia-474387402/" target="_blank" class="enlace-limpio">LinkedIn</a></li>
+				<li number ="8">Config</li>
+				<li number ="9" id = "phs"><br></li>
+				<li number ="10" id = "save">Save</li>
+				<li number ="11">Quit</li>
+			</ul>
+
+			<ul id="time">
+				<li>Time<span id ="currentTime">0<txt id = "colon">:</txt>00:00</span></li>
+				<li>Gil<span id ="gilAmount">46999</span></li>
+			</ul>
+		</aside>
+
+		<footer id="footer">
+		 Portafolio
+		</footer>
+      
+	</div>	
+
+	<!-- Panel: Proyectos -->
+	<div class="panelOverlay" id="panelProyectos">
+		<div class="panelHeaderUse" id="proyectosUse">Usar</div>
+		<div class="panelHeader" id="proyectosHeader">
+			<span>Proyectos</span>
+			<span class="panelClose" id="proyectosClose">X</span>
+		</div>
+		<div class="panelCard" id="proyectosCard">
+			<img class="panelCardPhoto" src="./Assets/Imagenes/potrait.png" alt="Matías">
+			<div class="panelCardInfo">
+				<div class="panelCardName">Matías Errico</div>
+				<div><span class="lv">LV</span> 38</div>
+			</div>
+		</div>
+		<div class="panelDescription" id="proyectosDescription">Pasa el cursor sobre un proyecto para ver más información.</div>
+		<div class="panelBody" id="proyectosBody">
+			<div class="panelBodyLeft" id="proyectosSelected">&nbsp;</div>
+			<ul class="panelList panelBodyRight" id="proyectosList"></ul>
+		</div>
+	</div>
+
+	<!-- Panel: Materia -->
+	<div class="panelOverlay" id="panelMateria">
+		<div class="panelHeader" id="materiaHeader">
+			<span>Materia</span>
+			<span class="panelClose" id="materiaClose">X</span>
+		</div>
+		<div class="panelCard" id="materiaCard">
+			<img class="panelCardPhoto" src="./Assets/Imagenes/potrait.png" alt="Matías">
+			<div class="panelCardInfo">
+				<div class="panelCardName">Matías Errico</div>
+				<div><span class="lv">LV</span> 38</div>
+			</div>
+			<div class="panelCardEquip">
+				<div class="equipRow">
+					<span class="equipLabel">Arma: Raton</span>
+					<span class="equipSlots" id="materiaSlotsArma"></span>
+				</div>
+				<div class="equipRow">
+					<span class="equipLabel">Armadura: Teclado</span>
+					<span class="equipSlots" id="materiaSlotsArmadura"></span>
+				</div>
+			</div>
+		</div>
+		<div class="panelDescription" id="materiaDescription">Pasa el cursor sobre una materia para ver más información.</div>
+		<div class="panelBody" id="materiaBody">
+			<div class="panelBodyLeft" id="materiaSelected">&nbsp;</div>
+			<ul class="panelList panelBodyRight" id="materiaList"></ul>
+		</div>
+	</div>
+
+	<!-- Panel: Config -->
+	<div class="panelOverlay" id="panelConfig">
+		<div class="panelHeaderUse" id="configUse">Config</div>
+		<div class="panelHeader" id="configHeader">
+			<span>Config</span>
+			<span class="panelClose" id="configClose">X</span>
+		</div>
+		<div class="panelSingleBody" id="configBody">
+			<div class="configRow" data-hint="Elegí el color principal de las ventanas.">
+				<span class="configLabel">Color de ventana</span>
+				<span class="configSwatchBtn" id="configSwatchBtn"></span>
+			</div>
+			<div class="colorPicker" id="colorPicker">
+				<span class="resetBtn" id="colorReset" title="Restablecer">&#8635;</span>
+				<div class="sliders">
+					<label><span class="chan" style="color:#ff8a8a;">R</span><input type="range" id="rngR" min="0" max="255"><span class="val" id="valR">000</span></label>
+					<label><span class="chan" style="color:#8aff8a;">G</span><input type="range" id="rngG" min="0" max="255"><span class="val" id="valG">000</span></label>
+					<label><span class="chan" style="color:#8ab8ff;">B</span><input type="range" id="rngB" min="0" max="255"><span class="val" id="valB">000</span></label>
+				</div>
+			</div>
+			<div class="configRow" data-hint="Activa o desactiva el sonido.">
+				<span class="configLabel">Sonido</span>
+				<span class="configToggle" id="soundToggle">
+					<span data-value="on">On</span>
+					<span data-value="off">Off</span>
+				</span>
+			</div>
+			<div class="configRow" data-hint="Activa o desactiva el filtro CRT de la página.">
+				<span class="configLabel">Efecto CRT</span>
+				<span class="configToggle" id="crtToggle">
+					<span data-value="on">On</span>
+					<span data-value="off">Off</span>
+				</span>
+			</div>
+		</div>
+	</div>
+	
+
+    <script src = "MenuFF7.js"> </script>
+</body>
+</html> 
+<footer2 style="text-align: center; color: #8a8a8a; font-family: monospace; font-size: 12px; margin-top: 20px;">
+    © 2026 Matías Errico | Diseñado y Desarrollado desde cero.
+</footer2>
