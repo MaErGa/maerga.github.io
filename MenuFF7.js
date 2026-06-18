@@ -278,38 +278,35 @@ document.addEventListener('DOMContentLoaded', function () {
 	// ----------------------------------------------------------
 	// PANEL: MATERIA (con ranuras intercambiables)
 	// ----------------------------------------------------------
-	// Mapeo color hex → offset X en materia-spritesheet.png (frame 8x8)
-	var ORB_OFFSETS = {
-		'#4682B4': 0,
-		'#B464B4': 8,
-		'#D23232': 24,
-		'#32B464': 32,
-		'#E6C846': 48
+
+	// Orbes individuales: un PNG por color (sin spritesheet)
+	var ORB_FILES = {
+		'#4682B4': 'Assets/Imagenes/orbs/orb_azul.png',
+		'#B464B4': 'Assets/Imagenes/orbs/orb_morado.png',
+		'#D23232': 'Assets/Imagenes/orbs/orb_rojo.png',
+		'#32B464': 'Assets/Imagenes/orbs/orb_verde.png',
+		'#E6C846': 'Assets/Imagenes/orbs/orb_amarillo.png'
 	};
-	function orbOffsetX(color) {
+	function orbFile(color) {
 		if (!color) return null;
-		var key = color.toUpperCase();
-		var map = {
-			'#4682B4': 0, '#B464B4': 8, '#D23232': 24, '#32B464': 32, '#E6C846': 48
-		};
-		return (map[key] !== undefined) ? map[key] : 0;
+		return ORB_FILES[color.toUpperCase()] || ORB_FILES[color] || null;
 	}
+
+	function orbOffsetX(color) { return 0; } // compatibilidad, ya no se usa
+
 	function aplicarOrbSprite(el, color) {
 		if (!color) {
 			el.style.backgroundImage = 'none';
+			el.style.backgroundSize  = '';
 			el.style.backgroundPosition = '';
-			el.style.backgroundSize = '';
-			el.style.backgroundRepeat = '';
 			return;
 		}
-		var ox = orbOffsetX(color);
-		// Spritesheet original 56x8, 7 frames de 8x8.
-		// El orbe mide 16x16 → escalamos el sheet x2 → 112x16.
-		// backgroundPosition usa el offset ya escalado (ox * 2).
-		el.style.backgroundImage = "url('Assets/Imagenes/materia-spritesheet.png')";
-		el.style.backgroundSize = '112px 16px';
-		el.style.backgroundPosition = '-' + (ox * 2) + 'px 0px';
-		el.style.backgroundRepeat = 'no-repeat';
+		var f = orbFile(color);
+		if (!f) return;
+		el.style.backgroundImage    = "url('" + f + "')";
+		el.style.backgroundSize     = '26px 26px';
+		el.style.backgroundPosition = '0px 0px';
+		el.style.backgroundRepeat   = 'no-repeat';
 	}
 	(function () {
 		const panel = document.querySelector('#panelMateria');
@@ -336,31 +333,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		function refrescarSlotVisual(slot, datos) {
 			slot.classList.toggle('filled', !!datos.color);
+			slot.style.backgroundImage    = "url('Assets/Imagenes/materia-slot.png')";
+			slot.style.backgroundSize     = '40px 44px';
+			slot.style.backgroundPosition = '0px 0px';
+			slot.style.backgroundRepeat   = 'no-repeat';
+
+			// Orbe: imagen individual, centrada en el slot (40x44)
+			var orbEl = slot.querySelector('.orbInSlot');
+			if (!orbEl) {
+				orbEl = document.createElement('img');
+				orbEl.className = 'orbInSlot';
+				orbEl.alt = '';
+				slot.appendChild(orbEl);
+			}
 			if (datos.color) {
-				var ox = orbOffsetX(datos.color);
-				// slot.png es 21x23 → backgroundSize '21px 23px' (tamaño exacto, sin distorsión)
-				// Orbe del spritesheet: escalar frame de 8px a 12px → sheet 56x8 → 84x12
-				// Centrar en slot 21x23: offsetX=(21-12)/2=4.5px, offsetY=(23-12)/2=5.5px
-				// backgroundPosition del orbe: left = 4px - (ox_escalado), top = 5px
-				var orbScale = 12 / 8;   // factor de escala del frame
-				var sheetW = Math.round(56 * orbScale); // 84px
-				var sheetH = Math.round(8  * orbScale); // 12px
-				var orbOx  = Math.round(ox * orbScale); // offset escalado del frame
-				var centerX = Math.round((21 - sheetH) / 2); // ~4px
-				var centerY = Math.round((23 - sheetH) / 2); // ~5px
-				slot.style.backgroundImage =
-					"url('Assets/Imagenes/materia-slot.png'), url('Assets/Imagenes/materia-spritesheet.png')";
-				slot.style.backgroundSize   = '21px 23px, ' + sheetW + 'px ' + sheetH + 'px';
-				slot.style.backgroundPosition = '0px 0px, ' + (centerX - orbOx) + 'px ' + centerY + 'px';
-				slot.style.backgroundRepeat = 'no-repeat, no-repeat';
-				slot.style.color = datos.color;
+				var f = orbFile(datos.color);
+				if (f) {
+					orbEl.src = f;
+					orbEl.style.display = 'block';
+				}
+				slot.style.color   = datos.color;
 				slot.dataset.color = datos.color;
 			} else {
-				slot.style.backgroundImage   = "url('Assets/Imagenes/materia-slot.png')";
-				slot.style.backgroundSize    = '21px 23px';
-				slot.style.backgroundPosition = '0px 0px';
-				slot.style.backgroundRepeat  = 'no-repeat';
-				slot.style.color = '';
+				orbEl.style.display = 'none';
+				orbEl.src = '';
+				slot.style.color    = '';
 				delete slot.dataset.color;
 			}
 		}
@@ -461,6 +458,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			description.textContent = hintPorDefecto;
 			selected.innerHTML = '&nbsp;';
 			openPanel(panel, [header], [card, description, body]);
+			document.dispatchEvent(new Event('panelListBuilt'));
 		}
 
 		function close() {
@@ -724,6 +722,52 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		actualizarHpTexto();
 		actualizarMpTexto();
+	})();
+
+	// ----------------------------------------------------------
+	// CURSOR FF7: flecha que aparece a la izquierda del ítem bajo hover
+	// ----------------------------------------------------------
+	(function () {
+		// Crear el elemento de cursor una sola vez
+		var cursorEl = document.createElement('div');
+		cursorEl.id = 'ff7Cursor';
+		document.body.appendChild(cursorEl);
+
+		var currentTarget = null;
+
+		function mostrarCursor(li) {
+			if (currentTarget === li) return;
+			currentTarget = li;
+			var rect = li.getBoundingClientRect();
+			// Centrar verticalmente en el li
+			var top = rect.top + window.scrollY + (rect.height / 2) - 15;
+			// A la izquierda del texto con suficiente separación
+			var left = rect.left + window.scrollX - 62;
+			cursorEl.style.top  = top  + 'px';
+			cursorEl.style.left = left + 'px';
+			cursorEl.classList.add('visible');
+		}
+
+		function ocultarCursor() {
+			currentTarget = null;
+			cursorEl.classList.remove('visible');
+		}
+
+		// Aplicar a todos los li interactivos del menú principal
+		function bindMenuItems() {
+			document.querySelectorAll('#menu li, .panelList li').forEach(function (li) {
+				li.addEventListener('mouseenter', function () { mostrarCursor(li); });
+				li.addEventListener('mouseleave', ocultarCursor);
+			});
+		}
+
+		bindMenuItems();
+
+		// Re-bind cuando se abra un panel (las listas se generan dinámicamente)
+		document.addEventListener('panelListBuilt', bindMenuItems);
+
+		// Ocultar si el mouse sale del área clickeable
+		document.addEventListener('mouseleave', ocultarCursor);
 	})();
 
 	// ----------------------------------------------------------
