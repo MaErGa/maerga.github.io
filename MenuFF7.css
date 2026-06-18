@@ -195,7 +195,7 @@ cursor:pointer;
 	position: absolute;
 	left: 40px;
 	top: 240px;
-	width: 720px;
+	width: 650px;
 	height: 340px;
 	box-sizing: border-box;
 	background: radial-gradient(circle at -180px 0px, var(--win-c1) 300px, var(--win-c2) 500px, var(--win-c3));
