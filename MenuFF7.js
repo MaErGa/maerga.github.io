@@ -296,17 +296,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	function aplicarOrbSprite(el, color) {
 		if (!color) {
-			el.style.backgroundImage = 'none';
-			el.style.backgroundSize  = '';
-			el.style.backgroundPosition = '';
+			el.style.background = 'none';
 			return;
 		}
-		var f = orbFile(color);
-		if (!f) return;
-		el.style.backgroundImage    = "url('" + f + "')";
-		el.style.backgroundSize     = '26px 26px';
-		el.style.backgroundPosition = '0px 0px';
-		el.style.backgroundRepeat   = 'no-repeat';
+		el.style.borderRadius = '50%';
+		el.style.background = 'radial-gradient(circle at 35% 30%, rgba(255,255,255,0.95) 4%, rgba(255,255,255,0.5) 18%, ' + color + ' 48%, rgba(0,0,0,0.65) 100%)';
+		el.style.boxShadow = '0 0 6px 2px ' + color + '99, inset 0 -3px 6px rgba(0,0,0,0.5)';
+		el.style.width = '24px';
+		el.style.height = '24px';
+		el.style.flexShrink = '0';
 	}
 	(function () {
 		const panel = document.querySelector('#panelMateria');
@@ -333,33 +331,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		function refrescarSlotVisual(slot, datos) {
 			slot.classList.toggle('filled', !!datos.color);
-			slot.style.backgroundImage    = "url('Assets/Imagenes/materia-slot.png')";
-			slot.style.backgroundSize     = '40px 44px';
-			slot.style.backgroundPosition = '0px 0px';
-			slot.style.backgroundRepeat   = 'no-repeat';
+			slot.innerHTML = '';
+			slot.style.backgroundImage = 'none';
+			slot.style.border = 'none';
+			slot.style.backgroundColor = 'transparent';
+			slot.style.width = '30px';
+			slot.style.height = '30px';
+			slot.style.display = 'flex';
+			slot.style.alignItems = 'center';
+			slot.style.justifyContent = 'center';
 
-			// Orbe: imagen individual, centrada en el slot (40x44)
-			var orbEl = slot.querySelector('.orbInSlot');
-			if (!orbEl) {
-				orbEl = document.createElement('img');
-				orbEl.className = 'orbInSlot';
-				orbEl.alt = '';
-				slot.appendChild(orbEl);
-			}
+			var orb = document.createElement('div');
+			orb.style.width = '26px';
+			orb.style.height = '26px';
+			orb.style.borderRadius = '50%';
+			orb.style.flexShrink = '0';
+
 			if (datos.color) {
-				var f = orbFile(datos.color);
-				if (f) {
-					orbEl.src = f;
-					orbEl.style.display = 'block';
-				}
-				slot.style.color   = datos.color;
+				orb.style.background = 'radial-gradient(circle at 35% 30%, rgba(255,255,255,0.95) 4%, rgba(255,255,255,0.5) 18%, ' + datos.color + ' 48%, rgba(0,0,0,0.65) 100%)';
+				orb.style.boxShadow = '0 0 7px 3px ' + datos.color + '99, inset 0 -3px 7px rgba(0,0,0,0.5)';
+				slot.style.color = datos.color;
 				slot.dataset.color = datos.color;
 			} else {
-				orbEl.style.display = 'none';
-				orbEl.src = '';
-				slot.style.color    = '';
+				orb.style.background = 'radial-gradient(circle at 35% 30%, rgba(255,255,255,0.2) 4%, rgba(120,120,120,0.3) 30%, rgba(40,40,40,0.95) 75%, rgba(10,10,10,1) 100%)';
+				orb.style.boxShadow = 'inset 0 -3px 7px rgba(0,0,0,0.9)';
+				slot.style.color = '';
 				delete slot.dataset.color;
 			}
+			slot.appendChild(orb);
 		}
 
 		function buildSlots(container, slots) {
