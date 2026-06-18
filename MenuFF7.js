@@ -528,6 +528,123 @@ document.addEventListener('DOMContentLoaded', function () {
 	})();
 
 	// ----------------------------------------------------------
+	// DAÑO AL HACER CLICK EN LA FOTO + KO + REVIVIR (gasta MP)
+	// ----------------------------------------------------------
+	(function () {
+		const photoContainer = document.querySelector('#firstPhotoContainer');
+		const photo = document.querySelector('#firstPosition');
+		const hpMinEl = document.querySelector('#firstHpMin');
+		const hpMaxEl = document.querySelector('#firstHpMax');
+		const hpBarEl = document.querySelector('#firstHpBar');
+		const mpMinEl = document.querySelector('#firstMpMin');
+		const mpMaxEl = document.querySelector('#firstMpMax');
+		const mpBarEl = document.querySelector('#firstMpBar');
+		const reviveBtn = document.querySelector('#firstReviveBtn');
+
+		if (!photoContainer || !photo || !hpMinEl || !hpMaxEl) return;
+
+		// Lee los valores actuales desde el HTML (admite "2.050" con punto de mil).
+		function leerNumero(texto) {
+			return parseInt(String(texto).replace(/[^\d]/g, ''), 10) || 0;
+		}
+
+		function formatearNumero(n) {
+			return n.toLocaleString('es-ES');
+		}
+
+		const hpMax = leerNumero(hpMaxEl.textContent);
+		const mpMax = leerNumero(mpMaxEl.textContent);
+		let hpActual = leerNumero(hpMinEl.textContent.replace('/', ''));
+		let mpActual = leerNumero(mpMinEl.textContent.replace('/', ''));
+		let estaKO = false;
+
+		// Costo de MP al revivir: aleatorio dentro de un rango razonable.
+		const MP_REVIVE_MIN = 25;
+		const MP_REVIVE_MAX = 45;
+
+		function actualizarHpTexto() {
+			hpMinEl.textContent = formatearNumero(hpActual) + '/';
+			if (hpBarEl) { hpBarEl.style.width = Math.max(0, (hpActual / hpMax) * 145) + 'px'; }
+			hpMinEl.classList.toggle('hpBajo', !estaKO && hpActual <= hpMax * 0.25);
+			hpMinEl.style.color = estaKO ? '#ff2020' : (hpActual <= hpMax * 0.25 ? '#f5e642' : '');
+		}
+
+		function actualizarMpTexto() {
+			mpMinEl.textContent = formatearNumero(mpActual) + '/';
+			if (mpBarEl) { mpBarEl.style.width = Math.max(0, (mpActual / mpMax) * 145) + 'px'; }
+		}
+
+		function mostrarNumeroDaño(valor, esKO) {
+			const numero = document.createElement('div');
+			numero.className = 'damageNumber' + (esKO ? ' ko' : (hpActual <= hpMax * 0.25 ? ' low' : ''));
+			numero.textContent = valor;
+			photoContainer.appendChild(numero);
+			numero.addEventListener('animationend', function () { numero.remove(); });
+		}
+
+		function entrarEnKO() {
+			estaKO = true;
+			photo.classList.add('ko');
+			actualizarHpTexto();
+			if (reviveBtn) {
+				reviveBtn.classList.add('show');
+				actualizarEstadoRevive();
+			}
+		}
+
+		// Si no queda suficiente MP para pagar el revivir, el botón se anula
+		// (no se puede volver a hacer click ni revivir nunca más).
+		function actualizarEstadoRevive() {
+			if (!reviveBtn) return;
+			const sinMp = mpActual < MP_REVIVE_MIN;
+			reviveBtn.classList.toggle('disabled', sinMp);
+		}
+
+		function golpear() {
+			if (estaKO) return; // ya está en KO: hay que revivir primero
+
+			const daño = Math.floor(Math.random() * (hpActual > 0 ? Math.max(50, Math.floor(hpMax * 0.35)) : 0)) + 40;
+			const nuevoHp = Math.max(0, hpActual - daño);
+			const esKO = nuevoHp === 0;
+
+			hpActual = nuevoHp;
+			mostrarNumeroDaño(daño, esKO);
+
+			if (esKO) {
+				entrarEnKO();
+			} else {
+				actualizarHpTexto();
+			}
+		}
+
+		function revivir() {
+			if (!estaKO) return;
+			if (reviveBtn && reviveBtn.classList.contains('disabled')) return; // sin MP suficiente: no se puede revivir
+
+			const costoMp = Math.min(mpActual, Math.floor(Math.random() * (MP_REVIVE_MAX - MP_REVIVE_MIN + 1)) + MP_REVIVE_MIN);
+			mpActual = Math.max(0, mpActual - costoMp);
+			actualizarMpTexto();
+
+			hpActual = hpMax;
+			estaKO = false;
+			photo.classList.remove('ko');
+			reviveBtn.classList.remove('show');
+			actualizarHpTexto();
+		}
+
+		photoContainer.addEventListener('click', golpear);
+		if (reviveBtn) {
+			reviveBtn.addEventListener('click', function (e) {
+				e.stopPropagation();
+				revivir();
+			});
+		}
+
+		actualizarHpTexto();
+		actualizarMpTexto();
+	})();
+
+	// ----------------------------------------------------------
 	// RELOJ DE TIEMPO (arranca en 0:00:00 al cargar la página)
 	// ----------------------------------------------------------
 	(function () {
