@@ -187,18 +187,28 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	}
 
-	// Genera filas de estrellas (★ llenas según "valor", de un máximo de 5).
+	// Genera filas de estrellas usando el spritesheet star-spritesheet.png
+	// Fila superior (y=0)  = estrella llena  del color correspondiente
+	// Fila inferior (y=16) = estrella vacía (oscura)
+	// Offsets X por color: #B464B4=0, #32B464=17, #D23232=34, #E6C846=52, #4682B4=69
+	var STAR_OFFSETS = {
+		'#B464B4': 0,
+		'#32B464': 17,
+		'#D23232': 34,
+		'#E6C846': 52,
+		'#4682B4': 69
+	};
 	function buildStars(valor, color) {
-		const row = document.createElement('div');
+		var row = document.createElement('div');
 		row.className = 'starRow';
-		for (let i = 0; i < 5; i++) {
-			const star = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-			star.setAttribute('viewBox', '0 0 24 24');
-			star.setAttribute('class', 'star');
-			const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-			path.setAttribute('d', 'M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 7-6.3-3.9-6.3 3.9 1.7-7L1.99 9.2l7.1-.6z');
-			path.setAttribute('fill', i < valor ? color : '#33415c');
-			star.appendChild(path);
+		var offsetX = (STAR_OFFSETS[color.toUpperCase()] !== undefined)
+			? STAR_OFFSETS[color.toUpperCase()]
+			: (STAR_OFFSETS[color] !== undefined ? STAR_OFFSETS[color] : 52);
+		for (var i = 0; i < 5; i++) {
+			var star = document.createElement('span');
+			star.className = 'starSprite';
+			var offsetY = (i < valor) ? 0 : -16;
+			star.style.backgroundPosition = '-' + offsetX + 'px ' + offsetY + 'px';
 			row.appendChild(star);
 		}
 		return row;
@@ -268,6 +278,39 @@ document.addEventListener('DOMContentLoaded', function () {
 	// ----------------------------------------------------------
 	// PANEL: MATERIA (con ranuras intercambiables)
 	// ----------------------------------------------------------
+	// Mapeo color hex → offset X en materia-spritesheet.png (frame 8x8)
+	var ORB_OFFSETS = {
+		'#4682B4': 0,
+		'#B464B4': 8,
+		'#D23232': 24,
+		'#32B464': 32,
+		'#E6C846': 48
+	};
+	function orbOffsetX(color) {
+		if (!color) return null;
+		var key = color.toUpperCase();
+		var map = {
+			'#4682B4': 0, '#B464B4': 8, '#D23232': 24, '#32B464': 32, '#E6C846': 48
+		};
+		return (map[key] !== undefined) ? map[key] : 0;
+	}
+	function aplicarOrbSprite(el, color) {
+		if (!color) {
+			el.style.backgroundImage = 'none';
+			el.style.backgroundPosition = '';
+			el.style.backgroundSize = '';
+			el.style.backgroundRepeat = '';
+			return;
+		}
+		var ox = orbOffsetX(color);
+		// Spritesheet original 56x8, 7 frames de 8x8.
+		// El orbe mide 16x16 → escalamos el sheet x2 → 112x16.
+		// backgroundPosition usa el offset ya escalado (ox * 2).
+		el.style.backgroundImage = "url('Assets/Imagenes/materia-spritesheet.png')";
+		el.style.backgroundSize = '112px 16px';
+		el.style.backgroundPosition = '-' + (ox * 2) + 'px 0px';
+		el.style.backgroundRepeat = 'no-repeat';
+	}
 	(function () {
 		const panel = document.querySelector('#panelMateria');
 		const header = document.querySelector('#materiaHeader');
@@ -294,11 +337,29 @@ document.addEventListener('DOMContentLoaded', function () {
 		function refrescarSlotVisual(slot, datos) {
 			slot.classList.toggle('filled', !!datos.color);
 			if (datos.color) {
-				slot.style.background = datos.color;
+				var ox = orbOffsetX(datos.color);
+				// slot.png es 21x23 → backgroundSize '21px 23px' (tamaño exacto, sin distorsión)
+				// Orbe del spritesheet: escalar frame de 8px a 12px → sheet 56x8 → 84x12
+				// Centrar en slot 21x23: offsetX=(21-12)/2=4.5px, offsetY=(23-12)/2=5.5px
+				// backgroundPosition del orbe: left = 4px - (ox_escalado), top = 5px
+				var orbScale = 12 / 8;   // factor de escala del frame
+				var sheetW = Math.round(56 * orbScale); // 84px
+				var sheetH = Math.round(8  * orbScale); // 12px
+				var orbOx  = Math.round(ox * orbScale); // offset escalado del frame
+				var centerX = Math.round((21 - sheetH) / 2); // ~4px
+				var centerY = Math.round((23 - sheetH) / 2); // ~5px
+				slot.style.backgroundImage =
+					"url('Assets/Imagenes/materia-slot.png'), url('Assets/Imagenes/materia-spritesheet.png')";
+				slot.style.backgroundSize   = '21px 23px, ' + sheetW + 'px ' + sheetH + 'px';
+				slot.style.backgroundPosition = '0px 0px, ' + (centerX - orbOx) + 'px ' + centerY + 'px';
+				slot.style.backgroundRepeat = 'no-repeat, no-repeat';
 				slot.style.color = datos.color;
 				slot.dataset.color = datos.color;
 			} else {
-				slot.style.background = '';
+				slot.style.backgroundImage   = "url('Assets/Imagenes/materia-slot.png')";
+				slot.style.backgroundSize    = '21px 23px';
+				slot.style.backgroundPosition = '0px 0px';
+				slot.style.backgroundRepeat  = 'no-repeat';
 				slot.style.color = '';
 				delete slot.dataset.color;
 			}
@@ -307,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		function buildSlots(container, slots) {
 			container.innerHTML = '';
 			slots.forEach(function (datos) {
-				const slot = document.createElement('span');
+				var slot = document.createElement('span');
 				slot.className = 'slot' + (datos.linked ? ' linked' : '');
 				refrescarSlotVisual(slot, datos);
 
@@ -345,11 +406,11 @@ document.addEventListener('DOMContentLoaded', function () {
 			selected.innerHTML = '';
 			const row = document.createElement('div');
 			row.className = 'selectedSkill';
-			const orb = document.createElement('span');
-			orb.className = 'orb';
+			var orb = document.createElement('span');
+			orb.className = 'orb orbSprite';
 			orb.style.width = '26px';
 			orb.style.height = '26px';
-			orb.style.background = materia.color;
+			aplicarOrbSprite(orb, materia.color);
 			row.appendChild(orb);
 			const nombre = document.createElement('span');
 			nombre.textContent = materia.nombre;
@@ -363,9 +424,9 @@ document.addEventListener('DOMContentLoaded', function () {
 			list.innerHTML = '';
 			materias.forEach(function (materia) {
 				const li = document.createElement('li');
-				const orb = document.createElement('span');
-				orb.className = 'orb';
-				orb.style.background = materia.color;
+				var orb = document.createElement('span');
+				orb.className = 'orb orbSprite';
+				aplicarOrbSprite(orb, materia.color);
 				li.appendChild(orb);
 				const nombre = document.createElement('span');
 				nombre.textContent = materia.nombre;
@@ -443,6 +504,27 @@ document.addEventListener('DOMContentLoaded', function () {
 		let crtActivado = preferencias.crt;
 
 		function pad3(n) { return String(n).padStart(3, '0'); }
+
+		// Sustituir letras R/G/B del colorPicker por sprites
+		// rgb-spritesheet.png: 33x8, 3 frames de 11x8 → R(x=0), G(x=11), B(x=22)
+		(function() {
+			var chans = document.querySelectorAll('.colorPicker .chan');
+			var rgbOffsets = { 'R': 0, 'G': 11, 'B': 22 };
+			chans.forEach(function(span) {
+				var letra = span.textContent.trim();
+				var ox = rgbOffsets[letra];
+				if (ox === undefined) return;
+				span.textContent = '';
+				span.style.display = 'inline-block';
+				span.style.width = '11px';
+				span.style.height = '8px';
+				span.style.backgroundImage = "url('Assets/Imagenes/rgb-spritesheet.png')";
+				span.style.backgroundPosition = '-' + ox + 'px 0px';
+				span.style.backgroundRepeat = 'no-repeat';
+				span.style.imageRendering = 'pixelated';
+				span.style.verticalAlign = 'middle';
+			});
+		})();
 
 		function actualizarSliders() {
 			rngR.value = colorActual.r; valR.textContent = pad3(colorActual.r);

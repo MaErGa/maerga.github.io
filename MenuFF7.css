@@ -71,6 +71,7 @@ body{
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	cursor: url('Assets/Imagenes/cursor.png') 0 0, auto;
 }
 	 
 #group{
@@ -1067,15 +1068,20 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 }
 
 .slot{
-	width: 24px;
-	height: 24px;
-	border-radius: 50%;
-	background: radial-gradient(circle at 35% 30%, #555 0%, #1a1a1a 70%);
-	border: 2px solid #555;
+	width: 21px;
+	height: 23px;
+	border-radius: 0;
+	background-image: url('Assets/Imagenes/materia-slot.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+	border: none;
 	margin-right: 10px;
 	position: relative;
 	transition: transform 0.25s ease, box-shadow 0.25s ease;
 	flex-shrink: 0;
+	image-rendering: pixelated;
+	image-rendering: crisp-edges;
+	cursor: pointer;
 }
 
 .slot.filled{
@@ -1087,9 +1093,13 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	position: absolute;
 	top: 50%;
 	left: 100%;
-	width: 14px;
-	height: 3px;
-	background: #777;
+	width: 18px;
+	height: 11px;
+	background-image: url('Assets/Imagenes/materia-connector.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+	image-rendering: pixelated;
+	image-rendering: crisp-edges;
 	transform: translateY(-50%);
 }
 
@@ -1174,12 +1184,20 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 }
 
 .orb{
-	width: 18px;
-	height: 18px;
+	width: 16px;
+	height: 16px;
 	border-radius: 50%;
 	display: inline-block;
 	flex-shrink: 0;
-	box-shadow: inset -2px -2px 4px rgba(0,0,0,0.4), inset 2px 2px 4px rgba(255,255,255,0.5);
+	overflow: hidden;
+}
+
+.orbSprite{
+	border-radius: 0;
+	width: 16px;
+	height: 16px;
+	image-rendering: pixelated;
+	image-rendering: crisp-edges;
 }
 
 .selectedSkill{
@@ -1197,6 +1215,16 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 .star{
 	width: 24px;
 	height: 24px;
+}
+
+.starSprite{
+	display: inline-block;
+	width: 17px;
+	height: 16px;
+	background-image: url('Assets/Imagenes/star-spritesheet.png');
+	background-repeat: no-repeat;
+	image-rendering: pixelated;
+	image-rendering: crisp-edges;
 }
 
 /*////////////////////////////////////////////////////////////////////////////////Config panel////////////////////////////////////////////////////////////////////////////////////*/
