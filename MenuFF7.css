@@ -304,7 +304,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	top: 151px;
 	left: 0px;
 	margin: 0px;
-	width: 187.5px;
+	width: 125px;
 	box-sizing: border-box;
 	padding: 6px 0px;
 	text-align: center;
@@ -388,7 +388,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 }
 
 #firstHpMin, #secondHpMin, #thirdHpMin{
-	text-align: right;
+	text-align: left;
 	width: 82px;
 	letter-spacing: 0.8px;
 }
