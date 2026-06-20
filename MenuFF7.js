@@ -41,24 +41,105 @@ const materias = [
 	
 ];
 
-// Slots decorativos de "Arma" y "Armadura". null = slot vacío.
-// "linked:true" dibuja la pequeña barra que conecta con el siguiente slot.
-const slotsArma = [
-	{ color: materias[0].color, linked: true },
-	{ color: materias[0].color, linked: false },
-	{ color: materias[1].color, linked: true },
-	{ color: materias[1].color, linked: false },
-	{ color: null, linked: false },
-	{ color: null, linked: false }
-];
+// Materia ya puesta de fábrica en las primeras ranuras de Arma/Armadura,
+// para que el panel no arranque vacío. Se aplican sobre el patrón de slots
+// del arma/armadura equipada actualmente (ver equipoActual más abajo).
+const materiaInicialArma = [materias[0].color, materias[0].color, materias[1].color, materias[1].color];
+const materiaInicialArmadura = [materias[1].color, materias[3].color, materias[4].color];
 
-const slotsArmadura = [
-	{ color: materias[1].color, linked: true },
-	{ color: materias[3].color, linked: false },
-	{ color: materias[4].color, linked: false },
-	{ color: null, linked: false },
-	{ color: null, linked: false }
-];
+// ============================================================
+// EQUIPO — panel "Equipo" (Arma / Armadura / Accesorio)
+// Cada ítem define sus stats absolutos y un patrón de slots
+// (igual sistema visual que las materias) propio del objeto.
+// ============================================================
+
+function patronSlots(cantidadPares, sueltos) {
+	var slots = [];
+	for (var i = 0; i < cantidadPares; i++) {
+		slots.push({ color: '#9aa0a8', linked: true });
+		slots.push({ color: '#9aa0a8', linked: false });
+	}
+	for (var j = 0; j < sueltos; j++) {
+		slots.push({ color: null, linked: false });
+	}
+	return slots;
+}
+
+const equipoItems = {
+	arma: [
+		{
+			nombre: "Ratón",
+			descripcion: "Periférico de precisión para trabajo rápido. Favorece el ataque puro.",
+			stats: { attack: 24, attackP: 92, defense: 32, defenseP: 8, magicAtk: 4, magicDefP: 5 },
+			slots: patronSlots(2, 2)
+		}
+	],
+	armadura: [
+		{
+			nombre: "Teclado",
+			descripcion: "Herramienta principal para programar. Equilibrado entre ataque y magia.",
+			stats: { attack: 18, attackP: 80, defense: 28, defenseP: 10, magicAtk: 12, magicDefP: 8 },
+			slots: patronSlots(1, 3)
+		},
+		{
+			nombre: "PC Gaming",
+			descripcion: "El núcleo de toda la operación. Máxima defensa y resistencia.",
+			stats: { attack: 14, attackP: 70, defense: 48, defenseP: 20, magicAtk: 6, magicDefP: 12 },
+			slots: patronSlots(2, 3)
+		}
+	],
+	accesorio: [
+		{
+			nombre: "Auriculares JBL 510BT",
+			descripcion: "Aislamiento sonoro para concentración total. Refuerza la defensa mágica.",
+			stats: { attack: 10, attackP: 60, defense: 22, defenseP: 14, magicAtk: 8, magicDefP: 22 },
+			slots: patronSlots(1, 2)
+		},
+		{
+			nombre: "Nintendo Switch",
+			descripcion: "Portabilidad ante todo. Aporta equilibrio general con un extra mágico.",
+			stats: { attack: 8, attackP: 50, defense: 14, defenseP: 8, magicAtk: 14, magicDefP: 10 },
+			slots: patronSlots(1, 1)
+		},
+		{
+			nombre: "PlayStation 4",
+			descripcion: "Potencia de la octava generación. Sube ataque y defensa por igual.",
+			stats: { attack: 16, attackP: 65, defense: 18, defenseP: 12, magicAtk: 6, magicDefP: 6 },
+			slots: patronSlots(1, 1)
+		},
+		{
+			nombre: "PlayStation 2",
+			descripcion: "La consola más vendida de la historia. Defensa% sólida.",
+			stats: { attack: 10, attackP: 55, defense: 16, defenseP: 18, magicAtk: 8, magicDefP: 8 },
+			slots: patronSlots(1, 1)
+		},
+		{
+			nombre: "SNES Classic Mini",
+			descripcion: "Nostalgia de 16 bits. Gran impulso a la magia.",
+			stats: { attack: 6, attackP: 45, defense: 10, defenseP: 6, magicAtk: 20, magicDefP: 14 },
+			slots: patronSlots(0, 2)
+		},
+		{
+			nombre: "Mega Drive Classic Mini",
+			descripcion: "Velocidad y acción de 16 bits. Favorece el ataque directo.",
+			stats: { attack: 20, attackP: 58, defense: 8, defenseP: 6, magicAtk: 4, magicDefP: 4 },
+			slots: patronSlots(0, 2)
+		},
+		{
+			nombre: "PlayStation Classic Mini",
+			descripcion: "Una colección compacta de clásicos. Defensa equilibrada.",
+			stats: { attack: 8, attackP: 48, defense: 14, defenseP: 16, magicAtk: 8, magicDefP: 10 },
+			slots: patronSlots(0, 2)
+		}
+	]
+};
+
+// Estado actual del personaje: qué nombre de ítem está equipado por categoría.
+const equipoActual = {
+	arma: "Ratón",
+	armadura: "Teclado",
+	accesorio: "Nintendo Switch"
+};
 
 // ============================================================
 // MOTOR GENÉRICO DE PANELES
@@ -204,6 +285,22 @@ document.addEventListener('DOMContentLoaded', function () {
 		return row;
 	}
 
+	// Lee el HP/MP real del personaje (la tarjeta principal, que cambia con
+	// el sistema de daño/revivir) y lo refleja en los elementos indicados,
+	// para que los paneles Materia y Equipo siempre muestren el valor actual.
+	function sincronizarHpMp(hpValueEl, mpValueEl) {
+		const hpMin = document.querySelector('#firstHpMin');
+		const hpMax = document.querySelector('#firstHpMax');
+		const mpMin = document.querySelector('#firstMpMin');
+		const mpMax = document.querySelector('#firstMpMax');
+		if (hpValueEl && hpMin && hpMax) {
+			hpValueEl.textContent = hpMin.textContent.trim() + hpMax.textContent.trim();
+		}
+		if (mpValueEl && mpMin && mpMax) {
+			mpValueEl.textContent = mpMin.textContent.trim() + mpMax.textContent.trim();
+		}
+	}
+
 	// ----------------------------------------------------------
 	// PANEL: PROYECTOS
 	// ----------------------------------------------------------
@@ -303,9 +400,44 @@ document.addEventListener('DOMContentLoaded', function () {
 		const menuItem = document.querySelector('#menu li[number="2"]');
 		const slotsArmaEl = document.querySelector('#materiaSlotsArma');
 		const slotsArmaduraEl = document.querySelector('#materiaSlotsArmadura');
+		const nombreArmaEl = document.querySelector('#materiaNombreArma');
+		const nombreArmaduraEl = document.querySelector('#materiaNombreArmadura');
+		const hpValueEl = document.querySelector('#materiaHpValue');
+		const mpValueEl = document.querySelector('#materiaMpValue');
 
 		let slotSeleccionado = null; // { datos, el }
 		const hintPorDefecto = 'Tocá una ranura y después una materia para equiparla (o desequipar).';
+
+		// Las ranuras "vivas" (con los colores de materia que el jugador puso)
+		// para cada categoría. Se regeneran cada vez que cambia el arma/armadura
+		// equipada, preservando los colores ya puestos cuando el slot sigue existiendo.
+		let ranurasArma = [];
+		let ranurasArmadura = [];
+
+		function buscarItemEquipo(categoria, nombre) {
+			const lista = equipoItems[categoria] || [];
+			return lista.find(function (it) { return it.nombre === nombre; }) || null;
+		}
+
+		// Genera la lista de ranuras para una categoría a partir del patrón de
+		// slots del ítem actualmente equipado, conservando los colores que ya
+		// había puestos en las ranuras anteriores (en el mismo orden). La
+		// primera vez (sin ranuras previas) usa la materia inicial de fábrica.
+		function regenerarRanuras(categoria, ranurasPrevias) {
+			const item = buscarItemEquipo(categoria, equipoActual[categoria]);
+			const patron = item ? item.slots : [];
+			const semilla = ranurasPrevias.length
+				? null
+				: (categoria === 'arma' ? materiaInicialArma : (categoria === 'armadura' ? materiaInicialArmadura : null));
+			return patron.map(function (slotPatron, i) {
+				const previa = ranurasPrevias[i];
+				const colorInicial = semilla && semilla[i] ? semilla[i] : null;
+				return {
+					color: previa ? previa.color : colorInicial,
+					linked: slotPatron.linked
+				};
+			});
+		}
 
 		function deseleccionarSlot() {
 			if (slotSeleccionado) {
@@ -341,9 +473,9 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		}
 
-		function buildSlots(container, slots) {
+		function buildSlots(container, ranuras) {
 			container.innerHTML = '';
-			slots.forEach(function (datos) {
+			ranuras.forEach(function (datos) {
 				var slot = document.createElement('span');
 				slot.className = 'slot' + (datos.linked ? ' linked' : '');
 				refrescarSlotVisual(slot, datos);
@@ -370,6 +502,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
 				container.appendChild(slot);
 			});
+		}
+
+		// Reconstruye visualmente ambas filas de ranuras a partir del arma y
+		// armadura equipadas actualmente (equipoActual, compartido con el panel Equipo).
+		function refrescarEquipoYRanuras() {
+			ranurasArma = regenerarRanuras('arma', ranurasArma);
+			ranurasArmadura = regenerarRanuras('armadura', ranurasArmadura);
+			if (nombreArmaEl) { nombreArmaEl.textContent = equipoActual.arma; }
+			if (nombreArmaduraEl) { nombreArmaduraEl.textContent = equipoActual.armadura; }
+			buildSlots(slotsArmaEl, ranurasArma);
+			buildSlots(slotsArmaduraEl, ranurasArmadura);
 		}
 
 		function highlightSlots(color) {
@@ -432,8 +575,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		function open() {
 			deseleccionarSlot();
 			buildList();
-			buildSlots(slotsArmaEl, slotsArma);
-			buildSlots(slotsArmaduraEl, slotsArmadura);
+			refrescarEquipoYRanuras();
+			sincronizarHpMp(hpValueEl, mpValueEl);
 			description.textContent = hintPorDefecto;
 			selected.innerHTML = '&nbsp;';
 			openPanel(panel, [header], [card, description, body]);
@@ -443,6 +586,193 @@ document.addEventListener('DOMContentLoaded', function () {
 		function close() {
 			deseleccionarSlot();
 			highlightSlots(null);
+			closePanel(panel, [header], [card, description, body]);
+		}
+
+		menuItem.addEventListener('click', open);
+		closeBtn.addEventListener('click', close);
+		closeOnEscape(function () { return panel.classList.contains('visible'); }, close);
+
+		// El panel Equipo dispara este evento cada vez que se confirma un cambio
+		// de arma/armadura/accesorio, para que Materia se mantenga sincronizado
+		// incluso si el panel ya estaba abierto.
+		document.addEventListener('equipoActualizado', function () {
+			if (panel.classList.contains('visible')) {
+				deseleccionarSlot();
+				refrescarEquipoYRanuras();
+			}
+		});
+	})();
+
+	// ----------------------------------------------------------
+	// PANEL: EQUIPO (Arma / Armadura / Accesorio)
+	// ----------------------------------------------------------
+	(function () {
+		const panel = document.querySelector('#panelEquipo');
+		const header = document.querySelector('#equipoHeader');
+		const card = document.querySelector('#equipoCard');
+		const description = document.querySelector('#equipoDescription');
+		const body = document.querySelector('#equipoBody');
+		const list = document.querySelector('#equipoList');
+		const closeBtn = document.querySelector('#equipoClose');
+		const menuItem = document.querySelector('#menu li[number="3"]');
+		const slotsEl = document.querySelector('#equipoSlots');
+		const growthEl = document.querySelector('#equipoGrowth');
+		const categoriasEls = document.querySelectorAll('#equipoCategorias li');
+		const hpValueEl = document.querySelector('#equipoHpValue');
+		const mpValueEl = document.querySelector('#equipoMpValue');
+
+		const valorEls = {
+			arma: document.querySelector('#equipoValorArma'),
+			armadura: document.querySelector('#equipoValorArmadura'),
+			accesorio: document.querySelector('#equipoValorAccesorio')
+		};
+
+		const statEls = {
+			attack: document.querySelector('#statAttack'),
+			attackP: document.querySelector('#statAttackP'),
+			defense: document.querySelector('#statDefense'),
+			defenseP: document.querySelector('#statDefenseP'),
+			magicAtk: document.querySelector('#statMagicAtk'),
+			magicDefP: document.querySelector('#statMagicDefP')
+		};
+
+		const etiquetas = { arma: 'Arma', armadura: 'Armadura', accesorio: 'Accesorio' };
+		const hintPorDefecto = 'Elegí Arma, Armadura o Accesorio para ver el equipo disponible.';
+
+		let categoriaActiva = 'arma';
+
+		function buscarItem(categoria, nombre) {
+			return equipoItems[categoria].find(function (it) { return it.nombre === nombre; }) || null;
+		}
+
+		function actualizarValoresEquipados() {
+			Object.keys(equipoActual).forEach(function (categoria) {
+				if (valorEls[categoria]) { valorEls[categoria].textContent = equipoActual[categoria]; }
+			});
+		}
+
+		function mostrarSlots(item) {
+			slotsEl.innerHTML = '';
+			if (!item) { return; }
+			item.slots.forEach(function (datos) {
+				const slot = document.createElement('span');
+				slot.className = 'slot' + (datos.linked ? ' linked' : '');
+				slot.style.backgroundImage    = "url('Assets/Imagenes/materia-slot.png')";
+				slot.style.backgroundSize     = '30px 30px';
+				slot.style.backgroundPosition = 'center';
+				slot.style.backgroundRepeat   = 'no-repeat';
+				slot.classList.toggle('filled', !!datos.color);
+
+				const orbEl = document.createElement('span');
+				orbEl.className = 'orbInSlot';
+				if (datos.color) {
+					aplicarOrbSprite(orbEl, datos.color);
+				} else {
+					orbEl.classList.add('orbHidden');
+				}
+				slot.appendChild(orbEl);
+				slotsEl.appendChild(slot);
+			});
+		}
+
+		// Pinta la tabla de stats. Si "preview" es un ítem, muestra
+		// "valor actual > valor proyectado" (rojo si baja, amarillo si sube).
+		// Si "preview" es null, muestra solo los valores actuales (equipados).
+		function mostrarStats(itemActual, itemPreview) {
+			const claves = ['attack', 'attackP', 'defense', 'defenseP', 'magicAtk', 'magicDefP'];
+			claves.forEach(function (clave) {
+				const actual = itemActual ? itemActual.stats[clave] : 0;
+				const el = statEls[clave];
+				el.innerHTML = '';
+
+				if (itemPreview && itemPreview !== itemActual) {
+					const proyectado = itemPreview.stats[clave];
+					const spanActual = document.createElement('span');
+					spanActual.className = 'statPreview';
+					spanActual.textContent = actual;
+					const spanFlecha = document.createElement('span');
+					spanFlecha.className = 'statArrow';
+					spanFlecha.textContent = '>';
+					const spanNuevo = document.createElement('span');
+					spanNuevo.textContent = proyectado;
+					spanNuevo.className = proyectado > actual ? 'statUp' : (proyectado < actual ? 'statDown' : 'statPreview');
+					el.appendChild(spanActual);
+					el.appendChild(spanFlecha);
+					el.appendChild(spanNuevo);
+				} else {
+					el.textContent = actual;
+				}
+			});
+		}
+
+		function refrescarCabecera(itemMostrado) {
+			mostrarSlots(itemMostrado);
+			growthEl.textContent = 'Normal';
+		}
+
+		function seleccionarCategoria(categoria) {
+			categoriaActiva = categoria;
+			categoriasEls.forEach(function (li) {
+				li.classList.toggle('activeCategoria', li.dataset.categoria === categoria);
+			});
+
+			const itemEquipado = buscarItem(categoria, equipoActual[categoria]);
+			refrescarCabecera(itemEquipado);
+			mostrarStats(itemEquipado, null);
+			description.textContent = itemEquipado ? itemEquipado.descripcion : hintPorDefecto;
+			buildList(categoria, itemEquipado);
+		}
+
+		function buildList(categoria, itemEquipado) {
+			list.innerHTML = '';
+			equipoItems[categoria].forEach(function (item) {
+				const li = document.createElement('li');
+				li.textContent = item.nombre;
+				li.classList.toggle('filled', item.nombre === equipoActual[categoria]);
+
+				li.addEventListener('mouseenter', function () {
+					description.textContent = item.descripcion;
+					refrescarCabecera(item);
+					mostrarStats(itemEquipado, item);
+				});
+
+				li.addEventListener('mouseleave', function () {
+					refrescarCabecera(itemEquipado);
+					mostrarStats(itemEquipado, null);
+				});
+
+				li.addEventListener('click', function () {
+					equipoActual[categoria] = item.nombre;
+					actualizarValoresEquipados();
+					description.textContent = item.nombre + ' equipado.';
+					seleccionarCategoria(categoria);
+					document.dispatchEvent(new Event('equipoActualizado'));
+				});
+
+				list.appendChild(li);
+			});
+		}
+
+		categoriasEls.forEach(function (li) {
+			li.addEventListener('click', function () {
+				seleccionarCategoria(li.dataset.categoria);
+			});
+			li.addEventListener('mouseenter', function () {
+				const itemEquipado = buscarItem(li.dataset.categoria, equipoActual[li.dataset.categoria]);
+				description.textContent = etiquetas[li.dataset.categoria] + ': ' + (itemEquipado ? itemEquipado.nombre : '—');
+			});
+		});
+
+		function open() {
+			actualizarValoresEquipados();
+			seleccionarCategoria(categoriaActiva);
+			sincronizarHpMp(hpValueEl, mpValueEl);
+			openPanel(panel, [header], [card, description, body]);
+			document.dispatchEvent(new Event('panelListBuilt'));
+		}
+
+		function close() {
 			closePanel(panel, [header], [card, description, body]);
 		}
 

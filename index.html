@@ -136,14 +136,24 @@
 			<div class="panelCardInfo">
 				<div class="panelCardName">Matías Errico</div>
 				<div><span class="lv">LV</span> 38</div>
+				<div class="panelHpMp">
+					<span class="panelHpMpLabel hp">HP</span>
+					<span class="panelHpMpValue" id="materiaHpValue">2050/2050</span>
+				</div>
+				<div class="panelHpMp">
+					<span class="panelHpMpLabel mp">MP</span>
+					<span class="panelHpMpValue" id="materiaMpValue">260/260</span>
+				</div>
 			</div>
 			<div class="panelCardEquip">
 				<div class="equipRow">
-					<span class="equipLabel">Arma: Raton</span>
+					<span class="equipLabel">Arma:</span>
+					<span class="equipValor" id="materiaNombreArma">Raton</span>
 					<span class="equipSlots" id="materiaSlotsArma"></span>
 				</div>
 				<div class="equipRow">
-					<span class="equipLabel">Armadura: Teclado</span>
+					<span class="equipLabel">Armadura:</span>
+					<span class="equipValor" id="materiaNombreArmadura">Teclado</span>
 					<span class="equipSlots" id="materiaSlotsArmadura"></span>
 				</div>
 			</div>
@@ -152,6 +162,56 @@
 		<div class="panelBody" id="materiaBody">
 			<div class="panelBodyLeft" id="materiaSelected">&nbsp;</div>
 			<ul class="panelList panelBodyRight" id="materiaList"></ul>
+		</div>
+	</div>
+
+	<!-- Panel: Equipo -->
+	<div class="panelOverlay" id="panelEquipo">
+		<div class="panelHeader" id="equipoHeader">
+			<span>Equipo</span>
+			<span class="panelClose" id="equipoClose">X</span>
+		</div>
+		<div class="panelCard" id="equipoCard">
+			<img class="panelCardPhoto" src="./Assets/Imagenes/potrait.png" alt="Matías">
+			<div class="panelCardInfo">
+				<div class="panelCardName">Matías Errico</div>
+				<div><span class="lv">LV</span> 38</div>
+				<div class="panelHpMp">
+					<span class="panelHpMpLabel hp">HP</span>
+					<span class="panelHpMpValue" id="equipoHpValue">2050/2050</span>
+				</div>
+				<div class="panelHpMp">
+					<span class="panelHpMpLabel mp">MP</span>
+					<span class="panelHpMpValue" id="equipoMpValue">260/260</span>
+				</div>
+			</div>
+			<ul class="equipCategoryList" id="equipoCategorias">
+				<li data-categoria="arma"><span class="equipCatLabel">Arma:</span> <span class="equipCatValor" id="equipoValorArma"></span></li>
+				<li data-categoria="armadura"><span class="equipCatLabel">Armadura:</span> <span class="equipCatValor" id="equipoValorArmadura"></span></li>
+				<li data-categoria="accesorio"><span class="equipCatLabel">Accesorio:</span> <span class="equipCatValor" id="equipoValorAccesorio"></span></li>
+			</ul>
+		</div>
+		<div class="panelDescription" id="equipoDescription">Elegí Arma, Armadura o Accesorio para ver el equipo disponible.</div>
+		<div class="panelBody" id="equipoBody">
+			<div class="panelBodyLeft equipStatsPanel" id="equipoStatsPanel">
+				<div class="equipSlotRow">
+					<span class="equipLabel">Slot</span>
+					<span class="equipSlots" id="equipoSlots"></span>
+				</div>
+				<div class="equipGrowthRow">
+					<span class="equipLabel">Growth</span>
+					<span id="equipoGrowth">Normal</span>
+				</div>
+				<table class="equipStatsTable" id="equipoStatsTable">
+					<tr><td>Attack</td><td id="statAttack">0</td></tr>
+					<tr><td>Attack%</td><td id="statAttackP">0</td></tr>
+					<tr><td>Defense</td><td id="statDefense">0</td></tr>
+					<tr><td>Defense%</td><td id="statDefenseP">0</td></tr>
+					<tr><td>Magic atk</td><td id="statMagicAtk">0</td></tr>
+					<tr><td>Magic def%</td><td id="statMagicDefP">0</td></tr>
+				</table>
+			</div>
+			<ul class="panelList panelBodyRight" id="equipoList"></ul>
 		</div>
 	</div>
 
