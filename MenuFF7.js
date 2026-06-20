@@ -51,7 +51,7 @@ const proyectos = [
 		link: "https://maerga.itch.io/dragon-quest-mistreal-song"
 	},
 	{
-		nombre: "Pirate Plataformer",
+		nombre: "Pirate Plataformer 2D",
 		descripcion: "Juego de plataformas para la segunda evaluación del curso Programación de Videojuegos con Unity.",
 		link: "https://maerga.itch.io/pirate-plataformer-alpha-version"
 	},
