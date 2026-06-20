@@ -701,7 +701,8 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	padding: 0px;
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
+	padding-left: 15px;
 	background: radial-gradient(circle at 60px -280px, var(--win-c1) 280px, var(--win-c2) 350px, var(--win-c3));
 	border: 5px solid;
 	 -moz-border-radius: 15px;
