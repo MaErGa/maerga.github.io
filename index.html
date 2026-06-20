@@ -1,21 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
+  <html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 	<title>Portafolio Matías Errico</title>
+	<meta charset="UTF-8">
 	<meta name="description" content ="Menus">
 	<meta name="Keywords"	content="Menu, FF7, Classic">	 
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-	<link rel="icon" type="image/png" href="Assets/Imagenes/favicon.png">
-	<link rel="stylesheet" href="MenuFF7.css?v=5">	 
+	<link rel="stylesheet" href="MenuFF7.css">	 
 </head>
 <body>
-	<div id="viewportScaler">
 	<div id ="screen"></div>
-	<div id="crtOverlay"></div>
  	<div id="group">
 		<header id="header">
 			<hgroup>
@@ -30,11 +24,10 @@
 		<section id="section">	
 
 			<article id="firstCharacter">
-				<figure class = "photoContainer" id="firstPhotoContainer"><img id = "firstPosition" class="photo" src="./Assets/Imagenes/potrait.png"></figure>
-				<button type="button" id="firstReviveBtn" class="reviveButton">Revive</button>
+				<figure class = "photoContainer"><img id = "firstPosition" class="photo" src="https://www.dropbox.com/s/p566d1ub569wi2u/Cloud.jpg?raw=1"></figure>
 				<table id = "firstStats" class = "statsTable">
 					<tr>
-						<td COLSPAN="3" id ="firstName">Matías Errico</td>
+						<td COLSPAN="3" id ="firstName">Matías</td>
 					</tr>
 					<tr>
 						<td class="lv">LV</td>
@@ -42,8 +35,8 @@
 					</tr>
 					<tr>
 						<td class="hp">HP<div id = "firstHpBar" class ="hpBar"></div><div class = "hpBarFont"></div></td>
-						<td id ="firstHpMin">2050/</td>
-						<td id ="firstHpMax">2050</td>
+						<td id ="firstHpMin">2.050/</td>
+						<td id ="firstHpMax">2.050</td>
 					</tr>
 					<tr>
 						<td class="mp">MP<div id = "firstMpBar" class ="mpBar"></div><div class = "mpBarFont"></div></td>
@@ -53,45 +46,33 @@
 				</table>
 				<table id ="firstLevels" class = "levelsTable">
 						<tr>
-							<td>Next level<div id ="firstLevelBar" class ="levelBar"></div><div class = "levelBarFont"></div></td>
+							<td>next level<div id ="firstLevelBar" class ="levelBar"></div><div class = "levelBarFont"></div></td>
 						</tr>
 						<tr>
 							<td>&nbsp;</td>
 						</tr>
 						<tr>
-							<td id ="firstLimitLevel">Limit level &nbsp;3<div id ="firstLimitBar" class = "limitBar limitBarBreak"></div><div class = "limitBarFont"></div></td>
+							<td id ="firstLimitLevel">Limit level &nbsp;3<div id ="firstLimitBar" class = "limitBar"></div><div class = "limitBarFont"></div></td>
 						</tr>
 					</table>
 			</article>
-
-			<div id="biografia">
-				Interfaz principal de Matías Errico.
-				Especialidad: Desarrollo de Videojuegos & Microinformática.
-				ENTORNO: Réplica de la UI del menú de pausa de FF7 (PS1)
-				 Guía del Usuario: 
-				 Este sistema compila mi trayectoria técnica y proyectos interactivos. 
-				 Utiliza el panel de comandos de la derecha para navegar:
-				 Proyectos / Itch.io: Ejecuta los entornos de juego creados.
-				 Materia: Consulta el árbol de tecnologías integradas.
-				 Redes / Contacto: Accede a los enlaces de GitHub, LinkedIn y CV.
-			</div>
-
+			
+			
 			</section>
 	
 		<aside id="aside">
-			<ul id="menu">				
+			<ul id="menu">
 				<li number ="0">Proyectos</li>
-				<li number ="1">Historia</li>
+				<li number ="1">Magia</li>
 				<li number ="2">Materia</li>
 				<li number ="3">Equipo</li>
-				<li number="4"><a href="Assets/CV/Matías_Errico_CV.pdf" target="_blank" class="enlace-limpio">CV</a></li>
-				<li number="5"><a href="https://maerga.itch.io/" target="_blank" class="enlace-limpio">Itch.io</a></li>
-				<li number="6"><a href="https://github.com/MaErGa" target="_blank" class="enlace-limpio">GitHub</a></li>
-				<li number="7"><a href="https://www.linkedin.com/in/matias-errico-garcia-474387402/" target="_blank" class="enlace-limpio">LinkedIn</a></li>
-				<li number ="8">Config</li>
-				<li number ="9" id = ""><br></li>
-				<li number ="10" id = ""></li>
-				<li number ="11"></li>
+				<li number ="4">CV</li>
+				<li number ="5">Itch.io</li>
+				<li number ="6">GitHub</li>
+				<li number ="7">LinkId</li>
+				<li number ="8" id = "phs"><br></li>
+				<li number ="9" id = "save">Save</li>
+				<li number ="10">Quit</li>
 			</ul>
 
 			<ul id="time">
@@ -105,193 +86,6 @@
 		</footer>
       
 	</div>	
-
-	<!-- Panel: Proyectos -->
-	<div class="panelOverlay" id="panelProyectos">
-		<div class="panelHeaderUse" id="proyectosUse">Usar</div>
-		<div class="panelHeader" id="proyectosHeader">
-			<span>Proyectos</span>
-			<span class="panelClose" id="proyectosClose">X</span>
-		</div>
-		<div class="panelCard" id="proyectosCard">
-			<img class="panelCardPhoto" src="./Assets/Imagenes/potrait.png" alt="Matías">
-			<div class="panelCardInfo">
-				<div class="panelCardName">Matías Errico</div>
-				<div><span class="lv">LV</span> 38</div>
-			</div>
-		</div>
-		<div class="panelDescription" id="proyectosDescription">Pasa el cursor sobre un proyecto para ver más información.</div>
-		<div class="panelBody" id="proyectosBody">
-			<div class="panelBodyLeft" id="proyectosSelected">&nbsp;</div>
-			<ul class="panelList panelBodyRight" id="proyectosList"></ul>
-		</div>
-	</div>
-
-	<!-- Panel: Materia -->
-	<div class="panelOverlay" id="panelMateria">
-		<div class="panelHeader" id="materiaHeader">
-			<span>Materia</span>
-			<span class="panelClose" id="materiaClose">X</span>
-		</div>
-		<div class="panelCard" id="materiaCard">
-			<img class="panelCardPhoto" src="./Assets/Imagenes/potrait.png" alt="Matías">
-			<div class="panelCardInfo">
-				<div class="panelCardName">Matías Errico</div>
-				<div><span class="lv">LV</span> 38</div>
-				<div class="panelHpMp">
-					<span class="panelHpMpLabel hp">HP</span>
-					<span class="panelHpMpValue" id="materiaHpValue">2050/2050</span>
-				</div>
-				<div class="panelHpMp">
-					<span class="panelHpMpLabel mp">MP</span>
-					<span class="panelHpMpValue" id="materiaMpValue">260/260</span>
-				</div>
-			</div>
-			<div class="panelCardEquip">
-				<div class="equipRow">
-					<span class="equipLabel">Arma:</span>
-					<span class="equipValor" id="materiaNombreArma">Raton</span>
-					<span class="equipSlots" id="materiaSlotsArma"></span>
-				</div>
-				<div class="equipRow">
-					<span class="equipLabel">Armadura:</span>
-					<span class="equipValor" id="materiaNombreArmadura">Teclado</span>
-					<span class="equipSlots" id="materiaSlotsArmadura"></span>
-				</div>
-			</div>
-		</div>
-		<div class="panelDescription" id="materiaDescription">Pasa el cursor sobre una materia para ver más información.</div>
-		<div class="panelBody" id="materiaBody">
-			<div class="panelBodyLeft" id="materiaSelected">&nbsp;</div>
-			<ul class="panelList panelBodyRight" id="materiaList"></ul>
-		</div>
-	</div>
-
-	<!-- Panel: Equipo -->
-	<div class="panelOverlay" id="panelEquipo">
-		<div class="panelHeader" id="equipoHeader">
-			<span>Equipo</span>
-			<span class="panelClose" id="equipoClose">X</span>
-		</div>
-		<div class="panelCard" id="equipoCard">
-			<img class="panelCardPhoto" src="./Assets/Imagenes/potrait.png" alt="Matías">
-			<div class="panelCardInfo">
-				<div class="panelCardName">Matías Errico</div>
-				<div><span class="lv">LV</span> 38</div>
-				<div class="panelHpMp">
-					<span class="panelHpMpLabel hp">HP</span>
-					<span class="panelHpMpValue" id="equipoHpValue">2050/2050</span>
-				</div>
-				<div class="panelHpMp">
-					<span class="panelHpMpLabel mp">MP</span>
-					<span class="panelHpMpValue" id="equipoMpValue">260/260</span>
-				</div>
-			</div>
-			<ul class="equipCategoryList" id="equipoCategorias">
-				<li data-categoria="arma"><span class="equipCatLabel">Arma:</span> <span class="equipCatValor" id="equipoValorArma"></span></li>
-				<li data-categoria="armadura"><span class="equipCatLabel">Armadura:</span> <span class="equipCatValor" id="equipoValorArmadura"></span></li>
-				<li data-categoria="accesorio"><span class="equipCatLabel">Accesorio:</span> <span class="equipCatValor" id="equipoValorAccesorio"></span></li>
-			</ul>
-		</div>
-		<div class="panelDescription" id="equipoDescription">Elegí Arma, Armadura o Accesorio para ver el equipo disponible.</div>
-		<div class="panelBody" id="equipoBody">
-			<div class="panelBodyLeft equipStatsPanel" id="equipoStatsPanel">
-				<div class="equipSlotRow">
-					<span class="equipLabel">Slot</span>
-					<span class="equipSlots" id="equipoSlots"></span>
-				</div>
-				<div class="equipGrowthRow">
-					<span class="equipLabel">Growth</span>
-					<span id="equipoGrowth">Normal</span>
-				</div>
-				<table class="equipStatsTable" id="equipoStatsTable">
-					<tr><td>Attack</td><td id="statAttack">0</td></tr>
-					<tr><td>Attack%</td><td id="statAttackP">0</td></tr>
-					<tr><td>Defense</td><td id="statDefense">0</td></tr>
-					<tr><td>Defense%</td><td id="statDefenseP">0</td></tr>
-					<tr><td>Magic atk</td><td id="statMagicAtk">0</td></tr>
-					<tr><td>Magic def%</td><td id="statMagicDefP">0</td></tr>
-				</table>
-			</div>
-			<ul class="panelList panelBodyRight" id="equipoList"></ul>
-		</div>
-	</div>
-
-	<!-- Panel: Historia -->
-	<div class="panelOverlay" id="panelHistoria">
-		<div class="panelHeader" id="historiaHeader">
-			<span id="historiaHeaderTitle">Historia</span>
-			<span class="panelClose" id="historiaClose">X</span>
-		</div>
-
-		<!-- Paso 1: elegir Work o Education -->
-		<div class="historiaStep historiaStepSelect" id="historiaStepSelect">
-			<div class="historiaTopBar">Select a Save Data File.</div>
-			<div class="historiaChoiceWrap">
-				<button type="button" class="historiaChoiceBtn" id="historiaChoiceWork">Work</button>
-				<button type="button" class="historiaChoiceBtn" id="historiaChoiceEducation">Education</button>
-			</div>
-		</div>
-
-		<!-- Paso 2: cargando -->
-		<div class="historiaStep historiaStepLoading" id="historiaStepLoading">
-			<div class="historiaTopBar">Checking Save Data File.</div>
-			<div class="historiaLoadBarWrap">
-				<div class="historiaLoadBar" id="historiaLoadBar"></div>
-			</div>
-		</div>
-
-		<!-- Paso 3: lista de tarjetas -->
-		<div class="historiaStep historiaStepList" id="historiaStepList">
-			<div class="historiaTopBar">
-				<span>Select a file.</span>
-				<span class="historiaFileTag" id="historiaFileTag">FILE 01</span>
-			</div>
-			<div class="historiaCards" id="historiaCards"></div>
-		</div>
-	</div>
-
-	<!-- Panel: Config -->
-	<div class="panelOverlay" id="panelConfig">
-		<div class="panelHeaderUse" id="configUse">Config</div>
-		<div class="panelHeader" id="configHeader">
-			<span>Config</span>
-			<span class="panelClose" id="configClose">X</span>
-		</div>
-		<div class="panelSingleBody" id="configBody">
-			<div class="configRow" data-hint="Elegí el color principal de las ventanas.">
-				<span class="configLabel">Color de ventana</span>
-				<span class="configSwatchBtn" id="configSwatchBtn"></span>
-			</div>
-			<div class="colorPicker" id="colorPicker">
-				<span class="resetBtn" id="colorReset" title="Restablecer">&#8635;</span>
-				<div class="sliders">
-					<label><span class="chan" style="color:#ff8a8a;">R</span><input type="range" id="rngR" min="0" max="255"><span class="val" id="valR">000</span></label>
-					<label><span class="chan" style="color:#8aff8a;">G</span><input type="range" id="rngG" min="0" max="255"><span class="val" id="valG">000</span></label>
-					<label><span class="chan" style="color:#8ab8ff;">B</span><input type="range" id="rngB" min="0" max="255"><span class="val" id="valB">000</span></label>
-				</div>
-			</div>
-			<div class="configRow" data-hint="Activa o desactiva el sonido.">
-				<span class="configLabel">Sonido</span>
-				<span class="configToggle" id="soundToggle">
-					<span data-value="on">On</span>
-					<span data-value="off">Off</span>
-				</span>
-			</div>
-			<div class="configRow" data-hint="Activa o desactiva el filtro CRT de la página.">
-				<span class="configLabel">Efecto CRT</span>
-				<span class="configToggle" id="crtToggle">
-					<span data-value="on">On</span>
-					<span data-value="off">Off</span>
-				</span>
-			</div>
-		</div>
-	</div>
-
-	<footer2>© 2026 Matías Errico | Diseñado y Desarrollado desde cero.</footer2>
-
-	</div><!-- /#viewportScaler -->
-
     <script src = "MenuFF7.js"> </script>
 </body>
-</html>
+</html> 
