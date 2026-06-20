@@ -605,12 +605,6 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	cursor: pointer;
 }
 
-.selected{
-	position: absolute;
-	margin: 12px 0px 0px -75px;
-	z-index: 1;
-}
-
 .shadow{
 	display: block;
 	width: 1px; 
@@ -1070,16 +1064,19 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 .equipSlots{
 	display: flex;
 	align-items: center;
-	gap: 0px;
+	gap: 8px;
 }
 
 .slot{
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	width: 28px;
 	height: 28px;
 	border-radius: 0;
 	border: none;
-	margin-right: 2px;
 	position: relative;
+	transform-origin: center center;
 	transition: transform 0.25s ease, box-shadow 0.25s ease;
 	flex-shrink: 0;
 	image-rendering: pixelated;
@@ -1096,19 +1093,13 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	position: absolute;
 	top: 50%;
 	left: 100%;
-	width: 22px;
-	height: 13px;
-	background-image: url('Assets/Imagenes/materia-connector.png');
-	background-size: 22px 13px;
-	background-repeat: no-repeat;
-	image-rendering: pixelated;
-	image-rendering: crisp-edges;
+	width: 8px;
+	height: 4px;
+	background-color: #9aa0a8;
 	transform: translateY(-50%);
-	margin-left: -2px;
 }
 
 .slot.highlight{
-	transform: scale(1.4);
 	box-shadow: 0px 0px 10px 3px currentColor;
 }
 
@@ -1192,23 +1183,42 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	height: 32px;
 	display: inline-block;
 	flex-shrink: 0;
+	border-radius: 50%;
+	background-color: var(--orb-color, #888);
+	background-image:
+		radial-gradient(circle at 35% 28%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.55) 8%, rgba(255,255,255,0) 35%),
+		radial-gradient(circle at 50% 50%, var(--orb-color-light, var(--orb-color, #aaa)) 0%, var(--orb-color, #888) 55%, var(--orb-color-dark, #333) 100%);
+	box-shadow:
+		inset -3px -3px 5px rgba(0,0,0,0.45),
+		inset 2px 2px 4px rgba(255,255,255,0.35),
+		0 1px 2px rgba(0,0,0,0.5);
 }
 
 .orbSprite{
 	width: 32px;
 	height: 32px;
-	image-rendering: pixelated;
-	image-rendering: crisp-edges;
 }
 
 .orbInSlot{
 	position: absolute;
-	top: 0; left: 0;
-	width: 40px;
-	height: 44px;
-	image-rendering: pixelated;
-	image-rendering: crisp-edges;
+	top: 50%; left: 50%;
+	transform: translate(-50%, -50%);
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
 	pointer-events: none;
+	background-color: var(--orb-color, #888);
+	background-image:
+		radial-gradient(circle at 35% 28%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.55) 8%, rgba(255,255,255,0) 35%),
+		radial-gradient(circle at 50% 50%, var(--orb-color-light, var(--orb-color, #aaa)) 0%, var(--orb-color, #888) 55%, var(--orb-color-dark, #333) 100%);
+	box-shadow:
+		inset -2px -2px 4px rgba(0,0,0,0.45),
+		inset 1px 1px 3px rgba(255,255,255,0.35),
+		0 1px 2px rgba(0,0,0,0.5);
+}
+
+.orbInSlot.orbHidden{
+	display: none;
 }
 
 .selectedSkill{
@@ -1232,10 +1242,24 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	display: inline-block;
 	width: 17px;
 	height: 16px;
-	background-image: url('Assets/Imagenes/star-spritesheet.png');
-	background-repeat: no-repeat;
-	image-rendering: pixelated;
-	image-rendering: crisp-edges;
+	position: relative;
+}
+
+.starSprite::before{
+	content: "";
+	position: absolute;
+	inset: 0;
+	clip-path: polygon(
+		50% 0%, 61% 35%, 98% 35%, 68% 57%,
+		79% 91%, 50% 70%, 21% 91%, 32% 57%,
+		2% 35%, 39% 35%
+	);
+	background: var(--star-color, #555);
+}
+
+.starSprite.starEmpty::before{
+	background: rgba(255,255,255,0.12);
+	box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);
 }
 
 /*////////////////////////////////////////////////////////////////////////////////Config panel////////////////////////////////////////////////////////////////////////////////////*/
@@ -1385,8 +1409,29 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 }
 
 .slot.selected{
-	box-shadow: 0px 0px 0px 3px white;
-	transform: scale(1.15);
+	box-shadow: none;
+}
+
+.slot.selected.highlight{
+	box-shadow: none;
+}
+
+.slot.selected::before{
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border: 2px solid #fff;
+	box-sizing: border-box;
+	pointer-events: none;
+	animation: ff7SlotCursorBlink 0.6s steps(1) infinite;
+}
+
+@keyframes ff7SlotCursorBlink{
+	0%, 49%   { opacity: 1; }
+	50%, 100% { opacity: 0; }
 }
 
 footer2 {
@@ -1904,12 +1949,6 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 
 #menu li:hover{
 	cursor: none;
-}
-
-.selected{
-	position: absolute;
-	margin: 12px 0px 0px -75px;
-	z-index: 1;
 }
 
 .shadow{

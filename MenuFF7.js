@@ -187,28 +187,18 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	}
 
-	// Genera filas de estrellas usando el spritesheet star-spritesheet.png
-	// Fila superior (y=0)  = estrella llena  del color correspondiente
-	// Fila inferior (y=16) = estrella vacía (oscura)
-	// Offsets X por color: #B464B4=0, #32B464=17, #D23232=34, #E6C846=52, #4682B4=69
-	var STAR_OFFSETS = {
-		'#B464B4': 0,
-		'#32B464': 17,
-		'#D23232': 34,
-		'#E6C846': 52,
-		'#4682B4': 69
-	};
+	// Genera filas de estrellas en CSS (clip-path), coloreadas según la materia.
 	function buildStars(valor, color) {
 		var row = document.createElement('div');
 		row.className = 'starRow';
-		var offsetX = (STAR_OFFSETS[color.toUpperCase()] !== undefined)
-			? STAR_OFFSETS[color.toUpperCase()]
-			: (STAR_OFFSETS[color] !== undefined ? STAR_OFFSETS[color] : 52);
 		for (var i = 0; i < 5; i++) {
 			var star = document.createElement('span');
 			star.className = 'starSprite';
-			var offsetY = (i < valor) ? 0 : -16;
-			star.style.backgroundPosition = '-' + offsetX + 'px ' + offsetY + 'px';
+			if (i < valor) {
+				star.style.setProperty('--star-color', color || '#E6C846');
+			} else {
+				star.classList.add('starEmpty');
+			}
 			row.appendChild(star);
 		}
 		return row;
@@ -279,32 +269,27 @@ document.addEventListener('DOMContentLoaded', function () {
 	// PANEL: MATERIA (con ranuras intercambiables)
 	// ----------------------------------------------------------
 
-	// Orbes individuales: un PNG por color (sin spritesheet)
-	var ORB_FILES = {
-		'#4682B4': 'Assets/Imagenes/orbs/orb_azul.png',
-		'#B464B4': 'Assets/Imagenes/orbs/orb_morado.png',
-		'#D23232': 'Assets/Imagenes/orbs/orb_rojo.png',
-		'#32B464': 'Assets/Imagenes/orbs/orb_verde.png',
-		'#E6C846': 'Assets/Imagenes/orbs/orb_amarillo.png'
-	};
-	function orbFile(color) {
-		if (!color) return null;
-		return ORB_FILES[color.toUpperCase()] || ORB_FILES[color] || null;
+	// Orbes individuales: generados en CSS (gradientes), un color por materia.
+	function shadeColor(hex, percent) {
+		// percent > 0 aclara, percent < 0 oscurece
+		var num = parseInt(hex.replace('#', ''), 16);
+		var r = (num >> 16) & 255, g = (num >> 8) & 255, b = num & 255;
+		r = Math.min(255, Math.max(0, Math.round(r + (percent < 0 ? r : 255 - r) * percent)));
+		g = Math.min(255, Math.max(0, Math.round(g + (percent < 0 ? g : 255 - g) * percent)));
+		b = Math.min(255, Math.max(0, Math.round(b + (percent < 0 ? b : 255 - b) * percent)));
+		return '#' + [r, g, b].map(function (v) { return v.toString(16).padStart(2, '0'); }).join('');
 	}
-
-	function orbOffsetX(color) { return 0; } // compatibilidad, ya no se usa
 
 	function aplicarOrbSprite(el, color) {
 		if (!color) {
-			el.style.background = 'none';
+			el.style.removeProperty('--orb-color');
+			el.style.removeProperty('--orb-color-light');
+			el.style.removeProperty('--orb-color-dark');
 			return;
 		}
-		el.style.borderRadius = '50%';
-		el.style.background = 'radial-gradient(circle at 35% 30%, rgba(255,255,255,0.95) 4%, rgba(255,255,255,0.5) 18%, ' + color + ' 48%, rgba(0,0,0,0.65) 100%)';
-		el.style.boxShadow = '0 0 6px 2px ' + color + '99, inset 0 -3px 6px rgba(0,0,0,0.5)';
-		el.style.width = '24px';
-		el.style.height = '24px';
-		el.style.flexShrink = '0';
+		el.style.setProperty('--orb-color', color);
+		el.style.setProperty('--orb-color-light', shadeColor(color, 0.35));
+		el.style.setProperty('--orb-color-dark', shadeColor(color, -0.45));
 	}
 	(function () {
 		const panel = document.querySelector('#panelMateria');
@@ -331,34 +316,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		function refrescarSlotVisual(slot, datos) {
 			slot.classList.toggle('filled', !!datos.color);
-			slot.innerHTML = '';
-			slot.style.backgroundImage = 'none';
-			slot.style.border = 'none';
-			slot.style.backgroundColor = 'transparent';
-			slot.style.width = '30px';
-			slot.style.height = '30px';
-			slot.style.display = 'flex';
-			slot.style.alignItems = 'center';
-			slot.style.justifyContent = 'center';
+			slot.style.backgroundImage    = "url('Assets/Imagenes/materia-slot.png')";
+			slot.style.backgroundSize     = '30px 30px';
+			slot.style.backgroundPosition = 'center';
+			slot.style.backgroundRepeat   = 'no-repeat';
 
-			var orb = document.createElement('div');
-			orb.style.width = '26px';
-			orb.style.height = '26px';
-			orb.style.borderRadius = '50%';
-			orb.style.flexShrink = '0';
-
+			// Orbe: generado en CSS, centrado en el slot
+			var orbEl = slot.querySelector('.orbInSlot');
+			if (!orbEl) {
+				orbEl = document.createElement('span');
+				orbEl.className = 'orbInSlot';
+				slot.appendChild(orbEl);
+			}
 			if (datos.color) {
-				orb.style.background = 'radial-gradient(circle at 35% 30%, rgba(255,255,255,0.95) 4%, rgba(255,255,255,0.5) 18%, ' + datos.color + ' 48%, rgba(0,0,0,0.65) 100%)';
-				orb.style.boxShadow = '0 0 7px 3px ' + datos.color + '99, inset 0 -3px 7px rgba(0,0,0,0.5)';
-				slot.style.color = datos.color;
+				aplicarOrbSprite(orbEl, datos.color);
+				orbEl.classList.remove('orbHidden');
+				slot.style.color   = datos.color;
 				slot.dataset.color = datos.color;
 			} else {
-				orb.style.background = 'radial-gradient(circle at 35% 30%, rgba(255,255,255,0.2) 4%, rgba(120,120,120,0.3) 30%, rgba(40,40,40,0.95) 75%, rgba(10,10,10,1) 100%)';
-				orb.style.boxShadow = 'inset 0 -3px 7px rgba(0,0,0,0.9)';
-				slot.style.color = '';
+				orbEl.classList.add('orbHidden');
+				aplicarOrbSprite(orbEl, null);
+				slot.style.color    = '';
 				delete slot.dataset.color;
 			}
-			slot.appendChild(orb);
 		}
 
 		function buildSlots(container, slots) {
