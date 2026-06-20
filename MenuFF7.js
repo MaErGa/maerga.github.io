@@ -41,6 +41,65 @@ const materias = [
 	
 ];
 
+// Historia: experiencia laboral y educación, en formato "save file" de FF7.
+// Reemplazá estos datos de ejemplo por los tuyos reales cuando quieras.
+const historiaTrabajo = [
+	{
+		logo: null, // url de imagen del logo de la empresa, o null para usar texto
+		logoTexto: "Empresa A",
+		nivel: 30,
+		rol: "Desarrollador Senior",
+		años: "2022-Actualidad",
+		organizacion: "Empresa A S.L."
+	},
+	{
+		logo: null,
+		logoTexto: "Empresa B",
+		nivel: 24,
+		rol: "Desarrollador Junior",
+		años: "2019-2022",
+		organizacion: "Empresa B S.L."
+	},
+	{
+		logo: null,
+		logoTexto: "",
+		nivel: null,
+		rol: "",
+		años: "",
+		organizacion: "",
+		vacio: true
+	}
+];
+
+const historiaEducacion = [
+	{
+		logo: null,
+		logoTexto: "Universidad",
+		nivel: 20,
+		rol: "Grado en Ingeniería Informática",
+		años: "2015-2019",
+		organizacion: "Universidad de Ejemplo"
+	},
+	{
+		logo: null,
+		logoTexto: "Instituto",
+		nivel: 16,
+		rol: "Ciclo de Desarrollo de Aplicaciones",
+		años: "2013-2015",
+		organizacion: "Instituto de Ejemplo"
+	},
+	{
+		logo: null,
+		logoTexto: "",
+		nivel: null,
+		rol: "",
+		años: "",
+		organizacion: "",
+		vacio: true
+	}
+];
+
+
 // Materia ya puesta de fábrica en las primeras ranuras de Arma/Armadura,
 // para que el panel no arranque vacío. Se aplican sobre el patrón de slots
 // del arma/armadura equipada actualmente (ver equipoActual más abajo).
@@ -72,12 +131,6 @@ const equipoItems = {
 			descripcion: "Periférico de precisión para trabajo rápido. Favorece el ataque puro.",
 			stats: { attack: 24, attackP: 92, defense: 32, defenseP: 8, magicAtk: 4, magicDefP: 5 },
 			slots: patronSlots(2, 2)
-		},
-		{
-			nombre: "SSD Externo",
-			descripcion: "Almacenamiento veloz para proyectos y backups. Refuerza la defensa y la velocidad de carga.",
-			stats: { attack: 12, attackP: 70, defense: 38, defenseP: 18, magicAtk: 6, magicDefP: 10 },
-			slots: patronSlots(1, 3)
 		}
 	],
 	armadura: [
@@ -781,6 +834,143 @@ document.addEventListener('DOMContentLoaded', function () {
 		function close() {
 			closePanel(panel, [header], [card, description, body]);
 		}
+
+		menuItem.addEventListener('click', open);
+		closeBtn.addEventListener('click', close);
+		closeOnEscape(function () { return panel.classList.contains('visible'); }, close);
+	})();
+
+	// ----------------------------------------------------------
+	// PANEL: HISTORIA (selector Work/Education → carga → tarjetas)
+	// ----------------------------------------------------------
+	(function () {
+		const panel = document.querySelector('#panelHistoria');
+		const header = document.querySelector('#historiaHeader');
+		const headerTitle = document.querySelector('#historiaHeaderTitle');
+		const closeBtn = document.querySelector('#historiaClose');
+		const menuItem = document.querySelector('#menu li[number="1"]');
+
+		const stepSelect = document.querySelector('#historiaStepSelect');
+		const stepLoading = document.querySelector('#historiaStepLoading');
+		const stepList = document.querySelector('#historiaStepList');
+		const loadBar = document.querySelector('#historiaLoadBar');
+		const fileTag = document.querySelector('#historiaFileTag');
+		const cardsEl = document.querySelector('#historiaCards');
+
+		const btnWork = document.querySelector('#historiaChoiceWork');
+		const btnEducation = document.querySelector('#historiaChoiceEducation');
+
+		let loadTimeout1 = null;
+		let loadTimeout2 = null;
+
+		function showStep(stepEl) {
+			[stepSelect, stepLoading, stepList].forEach(function (s) { s.classList.remove('show'); });
+			stepEl.classList.add('show');
+		}
+
+		function buildCard(item) {
+			const card = document.createElement('div');
+			card.className = 'historiaCard';
+
+			if (item.vacio) {
+				card.innerHTML = '';
+				const empty = document.createElement('div');
+				empty.className = 'historiaCardEmpty';
+				empty.textContent = 'EMPTY';
+				card.style.justifyContent = 'center';
+				card.appendChild(empty);
+				return card;
+			}
+
+			const logo = document.createElement('div');
+			logo.className = 'historiaCardLogo';
+			if (item.logo) {
+				const img = document.createElement('img');
+				img.src = item.logo;
+				img.alt = item.logoTexto || '';
+				logo.appendChild(img);
+			} else {
+				logo.textContent = item.logoTexto || '';
+			}
+
+			const photo = document.createElement('img');
+			photo.className = 'historiaCardPhoto';
+			photo.src = './Assets/Imagenes/potrait.png';
+			photo.alt = '';
+
+			const info = document.createElement('div');
+			info.className = 'historiaCardInfo';
+			const nameEl = document.createElement('div');
+			nameEl.textContent = 'Matías Errico';
+			const lvEl = document.createElement('div');
+			lvEl.className = 'lv';
+			lvEl.innerHTML = 'LV <span style="color:#fff;">' + (item.nivel !== null ? item.nivel : '') + '</span>';
+			info.appendChild(nameEl);
+			info.appendChild(lvEl);
+
+			const right = document.createElement('div');
+			right.className = 'historiaCardRight';
+
+			const roleRow = document.createElement('div');
+			roleRow.className = 'historiaCardRoleRow';
+			const roleLabelCol = document.createElement('div');
+			roleLabelCol.innerHTML = '<div class="historiaCardRoleLabel">Rol</div><div class="historiaCardRoleLabel" style="margin-top:6px;">Años</div>';
+			const roleValCol = document.createElement('div');
+			roleValCol.innerHTML = '<div>' + item.rol + '</div><div style="margin-top:6px;">' + item.años + '</div>';
+			roleRow.appendChild(roleLabelCol);
+			roleRow.appendChild(roleValCol);
+
+			const orgEl = document.createElement('div');
+			orgEl.className = 'historiaCardOrg';
+			orgEl.textContent = item.organizacion;
+
+			right.appendChild(roleRow);
+			right.appendChild(orgEl);
+
+			card.appendChild(logo);
+			card.appendChild(photo);
+			card.appendChild(info);
+			card.appendChild(right);
+			return card;
+		}
+
+		function buildList(items, tag) {
+			cardsEl.innerHTML = '';
+			fileTag.textContent = tag;
+			items.forEach(function (item) {
+				cardsEl.appendChild(buildCard(item));
+			});
+		}
+
+		function startFlow(items, tag) {
+			showStep(stepLoading);
+			loadBar.style.width = '0%';
+			clearTimeout(loadTimeout1);
+			clearTimeout(loadTimeout2);
+			window.requestAnimationFrame(function () {
+				loadTimeout1 = setTimeout(function () {
+					loadBar.style.width = '100%';
+				}, 50);
+			});
+			loadTimeout2 = setTimeout(function () {
+				buildList(items, tag);
+				showStep(stepList);
+			}, 1300);
+		}
+
+		function open() {
+			showStep(stepSelect);
+			openPanel(panel, [header], [panel]);
+		}
+
+		function close() {
+			clearTimeout(loadTimeout1);
+			clearTimeout(loadTimeout2);
+			closePanel(panel, [header], [panel]);
+		}
+
+		btnWork.addEventListener('click', function () { startFlow(historiaTrabajo, 'FILE 01'); });
+		btnEducation.addEventListener('click', function () { startFlow(historiaEducacion, 'FILE 02'); });
 
 		menuItem.addEventListener('click', open);
 		closeBtn.addEventListener('click', close);

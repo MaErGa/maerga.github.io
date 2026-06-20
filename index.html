@@ -215,6 +215,40 @@
 		</div>
 	</div>
 
+	<!-- Panel: Historia -->
+	<div class="panelOverlay" id="panelHistoria">
+		<div class="panelHeader" id="historiaHeader">
+			<span id="historiaHeaderTitle">Historia</span>
+			<span class="panelClose" id="historiaClose">X</span>
+		</div>
+
+		<!-- Paso 1: elegir Work o Education -->
+		<div class="historiaStep historiaStepSelect" id="historiaStepSelect">
+			<div class="historiaTopBar">Select a Save Data File.</div>
+			<div class="historiaChoiceWrap">
+				<button type="button" class="historiaChoiceBtn" id="historiaChoiceWork">Work</button>
+				<button type="button" class="historiaChoiceBtn" id="historiaChoiceEducation">Education</button>
+			</div>
+		</div>
+
+		<!-- Paso 2: cargando -->
+		<div class="historiaStep historiaStepLoading" id="historiaStepLoading">
+			<div class="historiaTopBar">Checking Save Data File.</div>
+			<div class="historiaLoadBarWrap">
+				<div class="historiaLoadBar" id="historiaLoadBar"></div>
+			</div>
+		</div>
+
+		<!-- Paso 3: lista de tarjetas -->
+		<div class="historiaStep historiaStepList" id="historiaStepList">
+			<div class="historiaTopBar">
+				<span>Select a file.</span>
+				<span class="historiaFileTag" id="historiaFileTag">FILE 01</span>
+			</div>
+			<div class="historiaCards" id="historiaCards"></div>
+		</div>
+	</div>
+
 	<!-- Panel: Config -->
 	<div class="panelOverlay" id="panelConfig">
 		<div class="panelHeaderUse" id="configUse">Config</div>

@@ -1095,10 +1095,6 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	padding: 6px 10px;
-	background: rgba(0,0,0,0.25);
-	border-radius: 6px;
-	border: 1px solid rgba(255,255,255,0.1);
 }
 
 .slot{
@@ -1613,3 +1609,215 @@ footer2 {
 	font-size: 12px;
 }
 /*////////////////////////////////////////////////////////////////////////////////Panel: Equipo////////////////////////////////////////////////////////////////////////////////////*/
+
+/*////////////////////////////////////////////////////////////////////////////////Panel: Historia////////////////////////////////////////////////////////////////////////////////////*/
+
+#panelHistoria{
+	position: fixed;
+}
+
+.historiaStep{
+	position: absolute;
+	left: 0px; right: 0px; top: 0px; bottom: 0px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.25s ease;
+	z-index: 1;
+}
+
+#historiaHeader{
+	z-index: 2;
+}
+
+.historiaStep.show{
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.historiaTopBar{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 270px;
+	box-sizing: border-box;
+	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
+	border: 5px solid;
+	border-radius: 15px;
+	font: 15px 'Press Start 2P', monospace;
+	padding: 12px 18px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 14px;
+	white-space: nowrap;
+}
+
+.historiaFileTag{
+	color: #ffe34d;
+	flex-shrink: 0;
+}
+
+/* Paso 1: selección Work / Education */
+.historiaChoiceWrap{
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.historiaChoiceBtn{
+	font: 16px 'Press Start 2P', monospace;
+	color: white;
+	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
+	border: 5px solid;
+	border-radius: 15px;
+	padding: 18px 36px;
+	cursor: pointer;
+	transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.historiaChoiceBtn:hover{
+	transform: scale(1.05);
+	box-shadow: 0 0 12px 2px rgba(255,255,255,0.35);
+}
+
+/* Paso 2: carga */
+.historiaLoadBarWrap{
+	margin-top: auto;
+	margin-bottom: auto;
+	width: 320px;
+	height: 60px;
+	border: 5px solid white;
+	border-radius: 10px;
+	background: rgba(0,0,0,0.6);
+	display: flex;
+	align-items: center;
+	padding: 0px 12px;
+	box-sizing: border-box;
+}
+
+.historiaLoadBar{
+	height: 26px;
+	width: 0%;
+	border-radius: 4px;
+	background: linear-gradient(to right, #2a0a6e, #6a3df5, #a98cff);
+	box-shadow: 0 0 10px 2px rgba(140,100,255,0.7);
+	transition: width 1.1s ease;
+}
+
+/* Paso 3: tarjetas tipo save-file */
+.historiaCards{
+	position: absolute;
+	top: 70px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	overflow-y: auto;
+	border: 5px solid white;
+	border-radius: 15px;
+	box-sizing: border-box;
+	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 500px, var(--win-c3));
+}
+
+.historiaCard{
+	display: flex;
+	align-items: stretch;
+	border-bottom: 3px solid rgba(255,255,255,0.5);
+	padding: 14px;
+	gap: 14px;
+}
+
+.historiaCard:last-child{
+	border-bottom: none;
+}
+
+.historiaCardLogo{
+	width: 80px;
+	height: 80px;
+	flex-shrink: 0;
+	background: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 4px;
+	overflow: hidden;
+	font: 12px 'Press Start 2P', monospace;
+	color: #001b85;
+	text-align: center;
+	padding: 4px;
+	box-sizing: border-box;
+}
+
+.historiaCardLogo img{
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.historiaCardPhoto{
+	width: 80px;
+	height: 80px;
+	flex-shrink: 0;
+	object-fit: cover;
+	border-radius: 4px;
+}
+
+.historiaCardInfo{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 6px;
+	font: 14px 'Press Start 2P', monospace;
+	min-width: 150px;
+}
+
+.historiaCardInfo .lv{
+	color: #20B2AA;
+	font-size: 12px;
+}
+
+.historiaCardRight{
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 8px;
+}
+
+.historiaCardRoleRow{
+	display: flex;
+	border: 3px solid white;
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.historiaCardRoleRow > div{
+	flex: 1;
+	padding: 8px 12px;
+	font-size: 13px;
+}
+
+.historiaCardRoleLabel{
+	color: #20B2AA;
+}
+
+.historiaCardOrg{
+	border: 3px solid white;
+	border-radius: 6px;
+	padding: 8px 12px;
+	font-size: 14px;
+	background: rgba(0,0,0,0.25);
+}
+
+.historiaCardEmpty{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 30px;
+	font: 16px 'Press Start 2P', monospace;
+	color: #ffe34d;
+	letter-spacing: 2px;
+}
