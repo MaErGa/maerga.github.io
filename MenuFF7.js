@@ -1,6 +1,47 @@
 // ============================================================
-// DATOS — editá estos arreglos para poner tu información real.
+// ESCALADO RESPONSIVE — hace que el menú se vea igual en cualquier
+// pantalla (PC, tablet, celular), escalando el lienzo completo de
+// 1165x770px como una sola unidad, sin reordenar ni romper nada
+// del layout original.
 // ============================================================
+
+// Factor de escala actual del wrapper, accesible desde cualquier otra
+// parte del script. Arranca en 1 (sin escalar) hasta el primer cálculo.
+window.mff7Scale = 1;
+
+(function () {
+	var CANVAS_W = 1165;
+	var CANVAS_H = 770;
+
+	function applyScale() {
+		var scaler = document.querySelector('#viewportScaler');
+		if (!scaler) return;
+
+		var vw = window.innerWidth;
+		var vh = window.innerHeight;
+
+		// Factor de escala: el mayor posible que permita que el lienzo
+		// completo entre en el viewport, sin recortarlo.
+		var scale = Math.min(vw / CANVAS_W, vh / CANVAS_H);
+
+		// No agrandamos más allá del tamaño original (evita verse borroso
+		// o "gigante" en monitores muy anchos); en PC normal esto da 1.
+		scale = Math.min(scale, 1);
+
+		window.mff7Scale = scale;
+		scaler.style.transform = 'scale(' + scale + ')';
+	}
+
+	// Aplicar apenas el HTML esté listo (antes de que se vea el flash sin escalar)
+	document.addEventListener('DOMContentLoaded', applyScale);
+	// Recalcular en cualquier cambio de tamaño u orientación
+	window.addEventListener('resize', applyScale);
+	window.addEventListener('orientationchange', applyScale);
+	// Primer cálculo inmediato (por si DOMContentLoaded ya pasó)
+	applyScale();
+})();
+
+
 
 // Proyectos: "link" puede quedar vacío ("") si todavía no lo tenés.
 const proyectos = [
@@ -131,6 +172,12 @@ const equipoItems = {
 			descripcion: "Periférico de precisión para trabajo rápido. Favorece el ataque puro.",
 			stats: { attack: 24, attackP: 92, defense: 32, defenseP: 8, magicAtk: 4, magicDefP: 5 },
 			slots: patronSlots(2, 2)
+		},
+		{
+			nombre: "SSD Externo",
+			descripcion: "Almacenamiento ultrarrápido. Transporta datos a velocidad de vértigo. Aumenta la magia y la velocidad de reacción.",
+			stats: { attack: 16, attackP: 74, defense: 20, defenseP: 12, magicAtk: 22, magicDefP: 18 },
+			slots: patronSlots(1, 3)
 		}
 	],
 	armadura: [
@@ -258,6 +305,36 @@ const preferencias = leerPreferencias();
 aplicarColorVentana(preferencias.color.r, preferencias.color.g, preferencias.color.b);
 aplicarCrt(preferencias.crt);
 
+
+// ============================================================
+// SISTEMA DE SONIDO
+// ============================================================
+const sonidos = {
+	menuAbrir:   new Audio('Assets/Audio/Menuabrir.wav'),
+	cerrar:      new Audio('Assets/Audio/Cerrar.mp3'),
+	slider:      new Audio('Assets/Audio/Slider.wav'),
+	materia:     new Audio('Assets/Audio/materia.mp3'),
+	slash:       new Audio('Assets/Audio/slash.mp3'),
+	currar:      new Audio('Assets/Audio/currar.mp3'),
+	delete:      new Audio('Assets/Audio/delete.mp3'),
+	save:        new Audio('Assets/Audio/save.mp3'),
+	saveSelect:  new Audio('Assets/Audio/saveSelect.mp3'),
+	error:       new Audio('Assets/Audio/error.mp3'),
+	victory:     new Audio('Assets/Audio/Victory.mp3'),
+	crit:        new Audio('Assets/Audio/crit.mp3')
+};
+
+function playSound(nombre) {
+	// Leer preferencia de sonido en tiempo real (el usuario puede cambiarla en Config)
+	let sonidoOn = true;
+	try { const v = localStorage.getItem('mff7_sonido'); if (v !== null) sonidoOn = v === '1'; } catch(e) {}
+	if (!sonidoOn) return;
+	const audio = sonidos[nombre];
+	if (!audio) return;
+	audio.currentTime = 0;
+	audio.play().catch(function(){});
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 
 	const group = document.querySelector('#group');
@@ -266,14 +343,26 @@ document.addEventListener('DOMContentLoaded', function () {
 	// personaje (#section) y la lista del menú (#menu). Los paneles se
 	// posicionan exactamente sobre esa zona, para que parezca que el menú
 	// "se transforma" en el panel, en vez de aparecer en otro lugar.
+	//
+	// IMPORTANTE: getBoundingClientRect() devuelve coordenadas reales de
+	// pantalla (ya escaladas visualmente por el transform de #viewportScaler).
+	// Pero estos paneles son `position: fixed` DENTRO de #viewportScaler,
+	// que al tener `transform` se vuelve su containing block: cualquier
+	// valor en px que les asignemos se interpreta en el espacio de
+	// coordenadas LOCAL (sin escalar) de ese wrapper, no en píxeles reales
+	// de pantalla. Por eso hay que dividir por el factor de escala actual
+	// antes de usarlos como left/top/width/height.
 	function getCanvasRect() {
+		const scale = window.mff7Scale || 1;
+		const scaler = document.querySelector('#viewportScaler');
+		const scalerRect = scaler.getBoundingClientRect();
 		const r1 = document.querySelector('#section').getBoundingClientRect();
 		const r2 = document.querySelector('#menu').getBoundingClientRect();
-		const left = Math.min(r1.left, r2.left);
-		const top = Math.min(r1.top, r2.top);
-		const right = Math.max(r1.right, r2.right);
-		const bottom = Math.max(r1.bottom, r2.bottom);
-		return { left: left, top: top, width: right - left, height: bottom - top, menuWidth: r2.width };
+		const left = (Math.min(r1.left, r2.left) - scalerRect.left) / scale;
+		const top = (Math.min(r1.top, r2.top) - scalerRect.top) / scale;
+		const right = (Math.max(r1.right, r2.right) - scalerRect.left) / scale;
+		const bottom = (Math.max(r1.bottom, r2.bottom) - scalerRect.top) / scale;
+		return { left: left, top: top, width: right - left, height: bottom - top, menuWidth: r2.width / scale };
 	}
 
 	function positionPanel(panelEl, headerEl, headerUseEl) {
@@ -288,9 +377,25 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	}
 
+	// Si la ventana cambia de tamaño (o el celular rota) mientras un panel
+	// está abierto, lo reposicionamos para que siga calzando exactamente
+	// sobre el menú escalado.
+	function reposicionarPanelAbierto() {
+		const panelVisible = document.querySelector('.panelOverlay.visible');
+		if (!panelVisible) return;
+		const header = panelVisible.querySelector('.panelHeader');
+		const headerUse = panelVisible.querySelector('.panelHeaderUse');
+		if (header) {
+			positionPanel(panelVisible, header, headerUse || null);
+		}
+	}
+	window.addEventListener('resize', reposicionarPanelAbierto);
+	window.addEventListener('orientationchange', reposicionarPanelAbierto);
+
 	// Abre un panel: el menú principal se desvanece y el panel aparece
 	// con el título primero y el resto del contenido un instante después.
 	function openPanel(panelEl, headerEls, contentEls) {
+		playSound('menuAbrir');
 		positionPanel(panelEl, headerEls[headerEls.length - 1], headerEls.length > 1 ? headerEls[0] : null);
 		group.classList.add('panelOpen');
 		panelEl.classList.add('visible');
@@ -307,6 +412,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Cierra un panel: primero se desvanece el contenido, luego el título,
 	// mientras el menú principal vuelve a aparecer.
 	function closePanel(panelEl, headerEls, contentEls) {
+		playSound('cerrar');
 		contentEls.forEach(function (el) { el.classList.remove('show'); });
 
 		setTimeout(function () {
@@ -622,6 +728,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						refrescarSlotVisual(slotSeleccionado.el, slotSeleccionado.datos);
 						description.textContent = materia.nombre + ' equipada.';
 						deseleccionarSlot();
+						playSound('materia');
 					} else {
 						description.textContent = materia.descripcion;
 					}
@@ -807,6 +914,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					description.textContent = item.nombre + ' equipado.';
 					seleccionarCategoria(categoria);
 					document.dispatchEvent(new Event('equipoActualizado'));
+					playSound('materia');
 				});
 
 				list.appendChild(li);
@@ -931,6 +1039,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			card.appendChild(photo);
 			card.appendChild(info);
 			card.appendChild(right);
+			card.addEventListener('click', function () { playSound('saveSelect'); });
 			return card;
 		}
 
@@ -955,6 +1064,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			loadTimeout2 = setTimeout(function () {
 				buildList(items, tag);
 				showStep(stepList);
+				playSound('save');
 			}, 1300);
 		}
 
@@ -969,6 +1079,23 @@ document.addEventListener('DOMContentLoaded', function () {
 			closePanel(panel, [header], [panel]);
 		}
 
+		[btnWork, btnEducation].forEach(function(btn) {
+			btn.addEventListener('mouseenter', function () {
+				var cursorEl = document.querySelector('#ff7Cursor');
+				if (!cursorEl) return;
+				var scale = window.mff7Scale || 1;
+				var scalerRect = (document.querySelector('#viewportScaler') || document.body).getBoundingClientRect();
+				var rect = btn.getBoundingClientRect();
+				cursorEl.style.top  = ((rect.top  - scalerRect.top)  / scale + rect.height / scale / 2 - 15) + 'px';
+				cursorEl.style.left = ((rect.left - scalerRect.left) / scale - 62) + 'px';
+				cursorEl.classList.add('visible');
+				playSound('slider');
+			});
+			btn.addEventListener('mouseleave', function () {
+				var cursorEl = document.querySelector('#ff7Cursor');
+				if (cursorEl) cursorEl.classList.remove('visible');
+			});
+		});
 		btnWork.addEventListener('click', function () { startFlow(historiaTrabajo, 'FILE 01'); });
 		btnEducation.addEventListener('click', function () { startFlow(historiaEducacion, 'FILE 02'); });
 
@@ -1093,6 +1220,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		document.querySelectorAll('#configBody .configRow').forEach(function (fila) {
 			fila.addEventListener('mouseenter', function () {
 				headerUse.textContent = fila.dataset.hint || hintPorDefecto;
+				playSound('slider');
 			});
 		});
 
@@ -1159,10 +1287,11 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (mpBarEl) { mpBarEl.style.width = Math.max(0, (mpActual / mpMax) * 145) + 'px'; }
 		}
 
-		function mostrarNumeroDaño(valor, esKO) {
+		function mostrarNumeroDaño(valor, esKO, esCritico) {
 			const numero = document.createElement('div');
 			numero.className = 'damageNumber' + (esKO ? ' ko' : (hpActual <= hpMax * 0.25 ? ' low' : ''));
-			numero.textContent = valor;
+			if (esCritico) { numero.classList.add('crit'); }
+			numero.textContent = esCritico ? '★ ' + valor : valor;
 			photoContainer.appendChild(numero);
 			numero.addEventListener('animationend', function () { numero.remove(); });
 		}
@@ -1171,6 +1300,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			estaKO = true;
 			photo.classList.add('ko');
 			actualizarHpTexto();
+			playSound('delete');
 			if (reviveBtn) {
 				reviveBtn.classList.add('show');
 				actualizarEstadoRevive();
@@ -1186,14 +1316,21 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 
 		function golpear() {
-			if (estaKO) return; // ya está en KO: hay que revivir primero
+			if (estaKO) { playSound('error'); return; } // ya está en KO: sonido de error
 
-			const daño = Math.floor(Math.random() * (hpActual > 0 ? Math.max(50, Math.floor(hpMax * 0.35)) : 0)) + 40;
+			const esCritico = Math.random() < 0.20; // 20% de probabilidad
+			let daño = Math.floor(Math.random() * (hpActual > 0 ? Math.max(50, Math.floor(hpMax * 0.35)) : 0)) + 40;
+			if (esCritico) { daño = Math.floor(daño * 2.0); } // el doble de daño
 			const nuevoHp = Math.max(0, hpActual - daño);
 			const esKO = nuevoHp === 0;
 
 			hpActual = nuevoHp;
-			mostrarNumeroDaño(daño, esKO);
+			if (esCritico) {
+				playSound('crit');
+			} else {
+				playSound('slash');
+			}
+			mostrarNumeroDaño(daño, esKO, esCritico);
 
 			if (esKO) {
 				entrarEnKO();
@@ -1205,6 +1342,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		function revivir() {
 			if (!estaKO) return;
 			if (reviveBtn && reviveBtn.classList.contains('disabled')) return; // sin MP suficiente: no se puede revivir
+			playSound('currar');
 
 			const costoMp = Math.min(mpActual, Math.floor(Math.random() * (MP_REVIVE_MAX - MP_REVIVE_MIN + 1)) + MP_REVIVE_MIN);
 			mpActual = Math.max(0, mpActual - costoMp);
@@ -1236,7 +1374,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		// Crear el elemento de cursor una sola vez
 		var cursorEl = document.createElement('div');
 		cursorEl.id = 'ff7Cursor';
-		document.body.appendChild(cursorEl);
+		var scalerHost = document.querySelector('#viewportScaler') || document.body;
+		scalerHost.appendChild(cursorEl);
 
 		var currentTarget = null;
 
@@ -1244,10 +1383,10 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (currentTarget === li) return;
 			currentTarget = li;
 			var rect = li.getBoundingClientRect();
-			// Centrar verticalmente en el li
-			var top = rect.top + window.scrollY + (rect.height / 2) - 15;
-			// A la izquierda del texto con suficiente separación
-			var left = rect.left + window.scrollX - 62;
+			var scale = window.mff7Scale || 1;
+			var scalerRect = (document.querySelector('#viewportScaler') || document.body).getBoundingClientRect();
+			var top = ((rect.top - scalerRect.top) / scale) + (rect.height / scale / 2) - 15;
+			var left = ((rect.left - scalerRect.left) / scale) - 62;
 			cursorEl.style.top  = top  + 'px';
 			cursorEl.style.left = left + 'px';
 			cursorEl.classList.add('visible');
@@ -1261,7 +1400,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		// Aplicar a todos los li interactivos del menú principal
 		function bindMenuItems() {
 			document.querySelectorAll('#menu li, .panelList li').forEach(function (li) {
-				li.addEventListener('mouseenter', function () { mostrarCursor(li); });
+				li.addEventListener('mouseenter', function () { mostrarCursor(li); playSound('slider'); });
 				li.addEventListener('mouseleave', ocultarCursor);
 			});
 		}
@@ -1300,6 +1439,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		actualizar();
 		setInterval(actualizar, 1000);
+	})();
+
+
+	// ----------------------------------------------------------
+	// CÓDIGO KONAMI: ↑↑↓↓←→←→BA → Victory fanfare
+	// ----------------------------------------------------------
+	(function () {
+		const KONAMI = [
+			'ArrowUp','ArrowUp','ArrowDown','ArrowDown',
+			'ArrowLeft','ArrowRight','ArrowLeft','ArrowRight',
+			'b','a'
+		];
+		let idx = 0;
+		document.addEventListener('keydown', function (e) {
+			if (e.key === KONAMI[idx]) {
+				idx++;
+				if (idx === KONAMI.length) {
+					playSound('victory');
+					idx = 0;
+				}
+			} else {
+				idx = e.key === KONAMI[0] ? 1 : 0;
+			}
+		});
 	})();
 
 });
