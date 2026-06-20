@@ -384,8 +384,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			row.className = 'selectedSkill';
 			var orb = document.createElement('span');
 			orb.className = 'orb orbSprite';
-			orb.style.width = '26px';
-			orb.style.height = '26px';
+			orb.style.width = '22px';
+			orb.style.height = '22px';
 			aplicarOrbSprite(orb, materia.color);
 			row.appendChild(orb);
 			const nombre = document.createElement('span');
