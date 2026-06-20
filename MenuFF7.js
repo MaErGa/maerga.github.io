@@ -72,6 +72,12 @@ const equipoItems = {
 			descripcion: "Periférico de precisión para trabajo rápido. Favorece el ataque puro.",
 			stats: { attack: 24, attackP: 92, defense: 32, defenseP: 8, magicAtk: 4, magicDefP: 5 },
 			slots: patronSlots(2, 2)
+		},
+		{
+			nombre: "SSD Externo",
+			descripcion: "Almacenamiento veloz para proyectos y backups. Refuerza la defensa y la velocidad de carga.",
+			stats: { attack: 12, attackP: 70, defense: 38, defenseP: 18, magicAtk: 6, magicDefP: 10 },
+			slots: patronSlots(1, 3)
 		}
 	],
 	armadura: [
