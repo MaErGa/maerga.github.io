@@ -453,17 +453,23 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Lee el HP/MP real del personaje (la tarjeta principal, que cambia con
 	// el sistema de daño/revivir) y lo refleja en los elementos indicados,
 	// para que los paneles Materia y Equipo siempre muestren el valor actual.
-	function sincronizarHpMp(hpValueEl, mpValueEl) {
-		const hpMin = document.querySelector('#firstHpMin');
-		const hpMax = document.querySelector('#firstHpMax');
-		const mpMin = document.querySelector('#firstMpMin');
-		const mpMax = document.querySelector('#firstMpMax');
-		if (hpValueEl && hpMin && hpMax) {
-			hpValueEl.textContent = hpMin.textContent.trim() + hpMax.textContent.trim();
+	function sincronizarHpMp(hpValueEl, mpValueEl, hpBarEl, mpBarEl) {
+		const hpMinEl = document.querySelector('#firstHpMin');
+		const hpMaxEl = document.querySelector('#firstHpMax');
+		const mpMinEl = document.querySelector('#firstMpMin');
+		const mpMaxEl = document.querySelector('#firstMpMax');
+		const hpActual = parseInt((hpMinEl ? hpMinEl.textContent : '').replace(/[^\d]/g, ''), 10) || 0;
+		const hpMax    = parseInt((hpMaxEl ? hpMaxEl.textContent : '').replace(/[^\d]/g, ''), 10) || 1;
+		const mpActual = parseInt((mpMinEl ? mpMinEl.textContent : '').replace(/[^\d]/g, ''), 10) || 0;
+		const mpMax    = parseInt((mpMaxEl ? mpMaxEl.textContent : '').replace(/[^\d]/g, ''), 10) || 1;
+		if (hpValueEl && hpMinEl && hpMaxEl) {
+			hpValueEl.textContent = hpMinEl.textContent.trim() + hpMaxEl.textContent.trim();
 		}
-		if (mpValueEl && mpMin && mpMax) {
-			mpValueEl.textContent = mpMin.textContent.trim() + mpMax.textContent.trim();
+		if (mpValueEl && mpMinEl && mpMaxEl) {
+			mpValueEl.textContent = mpMinEl.textContent.trim() + mpMaxEl.textContent.trim();
 		}
+		if (hpBarEl) { hpBarEl.style.width = Math.max(0, (hpActual / hpMax) * 145) + 'px'; }
+		if (mpBarEl) { mpBarEl.style.width = Math.max(0, (mpActual / mpMax) * 145) + 'px'; }
 	}
 
 	// ----------------------------------------------------------
@@ -502,7 +508,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			proyectos.forEach(function (proyecto) {
 				const li = document.createElement('li');
 				li.textContent = proyecto.nombre;
-				li.addEventListener('mouseenter', function () { showProyecto(proyecto); });
+				li.addEventListener('mouseenter', function () { showProyecto(proyecto); playSound('slider'); });
 				li.addEventListener('click', function () {
 					showProyecto(proyecto);
 					if (proyecto.link) { window.open(proyecto.link, '_blank'); }
@@ -511,8 +517,14 @@ document.addEventListener('DOMContentLoaded', function () {
 			});
 		}
 
+		const proyHpValueEl = document.querySelector('#proyectosHpValue');
+		const proyMpValueEl = document.querySelector('#proyectosMpValue');
+		const proyHpBarEl   = document.querySelector('#proyectosHpBar');
+		const proyMpBarEl   = document.querySelector('#proyectosMpBar');
+
 		function open() {
 			buildList();
+			sincronizarHpMp(proyHpValueEl, proyMpValueEl, proyHpBarEl, proyMpBarEl);
 			description.textContent = 'Pasa el cursor sobre un proyecto para ver más información.';
 			selected.innerHTML = '&nbsp;';
 			openPanel(panel, [headerUse, header], [card, description, body]);
@@ -742,7 +754,9 @@ document.addEventListener('DOMContentLoaded', function () {
 			deseleccionarSlot();
 			buildList();
 			refrescarEquipoYRanuras();
-			sincronizarHpMp(hpValueEl, mpValueEl);
+			const matHpBarEl = document.querySelector('#materiaHpBar');
+			const matMpBarEl = document.querySelector('#materiaMpBar');
+			sincronizarHpMp(hpValueEl, mpValueEl, matHpBarEl, matMpBarEl);
 			description.textContent = hintPorDefecto;
 			selected.innerHTML = '&nbsp;';
 			openPanel(panel, [header], [card, description, body]);
@@ -934,7 +948,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		function open() {
 			actualizarValoresEquipados();
 			seleccionarCategoria(categoriaActiva);
-			sincronizarHpMp(hpValueEl, mpValueEl);
+			const eqHpBarEl = document.querySelector('#equipoHpBar');
+			const eqMpBarEl = document.querySelector('#equipoMpBar');
+			sincronizarHpMp(hpValueEl, mpValueEl, eqHpBarEl, eqMpBarEl);
 			openPanel(panel, [header], [card, description, body]);
 			document.dispatchEvent(new Event('panelListBuilt'));
 		}
