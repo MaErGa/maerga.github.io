@@ -46,8 +46,8 @@ window.mff7Scale = 1;
 // Proyectos: "link" puede quedar vacío ("") si todavía no lo tienes.
 const proyectos = [
 	{
-		nombre: "RPG 2D — Estilo Dragon Quest Mistrel Song",
-		descripcion: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
+		nombre: "Dragon Quest -Mistrel Song-",
+		descripcion: "RPG 2D basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
 		link: "https://maerga.itch.io/dragon-quest-mistreal-song"
 	},
 	{
