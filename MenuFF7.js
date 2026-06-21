@@ -43,11 +43,11 @@ window.mff7Scale = 1;
 
 
 
-// Proyectos: "link" puede quedar vacío ("") si todavía no lo tienes.
+// Proyectos: "link" puede quedar vacío ("") si todavía no lo tenés.
 const proyectos = [
 	{
-		nombre: "Dragon Quest -Mistrel Song-",
-		descripcion: "RPG 2D basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
+		nombre: "RPG 2D — Estilo Dragon Quest Mistrel Song",
+		descripcion: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
 		link: "https://maerga.itch.io/dragon-quest-mistreal-song"
 	},
 	{
@@ -144,8 +144,19 @@ const historiaEducacion = [
 // Materia ya puesta de fábrica en las primeras ranuras de Arma/Armadura,
 // para que el panel no arranque vacío. Se aplican sobre el patrón de slots
 // del arma/armadura equipada actualmente (ver equipoActual más abajo).
-const materiaInicialArma = [materias[0].color, materias[0].color, materias[1].color, materias[1].color];
-const materiaInicialArmadura = [materias[1].color, materias[3].color, materias[4].color];
+const materiaInicialArma = [
+	{ nombre: materias[0].nombre, color: materias[0].color },
+	{ nombre: materias[1].nombre, color: materias[1].color },
+	{ nombre: materias[2].nombre, color: materias[2].color },
+	{ nombre: materias[3].nombre, color: materias[3].color },
+	{ nombre: materias[7].nombre, color: materias[7].color },
+	{ nombre: materias[8].nombre, color: materias[8].color }
+];
+const materiaInicialArmadura = [
+	{ nombre: materias[4].nombre, color: materias[4].color },
+	{ nombre: materias[5].nombre, color: materias[5].color },
+	{ nombre: materias[6].nombre, color: materias[6].color }
+];
 
 // ============================================================
 // EQUIPO — panel "Equipo" (Arma / Armadura / Accesorio)
@@ -171,7 +182,7 @@ const equipoItems = {
 			nombre: "Ratón",
 			descripcion: "Periférico de precisión para trabajo rápido. Favorece el ataque puro.",
 			stats: { attack: 24, attackP: 92, defense: 32, defenseP: 8, magicAtk: 4, magicDefP: 5 },
-			slots: patronSlots(2, 2)
+			slots: patronSlots(3, 2)
 		},
 		{
 			nombre: "SSD Externo",
@@ -185,7 +196,7 @@ const equipoItems = {
 			nombre: "Teclado",
 			descripcion: "Herramienta principal para programar. Equilibrado entre ataque y magia.",
 			stats: { attack: 18, attackP: 80, defense: 28, defenseP: 10, magicAtk: 12, magicDefP: 8 },
-			slots: patronSlots(1, 3)
+			slots: patronSlots(2, 2)
 		},
 		{
 			nombre: "PC Gaming",
@@ -598,7 +609,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		const mpValueEl = document.querySelector('#materiaMpValue');
 
 		let slotSeleccionado = null; // { datos, el }
-		const hintPorDefecto = 'Toca una ranura y después una materia para equiparla (o desequipar).';
+		const hintPorDefecto = 'Tocá una ranura y después una materia para equiparla (o desequipar).';
 
 		// Las ranuras "vivas" (con los colores de materia que el jugador puso)
 		// para cada categoría. Se regeneran cada vez que cambia el arma/armadura
@@ -611,9 +622,13 @@ document.addEventListener('DOMContentLoaded', function () {
 			return lista.find(function (it) { return it.nombre === nombre; }) || null;
 		}
 
+		function buscarMateriaPorNombre(nombre) {
+			return materias.find(function (m) { return m.nombre === nombre; }) || null;
+		}
+
 		// Genera la lista de ranuras para una categoría a partir del patrón de
-		// slots del ítem actualmente equipado, conservando los colores que ya
-		// había puestos en las ranuras anteriores (en el mismo orden). La
+		// slots del ítem actualmente equipado, conservando las materias que ya
+		// había puestas en las ranuras anteriores (en el mismo orden). La
 		// primera vez (sin ranuras previas) usa la materia inicial de fábrica.
 		function regenerarRanuras(categoria, ranurasPrevias) {
 			const item = buscarItemEquipo(categoria, equipoActual[categoria]);
@@ -623,9 +638,10 @@ document.addEventListener('DOMContentLoaded', function () {
 				: (categoria === 'arma' ? materiaInicialArma : (categoria === 'armadura' ? materiaInicialArmadura : null));
 			return patron.map(function (slotPatron, i) {
 				const previa = ranurasPrevias[i];
-				const colorInicial = semilla && semilla[i] ? semilla[i] : null;
+				const inicial = semilla && semilla[i] ? semilla[i] : null;
 				return {
-					color: previa ? previa.color : colorInicial,
+					color: previa ? previa.color : (inicial ? inicial.color : null),
+					nombre: previa ? previa.nombre : (inicial ? inicial.nombre : null),
 					linked: slotPatron.linked
 				};
 			});
@@ -655,13 +671,15 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (datos.color) {
 				aplicarOrbSprite(orbEl, datos.color);
 				orbEl.classList.remove('orbHidden');
-				slot.style.color   = datos.color;
-				slot.dataset.color = datos.color;
+				slot.style.color    = datos.color;
+				slot.dataset.color  = datos.color;
+				slot.dataset.nombre = datos.nombre || '';
 			} else {
 				orbEl.classList.add('orbHidden');
 				aplicarOrbSprite(orbEl, null);
-				slot.style.color    = '';
+				slot.style.color = '';
 				delete slot.dataset.color;
+				delete slot.dataset.nombre;
 			}
 		}
 
@@ -672,7 +690,22 @@ document.addEventListener('DOMContentLoaded', function () {
 				slot.className = 'slot' + (datos.linked ? ' linked' : '');
 				refrescarSlotVisual(slot, datos);
 
-				slot.addEventListener('mouseenter', function () { playSound('slider'); });
+				slot.addEventListener('mouseenter', function () {
+					playSound('slider');
+					// Si la ranura tiene una materia puesta, mostrarla igual que
+					// al pasar el cursor por la lista (orbe, nombre y estrellas),
+					// para saber de un vistazo qué hay equipado en cada slot.
+					if (datos.nombre) {
+						const materiaEquipada = buscarMateriaPorNombre(datos.nombre);
+						if (materiaEquipada) {
+							description.textContent = materiaEquipada.descripcion;
+							showMateria(materiaEquipada);
+							return;
+						}
+					}
+					if (!slotSeleccionado) { description.textContent = hintPorDefecto; }
+					highlightSlots(null);
+				});
 
 				slot.addEventListener('click', function (e) {
 					e.stopPropagation();
@@ -680,6 +713,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					if (slotSeleccionado && slotSeleccionado.el === slot) {
 						// Tocar la ranura ya seleccionada: la desequipa.
 						datos.color = null;
+						datos.nombre = null;
 						refrescarSlotVisual(slot, datos);
 						deseleccionarSlot();
 						description.textContent = hintPorDefecto;
@@ -690,8 +724,8 @@ document.addEventListener('DOMContentLoaded', function () {
 					slotSeleccionado = { datos: datos, el: slot };
 					slot.classList.add('selected');
 					description.textContent = datos.color
-						? 'Elige una materia para reemplazarla, o vuelve a tocar esta ranura para quitarla.'
-						: 'Elige una materia de la lista para equiparla en esta ranura.';
+						? 'Elegí una materia para reemplazarla, o volvé a tocar esta ranura para quitarla.'
+						: 'Elegí una materia de la lista para equiparla en esta ranura.';
 				});
 
 				container.appendChild(slot);
@@ -709,9 +743,32 @@ document.addEventListener('DOMContentLoaded', function () {
 			buildSlots(slotsArmaduraEl, ranurasArmadura);
 		}
 
-		function highlightSlots(color) {
+		function highlightSlots(nombre) {
 			document.querySelectorAll('#materiaSlotsArma .slot, #materiaSlotsArmadura .slot').forEach(function (slot) {
-				slot.classList.toggle('highlight', !!color && slot.dataset.color === color);
+				slot.classList.toggle('highlight', !!nombre && slot.dataset.nombre === nombre);
+			});
+		}
+
+		// Cada materia es una única unidad física, igual que en el juego: si ya
+		// está puesta en otra ranura (de Arma o de Armadura), se la quita de ahí
+		// antes de equiparla en la ranura nueva, en vez de quedar duplicada.
+		// Se compara por NOMBRE, no por color: varias materias distintas pueden
+		// compartir el mismo color de orbe (p. ej. Redes, Windows y Office son
+		// todas azules) y no deben sustituirse entre sí.
+		function liberarMateriaDuplicada(nombre, ranuraDestino) {
+			[
+				{ ranuras: ranurasArma, container: slotsArmaEl },
+				{ ranuras: ranurasArmadura, container: slotsArmaduraEl }
+			].forEach(function (grupo) {
+				grupo.ranuras.forEach(function (datos, i) {
+					if (datos === ranuraDestino) { return; }
+					if (datos.nombre === nombre) {
+						datos.color = null;
+						datos.nombre = null;
+						const slotEl = grupo.container.children[i];
+						if (slotEl) { refrescarSlotVisual(slotEl, datos); }
+					}
+				});
 			});
 		}
 
@@ -730,7 +787,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			row.appendChild(nombre);
 			selected.appendChild(row);
 			selected.appendChild(buildStars(materia.estrellas, materia.color));
-			highlightSlots(materia.color);
+			highlightSlots(materia.nombre);
 		}
 
 		function buildList() {
@@ -754,7 +811,9 @@ document.addEventListener('DOMContentLoaded', function () {
 				li.addEventListener('click', function () {
 					showMateria(materia);
 					if (slotSeleccionado) {
+						liberarMateriaDuplicada(materia.nombre, slotSeleccionado.datos);
 						slotSeleccionado.datos.color = materia.color;
+						slotSeleccionado.datos.nombre = materia.nombre;
 						refrescarSlotVisual(slotSeleccionado.el, slotSeleccionado.datos);
 						description.textContent = materia.nombre + ' equipada.';
 						deseleccionarSlot();
@@ -837,7 +896,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		};
 
 		const etiquetas = { arma: 'Arma', armadura: 'Armadura', accesorio: 'Accesorio' };
-		const hintPorDefecto = 'Elige Arma, Armadura o Accesorio para ver el equipo disponible.';
+		const hintPorDefecto = 'Elegí Arma, Armadura o Accesorio para ver el equipo disponible.';
 
 		let categoriaActiva = 'arma';
 
