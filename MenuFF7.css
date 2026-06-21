@@ -100,6 +100,7 @@ body{
    height: 770px;
    text-align: left;
    color:white;
+   transition: opacity 0.22s ease;
 }
 
 #controls{
@@ -221,6 +222,7 @@ cursor:pointer;
 	color: white;
 	line-height: 1.5;
 	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
 	z-index: 1;
 }
 
@@ -618,6 +620,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	line-height:34px;
 	width: 0px;
 	font-size: 15px;
+	cursor: default;
 }
 
 #menu li:hover{
@@ -946,10 +949,6 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 
 /*////////////////////////////////////////////////////////////////////////////////Panel system (Proyectos / Materia / etc.)////////////////////////////////////////////////////////////////////////////////////*/
 
-#group{
-	transition: opacity 0.22s ease;
-}
-
 #group.panelOpen{
 	opacity: 0;
 	pointer-events: none;
@@ -1217,6 +1216,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	 -webkit-border-radius: 15px;
 	font: 17px 'Press Start 2P', monospace;
 	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
 }
 
 .panelBodyLeft{
@@ -1457,6 +1457,22 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	display: inline-block;
 }
 
+.volumeSliderWrap{
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	font: 14px 'Press Start 2P', monospace;
+}
+
+.volumeSliderWrap input[type=range]{
+	width: 220px;
+}
+
+.volumeSliderWrap span.val{
+	width: 40px;
+	display: inline-block;
+}
+
 /*////////////////////////////////////////////////////////////////////////////////CRT filter////////////////////////////////////////////////////////////////////////////////////*/
 
 #crtOverlay{
@@ -1550,10 +1566,6 @@ footer2 {
 @keyframes ff7CursorBounce{
 	0%  { transform: translateX(0px);  }
 	100%{ transform: translateX(6px);  }
-}
-
-#menu li{
-	cursor: default;
 }
 
 /*////////////////////////////////////////////////////////////////////////////////Panel: Equipo////////////////////////////////////////////////////////////////////////////////////*/
@@ -1768,6 +1780,7 @@ footer2 {
 	right: 0px;
 	bottom: 0px;
 	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
 	border: 5px solid white;
 	border-radius: 15px;
 	box-sizing: border-box;
@@ -1883,4 +1896,5 @@ footer2 {
 html, body{
 	overscroll-behavior: none;
 	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
 }

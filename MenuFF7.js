@@ -262,6 +262,7 @@ function leerPreferencias() {
 	let color = coloresPorDefecto;
 	let sonido = true;
 	let crt = true;
+	let volumen = 0.75; // 75% por defecto
 	try {
 		const guardado = localStorage.getItem('mff7_color');
 		if (guardado) { color = JSON.parse(guardado); }
@@ -269,8 +270,10 @@ function leerPreferencias() {
 		if (sGuardado !== null) { sonido = sGuardado === '1'; }
 		const cGuardado = localStorage.getItem('mff7_crt');
 		if (cGuardado !== null) { crt = cGuardado === '1'; }
+		const vGuardado = localStorage.getItem('mff7_volumen');
+		if (vGuardado !== null) { volumen = parseFloat(vGuardado); }
 	} catch (e) { /* localStorage no disponible: usamos los valores por defecto */ }
-	return { color: color, sonido: sonido, crt: crt };
+	return { color: color, sonido: sonido, crt: crt, volumen: volumen };
 }
 
 function shade(r, g, b, factor) {
@@ -304,11 +307,16 @@ function aplicarCrt(activado) {
 	if (scaler) { scaler.classList.toggle('crtBlur', activado); }
 }
 
+function aplicarVolumen(nivel) {
+	// nivel va de 0 a 1
+	for (const clave in sonidos) {
+		if (sonidos.hasOwnProperty(clave)) { sonidos[clave].volume = nivel; }
+	}
+}
+
 const preferencias = leerPreferencias();
 aplicarColorVentana(preferencias.color.r, preferencias.color.g, preferencias.color.b);
 aplicarCrt(preferencias.crt);
-
-
 // ============================================================
 // SISTEMA DE SONIDO
 // ============================================================
@@ -326,6 +334,8 @@ const sonidos = {
 	victory:     new Audio('Assets/Audio/Victory.mp3'),
 	crit:        new Audio('Assets/Audio/crit.mp3')
 };
+
+aplicarVolumen(preferencias.volumen);
 
 function playSound(nombre) {
 	// Leer preferencia de sonido en tiempo real (el usuario puede cambiarla en Config)
@@ -1177,6 +1187,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		const valB = document.querySelector('#valB');
 		const soundToggle = document.querySelector('#soundToggle');
 		const crtToggle = document.querySelector('#crtToggle');
+		const rngVolumen = document.querySelector('#rngVolumen');
+		const valVolumen = document.querySelector('#valVolumen');
 
 		const hintPorDefecto = 'Pasa el cursor sobre una opción para ver más información.';
 
@@ -1264,6 +1276,27 @@ document.addEventListener('DOMContentLoaded', function () {
 				actualizarToggleVisual(soundToggle, sonidoActivado ? 'on' : 'off');
 				try { localStorage.setItem('mff7_sonido', sonidoActivado ? '1' : '0'); } catch (e) {}
 			});
+		});
+
+		// ---- Volumen ----
+		let volumenActual = preferencias.volumen;
+		rngVolumen.value = Math.round(volumenActual * 100);
+		valVolumen.textContent = pad3(Math.round(volumenActual * 100));
+
+		let ultimoSonidoVolumen = 0;
+		rngVolumen.addEventListener('mouseenter', function () { playSound('slider'); });
+		rngVolumen.addEventListener('input', function () {
+			volumenActual = parseInt(rngVolumen.value, 10) / 100;
+			valVolumen.textContent = pad3(parseInt(rngVolumen.value, 10));
+			aplicarVolumen(volumenActual);
+			try { localStorage.setItem('mff7_volumen', String(volumenActual)); } catch (e) {}
+			// Sonido al arrastrar, con throttle para que no se solape el audio,
+			// y usando el volumen recién aplicado (se nota el cambio al instante).
+			const ahora = Date.now();
+			if (ahora - ultimoSonidoVolumen > 60) {
+				playSound('slider');
+				ultimoSonidoVolumen = ahora;
+			}
 		});
 
 		// ---- Efecto CRT ----
