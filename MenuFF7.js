@@ -43,7 +43,7 @@ window.mff7Scale = 1;
 
 
 
-// Proyectos: "link" puede quedar vacío ("") si todavía no lo tenés.
+// Proyectos: "link" puede quedar vacío ("") si todavía no lo tienes.
 const proyectos = [
 	{
 		nombre: "RPG 2D — Estilo Dragon Quest Mistrel Song",
@@ -598,7 +598,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		const mpValueEl = document.querySelector('#materiaMpValue');
 
 		let slotSeleccionado = null; // { datos, el }
-		const hintPorDefecto = 'Tocá una ranura y después una materia para equiparla (o desequipar).';
+		const hintPorDefecto = 'Toca una ranura y después una materia para equiparla (o desequipar).';
 
 		// Las ranuras "vivas" (con los colores de materia que el jugador puso)
 		// para cada categoría. Se regeneran cada vez que cambia el arma/armadura
@@ -690,8 +690,8 @@ document.addEventListener('DOMContentLoaded', function () {
 					slotSeleccionado = { datos: datos, el: slot };
 					slot.classList.add('selected');
 					description.textContent = datos.color
-						? 'Elegí una materia para reemplazarla, o volvé a tocar esta ranura para quitarla.'
-						: 'Elegí una materia de la lista para equiparla en esta ranura.';
+						? 'Elige una materia para reemplazarla, o vuelve a tocar esta ranura para quitarla.'
+						: 'Elige una materia de la lista para equiparla en esta ranura.';
 				});
 
 				container.appendChild(slot);
@@ -837,7 +837,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		};
 
 		const etiquetas = { arma: 'Arma', armadura: 'Armadura', accesorio: 'Accesorio' };
-		const hintPorDefecto = 'Elegí Arma, Armadura o Accesorio para ver el equipo disponible.';
+		const hintPorDefecto = 'Elige Arma, Armadura o Accesorio para ver el equipo disponible.';
 
 		let categoriaActiva = 'arma';
 
