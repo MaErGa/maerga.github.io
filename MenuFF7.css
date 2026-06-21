@@ -86,7 +86,12 @@ body{
 	height: 770px;
 	flex-shrink: 0;
 	transform-origin: center center;
-	transition: transform 0.15s ease;
+	transition: transform 0.15s ease, filter 0.3s ease;
+}
+
+/* Desenfoque casi imperceptible que acompaña al efecto CRT (mismo toggle en Config). */
+#viewportScaler.crtBlur{
+	filter: blur(0.7px);
 }
 	 
 #group{
@@ -1224,6 +1229,17 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	padding: 20px 30px;
 }
 
+/* Ajuste fino pedido: el contenido de Equipo e Historia quedaba demasiado
+   pegado al borde izquierdo; lo movemos ~1mm (4px) hacia la derecha. */
+#panelEquipo .panelBodyRight{
+	padding-left: 34px;
+}
+
+/* Mismo ajuste de 1mm (4px) hacia la derecha para la lista de Proyectos. */
+#panelProyectos .panelBodyRight{
+	padding-left: 34px;
+}
+
 .panelList{
 	list-style: none;
 	margin: 0px;
@@ -1735,14 +1751,20 @@ footer2 {
 	border-radius: 4px;
 	background: linear-gradient(to right, #2a0a6e, #6a3df5, #a98cff);
 	box-shadow: 0 0 10px 2px rgba(140,100,255,0.7);
-	transition: width 1.1s ease;
+	transition: width 1.1s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Último tramo antes de completar: aviso visual en rojo, como un "casi listo". */
+.historiaLoadBar.red{
+	background: linear-gradient(to right, #6e0a0a, #f53d3d, #ff8c8c);
+	box-shadow: 0 0 10px 2px rgba(255,80,80,0.7);
 }
 
 /* Paso 3: tarjetas tipo save-file */
 .historiaCards{
 	position: absolute;
 	top: 70px;
-	left: 0px;
+	left: 4px;
 	right: 0px;
 	bottom: 0px;
 	overflow-y: auto;

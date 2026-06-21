@@ -299,6 +299,9 @@ function aplicarColorVentana(r, g, b) {
 function aplicarCrt(activado) {
 	const overlay = document.querySelector('#crtOverlay');
 	if (overlay) { overlay.classList.toggle('on', activado); }
+	// El desenfoque sutil acompaña al CRT: mismo interruptor, mismo estado.
+	const scaler = document.querySelector('#viewportScaler');
+	if (scaler) { scaler.classList.toggle('crtBlur', activado); }
 }
 
 const preferencias = leerPreferencias();
@@ -657,6 +660,8 @@ document.addEventListener('DOMContentLoaded', function () {
 				slot.className = 'slot' + (datos.linked ? ' linked' : '');
 				refrescarSlotVisual(slot, datos);
 
+				slot.addEventListener('mouseenter', function () { playSound('slider'); });
+
 				slot.addEventListener('click', function (e) {
 					e.stopPropagation();
 
@@ -731,6 +736,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				li.addEventListener('mouseenter', function () {
 					description.textContent = materia.descripcion;
 					showMateria(materia);
+					playSound('slider');
 				});
 
 				li.addEventListener('click', function () {
@@ -933,6 +939,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 				list.appendChild(li);
 			});
+
+			// La lista se reconstruye en cada cambio de categoría o de ítem
+			// equipado (innerHTML = ''), lo que perdía los listeners de
+			// cursor (mano) y sonido. Redisparamos el rebind cada vez.
+			document.dispatchEvent(new Event('panelListBuilt'));
 		}
 
 		categoriasEls.forEach(function (li) {
@@ -942,6 +953,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			li.addEventListener('mouseenter', function () {
 				const itemEquipado = buscarItem(li.dataset.categoria, equipoActual[li.dataset.categoria]);
 				description.textContent = etiquetas[li.dataset.categoria] + ': ' + (itemEquipado ? itemEquipado.nombre : '—');
+				playSound('slider');
 			});
 		});
 
@@ -986,6 +998,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		let loadTimeout1 = null;
 		let loadTimeout2 = null;
+		let loadTimeoutRed = null;
 
 		function showStep(stepEl) {
 			[stepSelect, stepLoading, stepList].forEach(function (s) { s.classList.remove('show'); });
@@ -1056,6 +1069,22 @@ document.addEventListener('DOMContentLoaded', function () {
 			card.appendChild(info);
 			card.appendChild(right);
 			card.addEventListener('click', function () { playSound('saveSelect'); });
+			card.addEventListener('mouseenter', function () {
+				var cursorEl = document.querySelector('#ff7Cursor');
+				if (cursorEl) {
+					var scale = window.mff7Scale || 1;
+					var scalerRect = (document.querySelector('#viewportScaler') || document.body).getBoundingClientRect();
+					var rect = card.getBoundingClientRect();
+					cursorEl.style.top  = ((rect.top  - scalerRect.top)  / scale + rect.height / scale / 2 - 15) + 'px';
+					cursorEl.style.left = ((rect.left - scalerRect.left) / scale - 62) + 'px';
+					cursorEl.classList.add('visible');
+				}
+				playSound('slider');
+			});
+			card.addEventListener('mouseleave', function () {
+				var cursorEl = document.querySelector('#ff7Cursor');
+				if (cursorEl) cursorEl.classList.remove('visible');
+			});
 			return card;
 		}
 
@@ -1070,13 +1099,19 @@ document.addEventListener('DOMContentLoaded', function () {
 		function startFlow(items, tag) {
 			showStep(stepLoading);
 			loadBar.style.width = '0%';
+			loadBar.classList.remove('red');
 			clearTimeout(loadTimeout1);
 			clearTimeout(loadTimeout2);
+			clearTimeout(loadTimeoutRed);
 			window.requestAnimationFrame(function () {
 				loadTimeout1 = setTimeout(function () {
 					loadBar.style.width = '100%';
 				}, 50);
 			});
+			// Último tramo de la carga: la barra se pone roja justo antes de llegar al 100%.
+			loadTimeoutRed = setTimeout(function () {
+				loadBar.classList.add('red');
+			}, 1000);
 			loadTimeout2 = setTimeout(function () {
 				buildList(items, tag);
 				showStep(stepList);
@@ -1194,16 +1229,26 @@ document.addEventListener('DOMContentLoaded', function () {
 			actualizarSliders();
 		});
 
+		let ultimoSonidoSlider = 0;
 		[[rngR, 'r', valR], [rngG, 'g', valG], [rngB, 'b', valB]].forEach(function (grupo) {
 			const input = grupo[0], canal = grupo[1], etiqueta = grupo[2];
+			input.addEventListener('mouseenter', function () { playSound('slider'); });
 			input.addEventListener('input', function () {
 				colorActual[canal] = parseInt(input.value, 10);
 				etiqueta.textContent = pad3(colorActual[canal]);
 				aplicarColorVentana(colorActual.r, colorActual.g, colorActual.b);
 				guardarColor();
+				// Sonido también al arrastrar el slider (izquierda o derecha),
+				// con un pequeño throttle para que no se solape el audio.
+				const ahora = Date.now();
+				if (ahora - ultimoSonidoSlider > 60) {
+					playSound('slider');
+					ultimoSonidoSlider = ahora;
+				}
 			});
 		});
 
+		resetBtn.addEventListener('mouseenter', function () { playSound('slider'); });
 		resetBtn.addEventListener('click', function () {
 			colorActual = Object.assign({}, coloresPorDefecto);
 			actualizarSliders();
