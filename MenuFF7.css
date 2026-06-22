@@ -1910,3 +1910,45 @@ html, body{
 	touch-action: manipulation;
 	-webkit-tap-highlight-color: transparent;
 }
+/*////////////////////////////////////////////////////////////////////////////////Sombras de texto + relieve de barras (añadido)////////////////////////////////////////////////////////////////////////////////////*/
+
+/* Sombra de texto general para mejorar lectura, estilo PS1 */
+#menu li,
+#time li,
+#footer,
+#biografia,
+.statsTable td,
+.levelsTable td,
+.panelHeader span,
+.panelHeaderUse,
+.panelCardName,
+.panelDescription,
+.panelList li,
+.panelBodyLeft,
+.equipCategoryList li,
+.equipLabel,
+.equipValor,
+.equipCatLabel,
+.equipCatValor,
+.historiaTopBar,
+.historiaChoiceBtn,
+.historiaFileTag,
+.configLabel,
+.chan,
+.val,
+h1, h2{
+	text-shadow: 1px 1px 2px rgba(0,0,0,0.75);
+}
+
+/* Relieve en las barras (HP/MP y Nivel/Limit) para que luzcan con volumen, como en la captura de referencia */
+.hpBar, .mpBar{
+	box-shadow: 0 0 0 1px rgba(0,0,0,0.55), inset 0 1px 1px rgba(255,255,255,0.45);
+}
+
+.hpBarFont, .mpBarFont{
+	box-shadow: 0 0 0 1px rgba(0,0,0,0.55);
+}
+
+.levelBar, .limitBar, .limitBarFury, .limitBarSadness, .limitBarBreak{
+	box-shadow: inset 0 1px 2px rgba(255,255,255,0.55), inset 0 -1px 2px rgba(0,0,0,0.35);
+}
