@@ -129,7 +129,7 @@ const historiaTrabajo = [
 
 const historiaEducacion = [
 	{
-		logo: "Assets/Imagenes/Logos/ETalent.png",
+		logo: "Assets/Imagenes/Logos/Etalent.png",
 		logoTexto: "E-Talent (Telde)",
 		nivel: 38,
 		rol: "IFCD57 - Programación para Videojuegos en Unity.",
