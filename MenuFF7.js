@@ -97,7 +97,7 @@ const historiaTrabajo = [
 		logo: "Assets/Imagenes/Logos/SantanaJerez.png",
 		logoTexto: "Santana Jerez S.L",
 		nivel: 36,
-		rol: "Prácticas",
+		rol: "Prácticas de Empresa",
 		años: "2024",
 		organizacion: "Santana Jerez S.L"
 	},
@@ -105,7 +105,7 @@ const historiaTrabajo = [
 		logo: "Assets/Imagenes/Logos/TumovilCanario.png",
 		logoTexto: "Tu móvil canario",
 		nivel: 35,
-		rol: "Prácticas",
+		rol: "Prácticas de Empresa",
 		años: "2022",
 		organizacion: "Tu móvil canario"
 	},
