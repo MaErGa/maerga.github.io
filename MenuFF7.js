@@ -102,7 +102,7 @@ const historiaTrabajo = [
 		organizacion: "Santana Jerez S.L"
 	},
 	{
-		logo: "Assets/Imagenes/Logos/TuMovilCanario.png",
+		logo: "Assets/Imagenes/Logos/TumovilCanario.png",
 		logoTexto: "Tu móvil canario",
 		nivel: 35,
 		rol: "Prácticas",
