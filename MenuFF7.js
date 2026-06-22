@@ -129,29 +129,38 @@ const historiaTrabajo = [
 
 const historiaEducacion = [
 	{
-		logo: null,
-		logoTexto: "Universidad",
-		nivel: 20,
-		rol: "Grado en Ingeniería Informática",
-		años: "2015-2019",
-		organizacion: "Universidad de Ejemplo"
+		logo: "Assets/Imagenes/Logos/ETalent.png",
+		logoTexto: "E-Talent (Telde)",
+		nivel: 38,
+		rol: "IFCD57 - Programación para Videojuegos en Unity.",
+		años: "2026",
+		organizacion: "Asociación Empleo y Talento (e-talent)"
 	},
 	{
-		logo: null,
-		logoTexto: "Instituto",
-		nivel: 16,
-		rol: "Ciclo de Desarrollo de Aplicaciones",
-		años: "2013-2015",
-		organizacion: "Instituto de Ejemplo"
+		logo: "Assets/Imagenes/Logos/Focan.jpg",
+		logoTexto: "Instituto Focan",
+		nivel: 38,
+		rol: "IFCT45- Competencias digitales básicas",
+		años: "2026",
+		organizacion: "Instituto Focan"
 	},
 	{
-		logo: null,
-		logoTexto: "",
-		nivel: null,
-		rol: "",
-		años: "",
-		organizacion: "",
-		vacio: true
+		logo: "Assets/Imagenes/Logos/Escuela.png",
+		logoTexto: "Escuela de Hostelería Europea",
+		nivel: 35,
+		rol: "IFCT0209 - Sistemas microinformáticos.",
+		años: "2024",
+		organizacion: "Escuela de Hostelería Europea",
+		vacio: false
+	},
+	{
+		logo: "Assets/Imagenes/Logos/Aura.png",
+		logoTexto: "Centro de Formación Empresarial Aura, SL",
+		nivel: 34,
+		rol: "IFCT0108 - Operaciones auxiliares de montaje y mantenimiento de sistemas microinformáticos",
+		años: "2022",
+		organizacion: "Centro de Formación Empresarial Aura, SL",
+		vacio: false
 	}
 ];
 
