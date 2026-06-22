@@ -86,29 +86,44 @@ const materias = [
 // Reemplazá estos datos de ejemplo por los tuyos reales cuando quieras.
 const historiaTrabajo = [
 	{
-		logo: null, // url de imagen del logo de la empresa, o null para usar texto
-		logoTexto: "Empresa A",
+		logo: "Assets/Imagenes/Logos/elcorteingles.png", // url de imagen del logo de la empresa, o null para usar texto
+		logoTexto: "El Corte Ingles",
+		nivel: 36,
+		rol: "Logistica",
+		años: "2024 Noviembre - 2025 Enero",
+		organizacion: "El Corte Ingles"
+	},
+	{
+		logo: "Assets/Imagenes/Logos/SantanaJerez.png",
+		logoTexto: "Santana Jerez S.L",
+		nivel: 36,
+		rol: "Prácticas",
+		años: "2024",
+		organizacion: "Santana Jerez S.L"
+	},
+	{
+		logo: "Assets/Imagenes/Logos/TuMovilCanario.png",
+		logoTexto: "Tu móvil canario",
+		nivel: 35,
+		rol: "Prácticas",
+		años: "2022",
+		organizacion: "Tu móvil canario"
+	},
+	{
+		logo: null,
+		logoTexto: "Mercadillo de Jinámar",
 		nivel: 30,
-		rol: "Desarrollador Senior",
-		años: "2022-Actualidad",
-		organizacion: "Empresa A S.L."
+		rol: "Atención al Público y Ventas",
+		años: "2008 - 2020",
+		organizacion: "Mercadillo de Jinámar"
 	},
 	{
 		logo: null,
-		logoTexto: "Empresa B",
-		nivel: 24,
-		rol: "Desarrollador Junior",
-		años: "2019-2022",
-		organizacion: "Empresa B S.L."
-	},
-	{
-		logo: null,
-		logoTexto: "",
-		nivel: null,
-		rol: "",
-		años: "",
-		organizacion: "",
-		vacio: true
+		logoTexto: "Valsequillo Embellece 2019",
+		nivel: 32,
+		rol: "Formación y Empleo (Construcción)",
+		años: "2019 - 2020",
+		organizacion: "Proyecto de Formación en Alternancia con el Empleo"
 	}
 ];
 
