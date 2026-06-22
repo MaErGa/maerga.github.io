@@ -86,7 +86,7 @@ const materias = [
 // Reemplazá estos datos de ejemplo por los tuyos reales cuando quieras.
 const historiaTrabajo = [
 	{
-		logo: "Assets/Imagenes/Logos/elcorteingles.png", // url de imagen del logo de la empresa, o null para usar texto
+		logo: "Assets/Imagenes/Logos/ElCorteIngles.png", // url de imagen del logo de la empresa, o null para usar texto
 		logoTexto: "El Corte Ingles",
 		nivel: 36,
 		rol: "Logistica",
