@@ -601,7 +601,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	position: absolute;
 	padding: 10px 0px 10px 40px;
 	width: 250px;
-	height: 520px;
+	height: 470px;
 	list-style: none;
 	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
 	border: 5px solid;
