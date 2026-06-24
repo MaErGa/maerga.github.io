@@ -56,9 +56,9 @@ const proyectos = [
 		link: "https://maerga.itch.io/pirate-plataformer-alpha-version"
 	},
 	{
-		nombre: "",
-		descripcion: "",
-		link: ""
+		nombre: "Duel Calculator",
+		descripcion: "Calculadora interactiva de puntos de vida (LP) para Yu-Gi-Oh! con diseño responsivo. Desarrollada con HTML, CSS y JavaScript nativo para ofrecer un control rápido y preciso durante los duelos.",
+		link: "https://MaErGa.github.io/duelcalculator/"
 	}
 ];
 
