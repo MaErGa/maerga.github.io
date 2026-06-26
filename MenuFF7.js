@@ -46,21 +46,19 @@ window.mff7Scale = 1;
 // Proyectos: "link" puede quedar vacío ("") si todavía no lo tenés.
 const proyectos = [
 	{
-		nombre: "Duel Calculator",
-		descripcion: "Calculadora interactiva de puntos de vida (LP) para Yu-Gi-Oh! con diseño responsivo. Desarrollada con HTML, CSS y JavaScript nativo para ofrecer un control rápido y preciso durante los duelos.",
-		link: "https://MaErGa.github.io/duelcalculator/"
-		
-	},
-	{
 		nombre: "RPG 2D — Estilo Dragon Quest Mistrel Song",
 		descripcion: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
 		link: "https://maerga.itch.io/dragon-quest-mistreal-song"
-		
 	},
 	{
 		nombre: "Pirate Plataformer 2D",
 		descripcion: "Juego de plataformas para la segunda evaluación del curso Programación de Videojuegos con Unity.",
 		link: "https://maerga.itch.io/pirate-plataformer-alpha-version"
+	},
+	{
+		nombre: "Duel Calculator",
+		descripcion: "Calculadora interactiva de puntos de vida (LP) para Yu-Gi-Oh! con diseño responsivo. Desarrollada con HTML, CSS y JavaScript nativo para ofrecer un control rápido y preciso durante los duelos.",
+		link: "https://MaErGa.github.io/duelcalculator/"
 	}
 ];
 
@@ -193,8 +191,8 @@ const materiaInicialArmadura = [
 function patronSlots(cantidadPares, sueltos) {
 	var slots = [];
 	for (var i = 0; i < cantidadPares; i++) {
-		slots.push({ color: '#9aa0a8', linked: true });
-		slots.push({ color: '#9aa0a8', linked: false });
+		slots.push({ color: null, linked: true });
+		slots.push({ color: null, linked: false });
 	}
 	for (var j = 0; j < sueltos; j++) {
 		slots.push({ color: null, linked: false });
@@ -769,6 +767,21 @@ document.addEventListener('DOMContentLoaded', function () {
 			buildSlots(slotsArmaduraEl, ranurasArmadura);
 		}
 
+		// Acceso de solo lectura a las ranuras "vivas" (con los colores de
+		// materia realmente equipados), para que el panel Equipo pueda
+		// pintar sus propios slots con esos mismos colores en vez de gris.
+		window.obtenerRanurasMateriaVivas = function (categoria) {
+			if (categoria === 'arma') { return ranurasArma; }
+			if (categoria === 'armadura') { return ranurasArmadura; }
+			return [];
+		};
+
+		// Sembrar las ranuras desde el arranque (no solo al abrir el panel
+		// Materia), así el panel Equipo ya tiene colores reales disponibles
+		// la primera vez que se abre.
+		ranurasArma = regenerarRanuras('arma', ranurasArma);
+		ranurasArmadura = regenerarRanuras('armadura', ranurasArmadura);
+
 		function highlightSlots(nombre) {
 			document.querySelectorAll('#materiaSlotsArma .slot, #materiaSlotsArmadura .slot').forEach(function (slot) {
 				slot.classList.toggle('highlight', !!nombre && slot.dataset.nombre === nombre);
@@ -939,7 +952,17 @@ document.addEventListener('DOMContentLoaded', function () {
 		function mostrarSlots(item) {
 			slotsEl.innerHTML = '';
 			if (!item) { return; }
-			item.slots.forEach(function (datos) {
+
+			// Si el ítem mostrado es el que está realmente equipado en esta
+			// categoría, usamos las ranuras "vivas" del panel Materia (con
+			// los colores reales puestos por el jugador) en vez del patrón
+			// gris genérico del ítem.
+			const ranurasVivas = (item.nombre === equipoActual[categoriaActiva] && window.obtenerRanurasMateriaVivas)
+				? window.obtenerRanurasMateriaVivas(categoriaActiva)
+				: null;
+
+			item.slots.forEach(function (datosPatron, i) {
+				const datos = (ranurasVivas && ranurasVivas[i]) ? ranurasVivas[i] : datosPatron;
 				const slot = document.createElement('span');
 				slot.className = 'slot' + (datos.linked ? ' linked' : '');
 				slot.style.backgroundImage    = "url('Assets/Imagenes/materia-slot.png')";
@@ -1291,16 +1314,18 @@ document.addEventListener('DOMContentLoaded', function () {
 		(function() {
 			var chans = document.querySelectorAll('.colorPicker .chan');
 			var rgbOffsets = { 'R': 0, 'G': 11, 'B': 22 };
+			var escala = 1.6; // factor de agrandado del sprite (base 11x8)
 			chans.forEach(function(span) {
 				var letra = span.textContent.trim();
 				var ox = rgbOffsets[letra];
 				if (ox === undefined) return;
 				span.textContent = '';
 				span.style.display = 'inline-block';
-				span.style.width = '11px';
-				span.style.height = '8px';
+				span.style.width = (11 * escala) + 'px';
+				span.style.height = (8 * escala) + 'px';
 				span.style.backgroundImage = "url('Assets/Imagenes/rgb-spritesheet.png')";
-				span.style.backgroundPosition = '-' + ox + 'px 0px';
+				span.style.backgroundSize = (33 * escala) + 'px ' + (8 * escala) + 'px';
+				span.style.backgroundPosition = '-' + (ox * escala) + 'px 0px';
 				span.style.backgroundRepeat = 'no-repeat';
 				span.style.imageRendering = 'pixelated';
 				span.style.verticalAlign = 'middle';
@@ -1612,12 +1637,12 @@ document.addEventListener('DOMContentLoaded', function () {
 			const horas = Math.floor(totalSegundos / 3600);
 			const minutos = Math.floor((totalSegundos % 3600) / 60);
 			const segundos = totalSegundos % 60;
-			return horas + ':' + dosDigitos(minutos) + ':' + dosDigitos(segundos);
+			return horas + '<span class="timeColon">:</span>' + dosDigitos(minutos) + '<span class="timeColon">:</span>' + dosDigitos(segundos);
 		}
 
 		function actualizar() {
 			const totalSegundos = Math.floor((Date.now() - inicio) / 1000);
-			elemento.textContent = formatear(totalSegundos);
+			elemento.innerHTML = formatear(totalSegundos);
 		}
 
 		actualizar();

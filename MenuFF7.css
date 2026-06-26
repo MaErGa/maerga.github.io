@@ -694,6 +694,18 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	margin-left: 45px;
 }
 
+.timeColon{
+	animation-name: timeColonBlink;
+	animation-duration: 1.6s;
+	animation-iteration-count: infinite;
+	animation-timing-function: ease-in-out;
+}
+
+@keyframes timeColonBlink{
+	0%, 100%{ opacity: 1; }
+	50%{ opacity: 0.45; }
+}
+
 #gilAmount{
 	position: absolute;
 	width: 192px;
@@ -1173,10 +1185,16 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	position: absolute;
 	top: 50%;
 	left: 100%;
-	width: 8px;
-	height: 4px;
-	background-color: #9aa0a8;
-	transform: translateY(-50%);
+	width: 13px;
+	height: 9px;
+	transform: translate(-2px, -50%);
+	background-image: url('Assets/Imagenes/materia-connector.png');
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	image-rendering: pixelated;
+	image-rendering: crisp-edges;
+	filter: drop-shadow(0 0 1px rgba(0,0,0,0.8));
+	z-index: 1;
 }
 
 .panelDescription{
@@ -1274,12 +1292,15 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	border-radius: 50%;
 	background-color: var(--orb-color, #888);
 	background-image:
-		radial-gradient(circle at 35% 28%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.55) 8%, rgba(255,255,255,0) 35%),
-		radial-gradient(circle at 50% 50%, var(--orb-color-light, var(--orb-color, #aaa)) 0%, var(--orb-color, #888) 55%, var(--orb-color-dark, #333) 100%);
+		radial-gradient(circle at 32% 24%, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.7) 5%, rgba(255,255,255,0) 22%),
+		radial-gradient(circle at 70% 65%, var(--orb-color-light, var(--orb-color, #aaa)) 0%, rgba(255,255,255,0) 30%),
+		radial-gradient(circle at 30% 70%, var(--orb-color-light, var(--orb-color, #aaa)) 0%, rgba(255,255,255,0) 28%),
+		radial-gradient(circle at 50% 50%, var(--orb-color-light, var(--orb-color, #aaa)) 0%, var(--orb-color, #888) 60%, var(--orb-color-dark, #333) 100%);
 	box-shadow:
-		inset -3px -3px 5px rgba(0,0,0,0.45),
-		inset 2px 2px 4px rgba(255,255,255,0.35),
-		0 1px 2px rgba(0,0,0,0.5);
+		0 0 6px 1px var(--orb-color, #888),
+		inset -3px -3px 5px rgba(0,0,0,0.4),
+		inset 2px 2px 4px rgba(255,255,255,0.45),
+		0 1px 2px rgba(0,0,0,0.4);
 }
 
 .orbSprite{
@@ -1297,12 +1318,15 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	pointer-events: none;
 	background-color: var(--orb-color, #888);
 	background-image:
-		radial-gradient(circle at 35% 28%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.55) 8%, rgba(255,255,255,0) 35%),
-		radial-gradient(circle at 50% 50%, var(--orb-color-light, var(--orb-color, #aaa)) 0%, var(--orb-color, #888) 55%, var(--orb-color-dark, #333) 100%);
+		radial-gradient(circle at 32% 24%, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.7) 5%, rgba(255,255,255,0) 22%),
+		radial-gradient(circle at 70% 65%, var(--orb-color-light, var(--orb-color, #aaa)) 0%, rgba(255,255,255,0) 30%),
+		radial-gradient(circle at 30% 70%, var(--orb-color-light, var(--orb-color, #aaa)) 0%, rgba(255,255,255,0) 28%),
+		radial-gradient(circle at 50% 50%, var(--orb-color-light, var(--orb-color, #aaa)) 0%, var(--orb-color, #888) 60%, var(--orb-color-dark, #333) 100%);
 	box-shadow:
-		inset -2px -2px 4px rgba(0,0,0,0.45),
-		inset 1px 1px 3px rgba(255,255,255,0.35),
-		0 1px 2px rgba(0,0,0,0.5);
+		0 0 5px 1px var(--orb-color, #888),
+		inset -2px -2px 4px rgba(0,0,0,0.4),
+		inset 1px 1px 3px rgba(255,255,255,0.45),
+		0 1px 2px rgba(0,0,0,0.4);
 }
 
 .orbInSlot.orbHidden{
@@ -1447,6 +1471,10 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	flex-direction: column;
 	gap: 6px;
 	font: 14px 'Press Start 2P', monospace;
+	border: 2px solid white;
+	border-radius: 6px;
+	padding: 10px 16px;
+	background: rgba(0, 0, 0, 0.18);
 }
 
 .colorPicker .sliders label{
@@ -1456,7 +1484,8 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 }
 
 .colorPicker .sliders span.chan{
-	width: 16px;
+	width: 20px;
+	font-size: 22px;
 	font-weight: bold;
 }
 
