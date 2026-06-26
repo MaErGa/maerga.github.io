@@ -1,0 +1,1 @@
+Esta es una recreación fiel de la pantalla del menú de Final Fantasy 7, convertida en mi sitio web personal para mostrar mis proyectos. Utiliza principalmente HTML, CSS y JavaScript, y busca ser lo más fiel posible al material original. Puede verse aquí: https://maerga.github.io
