@@ -56,7 +56,7 @@ const proyectos = [
 		link: "https://maerga.itch.io/pirate-plataformer-alpha-version"
 	},
 	{
-		nombre: "RPG 2D — Estilo Dragon Quest Mistrel Song",
+		nombre: "RPG 2D Dragon Quest Mistrel Song",
 		descripcion: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
 		link: "https://maerga.itch.io/dragon-quest-mistreal-song"
 	}
