@@ -51,12 +51,12 @@ const proyectos = [
 		link: "https://MaErGa.github.io/duelcalculator/"
 	},
 	{
-		nombre: "Pirate Plataformer 2D",
+		nombre: "Pirate Plataformer",
 		descripcion: "Juego de plataformas para la segunda evaluación del curso Programación de Videojuegos con Unity.",
 		link: "https://maerga.itch.io/pirate-plataformer-alpha-version"
 	},
 	{
-		nombre: "RPG 2D Dragon Quest Mistrel Song",
+		nombre: "Dragon Quest Mistrel Song",
 		descripcion: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
 		link: "https://maerga.itch.io/dragon-quest-mistreal-song"
 	}
