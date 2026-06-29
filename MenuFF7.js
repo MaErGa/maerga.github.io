@@ -470,6 +470,11 @@ function actualizarNivelPorEdad() {
 	if (hpMinEl) { hpMinEl.textContent = hpMax + '/'; }
 	if (mpMaxEl) { mpMaxEl.textContent = mpMax; }
 	if (mpMinEl) { mpMinEl.textContent = mpMax + '/'; }
+
+	// Se expone para que otras partes del script (ej. tabla de stats de
+	// Equipo) puedan sumar el bono de nivel a los stats fijos del ítem.
+	window.mff7Nivel = edad;
+	window.mff7NivelBase = NIVEL_BASE;
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -1081,13 +1086,22 @@ document.addEventListener('DOMContentLoaded', function () {
 		// Si "preview" es null, muestra solo los valores actuales (equipados).
 		function mostrarStats(itemActual, itemPreview) {
 			const claves = ['attack', 'attackP', 'defense', 'defenseP', 'magicAtk', 'magicDefP'];
+			// Solo los stats fijos (no los "%") crecen con el nivel del
+			// personaje; los porcentuales son propios del ítem equipado.
+			const clavesFijas = ['attack', 'defense', 'magicAtk'];
+			const ATAQUE_DEFENSA_POR_NIVEL = 2;
+			const nivel = window.mff7Nivel || window.mff7NivelBase || 0;
+			const nivelBase = window.mff7NivelBase || nivel;
+			const bonoNivel = (nivel - nivelBase) * ATAQUE_DEFENSA_POR_NIVEL;
+
 			claves.forEach(function (clave) {
-				const actual = itemActual ? itemActual.stats[clave] : 0;
+				const esFija = clavesFijas.indexOf(clave) !== -1;
+				const actual = (itemActual ? itemActual.stats[clave] : 0) + (esFija ? bonoNivel : 0);
 				const el = statEls[clave];
 				el.innerHTML = '';
 
 				if (itemPreview && itemPreview !== itemActual) {
-					const proyectado = itemPreview.stats[clave];
+					const proyectado = itemPreview.stats[clave] + (esFija ? bonoNivel : 0);
 					const spanActual = document.createElement('span');
 					spanActual.className = 'statPreview';
 					spanActual.textContent = actual;
