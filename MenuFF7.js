@@ -445,7 +445,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		panelEl.style.height = rect.height + 'px';
 		headerEl.style.width = rect.menuWidth + 'px';
 		if (headerUseEl) {
-			headerUseEl.style.width = (rect.width - rect.menuWidth - 8) + 'px';
+			headerUseEl.style.width = (rect.width - rect.menuWidth) + 'px';
 		}
 	}
 

@@ -1023,6 +1023,10 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 
 .panelHeaderUse{
 	left: 0px;
+	height: 70px;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
 }
 
 .panelHeader.show, .panelHeaderUse.show{
@@ -1220,7 +1224,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 .panelDescription{
 	position: absolute;
 	left: 0px;
-	top: 318px;
+	top: 300px;
 	width: 100%;
 	height: 50px;
 	box-sizing: border-box;
@@ -1244,11 +1248,11 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 .panelBody{
 	position: absolute;
 	left: 0px;
-	top: 384px;
+	top: 350px;
 	width: 100%;
 	bottom: 0px;
 	display: flex;
-	gap: 8px;
+	gap: 0px;
 	opacity: 0;
 	transition: opacity 0.22s ease;
 }
