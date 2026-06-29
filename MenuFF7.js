@@ -409,12 +409,21 @@ function playSound(nombre) {
 
 // Nivel = edad real de Matías. La barra "Next level" se llena con el
 // progreso transcurrido desde el último cumpleaños hasta el próximo;
-// al llegar al 100% (el día del cumpleaños) el nivel sube solo.
+// al llegar al 100% (el día del cumpleaños) el nivel sube solo, y junto
+// con el nivel suben también los stats (HP/MP máximos), como en un RPG.
 function actualizarNivelPorEdad() {
 	const NACIMIENTO_DIA = 30;
 	const NACIMIENTO_MES = 7; // Agosto, 0-indexado
 	const NACIMIENTO_ANIO = 1987;
 	const ANCHO_TRACK_LEVELBAR = 180; // debe coincidir con #firstLevelBar máximo
+
+	// Stats base "ancladas" al nivel 38 (los valores actuales del menú).
+	// Por cada nivel de más, HP y MP suben esta cantidad fija.
+	const NIVEL_BASE = 38;
+	const HP_BASE = 2050;
+	const MP_BASE = 260;
+	const HP_POR_NIVEL = 60;
+	const MP_POR_NIVEL = 8;
 
 	const hoy = new Date();
 
@@ -445,6 +454,22 @@ function actualizarNivelPorEdad() {
 		const el = document.querySelector(selector);
 		if (el) { el.textContent = edad; }
 	});
+
+	// Stats que crecen con el nivel: se escriben en la tarjeta principal
+	// (a HP/MP completos); el resto de los paneles los sincronizan solos
+	// al abrirse, leyendo estos mismos valores.
+	const hpMax = HP_BASE + (edad - NIVEL_BASE) * HP_POR_NIVEL;
+	const mpMax = MP_BASE + (edad - NIVEL_BASE) * MP_POR_NIVEL;
+
+	const hpMaxEl = document.querySelector('#firstHpMax');
+	const hpMinEl = document.querySelector('#firstHpMin');
+	const mpMaxEl = document.querySelector('#firstMpMax');
+	const mpMinEl = document.querySelector('#firstMpMin');
+
+	if (hpMaxEl) { hpMaxEl.textContent = hpMax; }
+	if (hpMinEl) { hpMinEl.textContent = hpMax + '/'; }
+	if (mpMaxEl) { mpMaxEl.textContent = mpMax; }
+	if (mpMinEl) { mpMinEl.textContent = mpMax + '/'; }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
