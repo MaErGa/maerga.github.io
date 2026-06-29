@@ -439,6 +439,12 @@ function actualizarNivelPorEdad() {
 		if (statusSpan) { levelEl.appendChild(statusSpan); }
 	}
 	if (levelBarEl) { levelBarEl.style.width = (progreso * ANCHO_TRACK_LEVELBAR) + 'px'; }
+
+	// Mismo nivel en las tarjetas de los paneles (Proyectos, Materia, Equipo).
+	['#proyectosLevel', '#materiaLevel', '#equipoLevel'].forEach(function (selector) {
+		const el = document.querySelector(selector);
+		if (el) { el.textContent = edad; }
+	});
 }
 
 document.addEventListener('DOMContentLoaded', function () {
