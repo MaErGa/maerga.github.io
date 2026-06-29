@@ -407,7 +407,46 @@ function playSound(nombre) {
 	audio.play().catch(function(){});
 }
 
+// Nivel = edad real de Matías. La barra "Next level" se llena con el
+// progreso transcurrido desde el último cumpleaños hasta el próximo;
+// al llegar al 100% (el día del cumpleaños) el nivel sube solo.
+function actualizarNivelPorEdad() {
+	const NACIMIENTO_DIA = 30;
+	const NACIMIENTO_MES = 7; // Agosto, 0-indexado
+	const NACIMIENTO_ANIO = 1987;
+	const ANCHO_TRACK_LEVELBAR = 180; // debe coincidir con #firstLevelBar máximo
+
+	const hoy = new Date();
+
+	let edad = hoy.getFullYear() - NACIMIENTO_ANIO;
+	const cumpleEsteAnio = new Date(hoy.getFullYear(), NACIMIENTO_MES, NACIMIENTO_DIA);
+	if (hoy < cumpleEsteAnio) { edad--; }
+
+	let proximoCumple = new Date(hoy.getFullYear(), NACIMIENTO_MES, NACIMIENTO_DIA);
+	if (hoy >= proximoCumple) { proximoCumple = new Date(hoy.getFullYear() + 1, NACIMIENTO_MES, NACIMIENTO_DIA); }
+	const cumpleAnterior = new Date(proximoCumple.getFullYear() - 1, NACIMIENTO_MES, NACIMIENTO_DIA);
+
+	const totalMs = proximoCumple - cumpleAnterior;
+	const transcurridoMs = hoy - cumpleAnterior;
+	const progreso = Math.max(0, Math.min(1, transcurridoMs / totalMs));
+
+	const levelEl = document.querySelector('#firstLevel');
+	const levelBarEl = document.querySelector('#firstLevelBar');
+
+	if (levelEl) {
+		const statusSpan = levelEl.querySelector('#firstStatus');
+		levelEl.textContent = edad;
+		if (statusSpan) { levelEl.appendChild(statusSpan); }
+	}
+	if (levelBarEl) { levelBarEl.style.width = (progreso * ANCHO_TRACK_LEVELBAR) + 'px'; }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+
+	actualizarNivelPorEdad();
+	// Revisa una vez por hora por si cruza la medianoche del cumpleaños
+	// mientras la página queda abierta.
+	setInterval(actualizarNivelPorEdad, 60 * 60 * 1000);
 
 	const group = document.querySelector('#group');
 
