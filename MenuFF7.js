@@ -297,7 +297,7 @@ function leerPreferencias() {
 	let color = coloresPorDefecto;
 	let sonido = true;
 	let crt = true;
-	let volumen = 0.75; // 75% por defecto
+	let volumen = 0.35; // 35% por defecto
 	try {
 		const guardado = localStorage.getItem('mff7_color');
 		if (guardado) { color = JSON.parse(guardado); }
@@ -342,7 +342,7 @@ function aplicarCrt(activado) {
 	// #crtOverlay (las scanlines), porque son hermanos dentro del mismo
 	// contenedor: si el blur fuera al padre común, también difuminaría
 	// las líneas finitas del filtro y las dejaba invisibles.
-	const elementosConBlur = document.querySelectorAll('#group, .panelOverlay');
+	const elementosConBlur = document.querySelectorAll('#group, .panelOverlay, #ff7Cursor');
 	elementosConBlur.forEach(function (el) { el.classList.toggle('crtBlur', activado); });
 }
 
@@ -425,7 +425,12 @@ function actualizarNivelPorEdad() {
 	const HP_POR_NIVEL = 60;
 	const MP_POR_NIVEL = 8;
 
+	// TESTING: para probar el cambio de nivel sin esperar al cumpleaños,
+	// comentá la línea "const hoy = new Date();" de abajo y descomentá la
+	// de simulación, poniendo la fecha que quieras probar. No olvidar
+	// volver a dejarlo como estaba antes de subir la página.
 	const hoy = new Date();
+	// const hoy = new Date(2026, 7, 31); // <-- simula 31/08/2026 (cumplido)
 
 	let edad = hoy.getFullYear() - NACIMIENTO_ANIO;
 	const cumpleEsteAnio = new Date(hoy.getFullYear(), NACIMIENTO_MES, NACIMIENTO_DIA);
@@ -1692,6 +1697,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		cursorEl.id = 'ff7Cursor';
 		var scalerHost = document.querySelector('#viewportScaler') || document.body;
 		scalerHost.appendChild(cursorEl);
+		// El cursor se crea después de la primera llamada a aplicarCrt() (esa
+		// corrió cuando el cursor todavía no existía). Volvemos a llamarla
+		// ahora para que el cursor quede sincronizado con el estado real del
+		// CRT desde el primer momento, sin duplicar la lógica del toggle.
+		aplicarCrt(preferencias.crt);
 
 		var currentTarget = null;
 
