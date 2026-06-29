@@ -46,19 +46,19 @@ window.mff7Scale = 1;
 // Proyectos: "link" puede quedar vacío ("") si todavía no lo tenés.
 const proyectos = [
 	{
-		nombre: "RPG 2D — Estilo Dragon Quest Mistrel Song",
-		descripcion: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
-		link: "https://maerga.itch.io/dragon-quest-mistreal-song"
+		nombre: "Duel Calculator",
+		descripcion: "Calculadora interactiva de puntos de vida (LP) para Yu-Gi-Oh! con diseño responsivo. Desarrollada con HTML, CSS y JavaScript nativo para ofrecer un control rápido y preciso durante los duelos.",
+		link: "https://MaErGa.github.io/duelcalculator/"
 	},
 	{
-		nombre: "Pirate Plataformer 2D",
+		nombre: "Pirate Plataformer",
 		descripcion: "Juego de plataformas para la segunda evaluación del curso Programación de Videojuegos con Unity.",
 		link: "https://maerga.itch.io/pirate-plataformer-alpha-version"
 	},
 	{
-		nombre: "Duel Calculator",
-		descripcion: "Calculadora interactiva de puntos de vida (LP) para Yu-Gi-Oh! con diseño responsivo. Desarrollada con HTML, CSS y JavaScript nativo para ofrecer un control rápido y preciso durante los duelos.",
-		link: "https://MaErGa.github.io/duelcalculator/"
+		nombre: "Dragon Quest -Mistrel Song- ",
+		descripcion: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
+		link: "https://maerga.itch.io/dragon-quest-mistreal-song"
 	}
 ];
 
