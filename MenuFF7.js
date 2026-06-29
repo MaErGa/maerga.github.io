@@ -46,19 +46,19 @@ window.mff7Scale = 1;
 // Proyectos: "link" puede quedar vacío ("") si todavía no lo tenés.
 const proyectos = [
 	{
-		nombre: "Duel Calculator",
-		descripcion: "Calculadora interactiva de puntos de vida (LP) para Yu-Gi-Oh! con diseño responsivo. Desarrollada con HTML, CSS y JavaScript nativo para ofrecer un control rápido y preciso durante los duelos.",
-		link: "https://MaErGa.github.io/duelcalculator/"
+		nombre: "RPG 2D — Estilo Dragon Quest Mistrel Song",
+		descripcion: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
+		link: "https://maerga.itch.io/dragon-quest-mistreal-song"
 	},
 	{
-		nombre: "Pirate Plataformer",
+		nombre: "Pirate Plataformer 2D",
 		descripcion: "Juego de plataformas para la segunda evaluación del curso Programación de Videojuegos con Unity.",
 		link: "https://maerga.itch.io/pirate-plataformer-alpha-version"
 	},
 	{
-		nombre: "Dragon Quest Mistrel Song",
-		descripcion: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
-		link: "https://maerga.itch.io/dragon-quest-mistreal-song"
+		nombre: "Duel Calculator",
+		descripcion: "Calculadora interactiva de puntos de vida (LP) para Yu-Gi-Oh! con diseño responsivo. Desarrollada con HTML, CSS y JavaScript nativo para ofrecer un control rápido y preciso durante los duelos.",
+		link: "https://MaErGa.github.io/duelcalculator/"
 	}
 ];
 
@@ -338,8 +338,12 @@ function aplicarCrt(activado) {
 	const overlay = document.querySelector('#crtOverlay');
 	if (overlay) { overlay.classList.toggle('on', activado); }
 	// El desenfoque sutil acompaña al CRT: mismo interruptor, mismo estado.
-	const scaler = document.querySelector('#viewportScaler');
-	if (scaler) { scaler.classList.toggle('crtBlur', activado); }
+	// Se aplica a #group y a cada panel (.panelOverlay), pero NUNCA a
+	// #crtOverlay (las scanlines), porque son hermanos dentro del mismo
+	// contenedor: si el blur fuera al padre común, también difuminaría
+	// las líneas finitas del filtro y las dejaba invisibles.
+	const elementosConBlur = document.querySelectorAll('#group, .panelOverlay');
+	elementosConBlur.forEach(function (el) { el.classList.toggle('crtBlur', activado); });
 }
 
 function aplicarVolumen(nivel) {
@@ -349,9 +353,27 @@ function aplicarVolumen(nivel) {
 	}
 }
 
+// Efecto de "encendido" de un televisor CRT (adaptado del filtro CRT de
+// CodePen). Se dispara al cargar la página si el efecto está activo, y
+// también cada vez que se reactiva desde Config.
+function reproducirEncendidoCrt() {
+	const scaler = document.querySelector('#viewportScaler');
+	if (!scaler) { return; }
+	scaler.classList.remove('crtTurnOn');
+	void scaler.offsetWidth; // reinicia la animación aunque ya se haya jugado antes
+	scaler.classList.add('crtTurnOn');
+	scaler.addEventListener('animationend', function () {
+		scaler.classList.remove('crtTurnOn');
+	}, { once: true });
+}
+
 const preferencias = leerPreferencias();
 aplicarColorVentana(preferencias.color.r, preferencias.color.g, preferencias.color.b);
 aplicarCrt(preferencias.crt);
+
+if (preferencias.crt) {
+	reproducirEncendidoCrt();
+}
 
 
 // ============================================================
@@ -565,6 +587,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				});
 				list.appendChild(li);
 			});
+			document.dispatchEvent(new Event('panelListBuilt'));
 		}
 
 		const proyHpValueEl = document.querySelector('#proyectosHpValue');
@@ -1416,9 +1439,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		actualizarToggleVisual(crtToggle, crtActivado ? 'on' : 'off');
 		crtToggle.querySelectorAll('span').forEach(function (span) {
 			span.addEventListener('click', function () {
+				const estabaApagado = !crtActivado;
 				crtActivado = span.dataset.value === 'on';
 				actualizarToggleVisual(crtToggle, crtActivado ? 'on' : 'off');
 				aplicarCrt(crtActivado);
+				if (estabaApagado && crtActivado) { reproducirEncendidoCrt(); }
 				try { localStorage.setItem('mff7_crt', crtActivado ? '1' : '0'); } catch (e) {}
 			});
 		});
@@ -1607,7 +1632,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		// Aplicar a todos los li interactivos del menú principal, las listas
 		// de paneles, y los slots de materia/equipo (arma, armadura, accesorio).
 		function bindMenuItems() {
-			document.querySelectorAll('#menu li, .panelList li, .slot').forEach(function (li) {
+			document.querySelectorAll('#menu li, .panelList li, .slot, #configBody .configRow').forEach(function (li) {
 				li.addEventListener('mouseenter', function () { mostrarCursor(li); playSound('slider'); });
 				li.addEventListener('mouseleave', ocultarCursor);
 			});

@@ -89,9 +89,29 @@ body{
 	transition: transform 0.15s ease, filter 0.3s ease;
 }
 
-/* Desenfoque casi imperceptible que acompaña al efecto CRT (mismo toggle en Config). */
-#viewportScaler.crtBlur{
+/* Desenfoque casi imperceptible que acompaña al efecto CRT (mismo toggle en Config).
+   Clase genérica: se la pone por JS a #group y a cada panel abierto, pero
+   nunca a #crtOverlay (las scanlines), porque son hermanos dentro del
+   mismo contenedor y el blur las borraría si fuera al padre común. */
+.crtBlur{
 	filter: blur(0.7px);
+}
+
+/* Animación de "encendido" de un televisor CRT al cargar la página.
+   Adaptado de un efecto de CodePen (turn-on/flicker), pero sin tocar
+   transform: scale/translate, porque el JS ya usa transform en este
+   mismo elemento para escalar el sitio, y pisarían el efecto entre sí. */
+@keyframes crtTurnOn{
+	0%{ filter: brightness(8) contrast(0); opacity: 0; }
+	8%{ filter: brightness(8) contrast(0); opacity: 1; }
+	18%{ filter: brightness(0.15) contrast(0.2); opacity: 0.15; }
+	19%{ filter: brightness(0.15) contrast(0.2); opacity: 0; }
+	34%{ filter: brightness(3) contrast(1.5) saturate(1.4); opacity: 1; }
+	100%{ filter: brightness(1) contrast(1) saturate(1); opacity: 1; }
+}
+
+#viewportScaler.crtTurnOn{
+	animation: crtTurnOn 0.9s linear;
 }
 	 
 #group{
@@ -1529,8 +1549,10 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	opacity: 0;
 	transition: opacity 0.3s ease;
 	background-image:
-		repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 1px, rgba(0,0,0,0.28) 2px, rgba(0,0,0,0) 3px),
+		linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.18) 50%),
+		linear-gradient(90deg, rgba(255,0,0,0.05), rgba(0,255,0,0.02), rgba(0,0,255,0.05)),
 		radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%);
+	background-size: 100% 2px, 3px 100%, 100% 100%;
 }
 
 #crtOverlay.on{
@@ -1595,7 +1617,7 @@ footer2 {
 	image-rendering: pixelated;
 	image-rendering: crisp-edges;
 	pointer-events: none;
-	z-index: 9999;
+	z-index: 500;
 	opacity: 0;
 	transform: translateX(0px);
 	transition: opacity 0.08s ease, top 0.1s ease, left 0.1s ease;
