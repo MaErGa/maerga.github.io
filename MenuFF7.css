@@ -120,7 +120,7 @@ body{
    height: 770px;
    text-align: left;
    color:white;
-   transition: opacity 0.22s ease;
+   transition: opacity 0.2s ease;
 }
 
 #controls{
@@ -981,9 +981,29 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 
 /*////////////////////////////////////////////////////////////////////////////////Panel system (Proyectos / Materia / etc.)////////////////////////////////////////////////////////////////////////////////////*/
 
+/* Ventana clásica FF7/PS1: primero se estira en ancho (queda como una barra
+   plana), y recién cuando llega al ancho final empieza a crecer en alto.
+   Cerrar es exactamente al revés: primero se achica en alto, después en ancho. */
+@keyframes ff7WindowGrow{
+	0%   { transform: scale(0.04, 0.04); }
+	45%  { transform: scale(1, 0.04); }
+	100% { transform: scale(1, 1); }
+}
+
+@keyframes ff7WindowShrink{
+	0%   { transform: scale(1, 1); }
+	55%  { transform: scale(1, 0.04); }
+	100% { transform: scale(0.04, 0.04); }
+}
+
 #group.panelOpen{
 	opacity: 0;
 	pointer-events: none;
+	animation: ff7WindowShrink 0.3s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+#group.panelGrowing{
+	animation: ff7WindowGrow 0.3s cubic-bezier(.4,0,.2,1) forwards;
 }
 
 .panelOverlay{
@@ -991,10 +1011,19 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	position: fixed;
 	z-index: 10;
 	color: white;
+	transform: scale(0.04, 0.04);
 }
 
 .panelOverlay.visible{
 	display: block;
+}
+
+.panelOverlay.visible.opening{
+	animation: ff7WindowGrow 0.3s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+.panelOverlay.visible.closing{
+	animation: ff7WindowShrink 0.3s cubic-bezier(.4,0,.2,1) forwards;
 }
 
 .panelHeader, .panelHeaderUse{

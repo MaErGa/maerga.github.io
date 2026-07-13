@@ -527,6 +527,21 @@ document.addEventListener('DOMContentLoaded', function () {
 		if (headerUseEl) {
 			headerUseEl.style.width = (rect.width - rect.menuWidth) + 'px';
 		}
+
+		// El panel (y el menú principal al achicarse) crecen/se contraen desde
+		// el mismo punto: el centro de la lista de comandos (#menu), igual que
+		// en el menú de FF7, en vez de crecer desde el centro de la pantalla.
+		const scale = window.mff7Scale || 1;
+		const scaler = document.querySelector('#viewportScaler');
+		const scalerRect = scaler.getBoundingClientRect();
+		const menuRect = document.querySelector('#menu').getBoundingClientRect();
+		const menuCenterX = ((menuRect.left + menuRect.right) / 2 - scalerRect.left) / scale;
+		const menuCenterY = ((menuRect.top + menuRect.bottom) / 2 - scalerRect.top) / scale;
+		const originX = ((menuCenterX - rect.left) / rect.width) * 100;
+		const originY = ((menuCenterY - rect.top) / rect.height) * 100;
+		const origin = originX + '% ' + originY + '%';
+		panelEl.style.transformOrigin = origin;
+		group.style.transformOrigin = origin;
 	}
 
 	// Si la ventana cambia de tamaño (o el celular rota) mientras un panel
@@ -549,16 +564,27 @@ document.addEventListener('DOMContentLoaded', function () {
 	function openPanel(panelEl, headerEls, contentEls) {
 		playSound('menuAbrir');
 		positionPanel(panelEl, headerEls[headerEls.length - 1], headerEls.length > 1 ? headerEls[0] : null);
-		group.classList.add('panelOpen');
+
+		// Se asegura de arrancar siempre desde el estado contraído, aunque
+		// venga de un cierre anterior interrumpido a mitad de animación.
+		panelEl.classList.remove('opening', 'closing');
 		panelEl.classList.add('visible');
+		group.classList.remove('panelGrowing');
+		void panelEl.offsetHeight; // fuerza reflow para no saltarse el estado inicial
+
+		group.classList.add('panelOpen'); // el menú principal se achica (ancho, luego alto)
 
 		window.requestAnimationFrame(function () {
-			headerEls.forEach(function (el) { el.classList.add('show'); });
+			panelEl.classList.add('opening'); // el panel crece (ancho, luego alto)
 		});
 
 		setTimeout(function () {
+			headerEls.forEach(function (el) { el.classList.add('show'); });
+		}, 160);
+
+		setTimeout(function () {
 			contentEls.forEach(function (el) { el.classList.add('show'); });
-		}, 180);
+		}, 320);
 	}
 
 	// Cierra un panel: primero se desvanece el contenido, luego el título,
@@ -566,15 +592,22 @@ document.addEventListener('DOMContentLoaded', function () {
 	function closePanel(panelEl, headerEls, contentEls) {
 		playSound('cerrar');
 		contentEls.forEach(function (el) { el.classList.remove('show'); });
+		panelEl.classList.remove('opening');
+		panelEl.classList.add('closing'); // el panel se achica (alto, luego ancho)
 
 		setTimeout(function () {
 			headerEls.forEach(function (el) { el.classList.remove('show'); });
 			group.classList.remove('panelOpen');
-		}, 150);
+			group.classList.add('panelGrowing'); // el menú principal vuelve a crecer (ancho, luego alto)
+		}, 110);
 
 		setTimeout(function () {
-			panelEl.classList.remove('visible');
-		}, 380);
+			panelEl.classList.remove('visible', 'closing');
+		}, 420);
+
+		setTimeout(function () {
+			group.classList.remove('panelGrowing');
+		}, 420);
 	}
 
 	function closeOnEscape(isOpenFn, closeFn) {
