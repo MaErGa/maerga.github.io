@@ -226,7 +226,7 @@ const equipoItems = {
 			nombre: "PC Gaming",
 			descripcion: "El núcleo de toda la operación. Máxima defensa y resistencia.",
 			stats: { attack: 14, attackP: 70, defense: 48, defenseP: 20, magicAtk: 6, magicDefP: 12 },
-			slots: patronSlots(2, 3)
+			slots: patronSlots(2, 4)
 		}
 	],
 	accesorio: [
