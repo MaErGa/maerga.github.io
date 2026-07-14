@@ -198,7 +198,7 @@ cursor:pointer;
 #section{
 	position: absolute;
 	margin: 35px 0px 0px 100px;
-	width: 790px;
+	width: 925px;
 	height: 630px;
 	background: radial-gradient(circle at -180px 0px, var(--win-c1) 300px, var(--win-c2) 500px, var(--win-c3));
 	border: 5px solid;
