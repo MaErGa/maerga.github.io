@@ -528,20 +528,12 @@ document.addEventListener('DOMContentLoaded', function () {
 			headerUseEl.style.width = (rect.width - rect.menuWidth) + 'px';
 		}
 
-		// El panel (y el menú principal al achicarse) crecen/se contraen desde
-		// el mismo punto: el centro de la lista de comandos (#menu), igual que
-		// en el menú de FF7, en vez de crecer desde el centro de la pantalla.
-		const scale = window.mff7Scale || 1;
-		const scaler = document.querySelector('#viewportScaler');
-		const scalerRect = scaler.getBoundingClientRect();
-		const menuRect = document.querySelector('#menu').getBoundingClientRect();
-		const menuCenterX = ((menuRect.left + menuRect.right) / 2 - scalerRect.left) / scale;
-		const menuCenterY = ((menuRect.top + menuRect.bottom) / 2 - scalerRect.top) / scale;
-		const originX = ((menuCenterX - rect.left) / rect.width) * 100;
-		const originY = ((menuCenterY - rect.top) / rect.height) * 100;
-		const origin = originX + '% ' + originY + '%';
-		panelEl.style.transformOrigin = origin;
-		group.style.transformOrigin = origin;
+		// La ventana crece/se achica siempre anclada arriba a la derecha:
+		// el ancho arranca fijo en el ancho del menú de comandos (--navW)
+		// y el punto fijo (transform-origin: 100% 0%) queda definido en el CSS.
+		const navRatio = rect.menuWidth / rect.width;
+		panelEl.style.setProperty('--navW', navRatio);
+		group.style.setProperty('--navW', navRatio);
 	}
 
 	// Si la ventana cambia de tamaño (o el celular rota) mientras un panel

@@ -984,16 +984,25 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 /* Ventana clásica FF7/PS1: primero se estira en ancho (queda como una barra
    plana), y recién cuando llega al ancho final empieza a crecer en alto.
    Cerrar es exactamente al revés: primero se achica en alto, después en ancho. */
+/* Ventana clásica FF7/PS1: el ancho arranca fijo en el ancho del menú de
+   comandos (columna angosta de la derecha) y NO se mueve; lo primero que
+   crece es el alto, hacia abajo (el techo, arriba a la derecha, es el punto
+   fijo). Recién cuando el alto llegó al final, crece el ancho hacia la
+   izquierda hasta ocupar toda la pantalla. Cerrar es exactamente al revés. */
 @keyframes ff7WindowGrow{
-	0%   { transform: scale(0.04, 0.04); }
-	45%  { transform: scale(1, 0.04); }
+	0%   { transform: scale(var(--navW, 0.22), 0.04); }
+	55%  { transform: scale(var(--navW, 0.22), 1); }
 	100% { transform: scale(1, 1); }
 }
 
 @keyframes ff7WindowShrink{
 	0%   { transform: scale(1, 1); }
-	55%  { transform: scale(1, 0.04); }
-	100% { transform: scale(0.04, 0.04); }
+	45%  { transform: scale(var(--navW, 0.22), 1); }
+	100% { transform: scale(var(--navW, 0.22), 0.04); }
+}
+
+#group{
+	transform-origin: 100% 0%;
 }
 
 #group.panelOpen{
@@ -1011,7 +1020,8 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	position: fixed;
 	z-index: 10;
 	color: white;
-	transform: scale(0.04, 0.04);
+	transform-origin: 100% 0%;
+	transform: scale(var(--navW, 0.22), 0.04);
 }
 
 .panelOverlay.visible{
