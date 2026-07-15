@@ -414,6 +414,11 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	color:rgb(177, 4, 139);
 }
 
+.panelStatus{
+	color: rgb(177, 4, 139);
+	margin-left: 4px;
+}
+
 #firstHpMin, #secondHpMin, #thirdHpMin{
 	text-align: left;
 	width: 82px;

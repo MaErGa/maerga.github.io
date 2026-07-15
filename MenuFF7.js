@@ -450,7 +450,10 @@ function actualizarNivelPorEdad() {
 	if (levelEl) {
 		const statusSpan = levelEl.querySelector('#firstStatus');
 		levelEl.textContent = edad;
-		if (statusSpan) { levelEl.appendChild(statusSpan); }
+		if (statusSpan) {
+			if (!statusSpan.textContent.trim()) { statusSpan.textContent = ' Furia'; }
+			levelEl.appendChild(statusSpan);
+		}
 	}
 	if (levelBarEl) { levelBarEl.style.width = (progreso * ANCHO_TRACK_LEVELBAR) + 'px'; }
 
@@ -458,6 +461,9 @@ function actualizarNivelPorEdad() {
 	['#proyectosLevel', '#materiaLevel', '#equipoLevel'].forEach(function (selector) {
 		const el = document.querySelector(selector);
 		if (el) { el.textContent = edad; }
+		const statusSel = selector.replace('Level', 'Status');
+		const statusEl = document.querySelector(statusSel);
+		if (statusEl && !statusEl.textContent.trim()) { statusEl.textContent = ' Furia'; }
 	});
 
 	// Stats que crecen con el nivel: se escriben en la tarjeta principal
