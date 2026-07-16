@@ -209,7 +209,7 @@ cursor:pointer;
 	 -moz-box-sizing: border-box;
 	 -webkit-box-sizing: border-box;
 	animation-name: movingLeft;
-	 animation-duration: 0.5s;
+	 animation-duration: 0.9s;
 	 animation-timing-function: ease;
 	 z-index: 0; 
 }
@@ -637,7 +637,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	 -moz-box-sizing: border-box;
 	 -webkit-box-sizing: border-box;
 	animation-name: movingUp;
-	 animation-duration: 0.5s;
+	 animation-duration: 0.9s;
 	 animation-timing-function: ease;		  	  
 }
 
@@ -702,7 +702,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	 -moz-box-sizing: border-box;
 	 -webkit-box-sizing: border-box;
 	animation-name: movingRight;
-	 animation-duration: 0.5s;
+	 animation-duration: 0.9s;
 	 animation-timing-function: ease;
 }
 
@@ -757,7 +757,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
      -webkit-box-sizing: border-box;
     box-sizing: border-box;
 	animation-name: movingDown;
-	 animation-duration: 0.5s;
+	 animation-duration: 0.9s;
 	 animation-timing-function: ease;
 	 z-index: 3;
 }
@@ -986,38 +986,35 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 
 /*////////////////////////////////////////////////////////////////////////////////Panel system (Proyectos / Materia / etc.)////////////////////////////////////////////////////////////////////////////////////*/
 
-/* Ventana clásica FF7/PS1: primero se estira en ancho (queda como una barra
-   plana), y recién cuando llega al ancho final empieza a crecer en alto.
-   Cerrar es exactamente al revés: primero se achica en alto, después en ancho. */
-/* Ventana clásica FF7/PS1: el ancho arranca fijo en el ancho del menú de
-   comandos (columna angosta de la derecha) y NO se mueve; lo primero que
-   crece es el alto, hacia abajo (el techo, arriba a la derecha, es el punto
-   fijo). Recién cuando el alto llegó al final, crece el ancho hacia la
-   izquierda hasta ocupar toda la pantalla. Cerrar es exactamente al revés. */
+/* Ventana clásica FF7/PS1 (replica exacta de jamiepates.com): el ancho salta
+   casi de inmediato de la columna angosta del menú de comandos al ancho
+   completo (anclado arriba a la derecha, que es el punto fijo), y recién
+   ahí empieza a crecer en alto hacia abajo hasta ocupar toda la pantalla.
+   Cerrar es exactamente al revés: primero se achica en alto, y al llegar
+   abajo recién ahí el ancho vuelve a saltar a la columna angosta. */
 @keyframes ff7WindowGrow{
 	0%   { transform: scale(var(--navW, 0.22), 0.04); }
-	55%  { transform: scale(var(--navW, 0.22), 1); }
+	20%  { transform: scale(1, 0.04); }
 	100% { transform: scale(1, 1); }
 }
 
 @keyframes ff7WindowShrink{
 	0%   { transform: scale(1, 1); }
-	45%  { transform: scale(var(--navW, 0.22), 1); }
+	80%  { transform: scale(1, 0.04); }
 	100% { transform: scale(var(--navW, 0.22), 0.04); }
 }
 
 #group{
 	transform-origin: 100% 0%;
+	transition: opacity 0.12s ease;
 }
 
+/* El menú principal (tarjeta de HP + lista de comandos) NO se achica junto
+   con el panel: desaparece de golpe (fundido rápido) en el mismo instante
+   en que el panel "toma su lugar", tal como en el juego original. */
 #group.panelOpen{
 	opacity: 0;
 	pointer-events: none;
-	animation: ff7WindowShrink 0.3s cubic-bezier(.4,0,.2,1) forwards;
-}
-
-#group.panelGrowing{
-	animation: ff7WindowGrow 0.3s cubic-bezier(.4,0,.2,1) forwards;
 }
 
 .panelOverlay{
@@ -1034,11 +1031,11 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 }
 
 .panelOverlay.visible.opening{
-	animation: ff7WindowGrow 0.3s cubic-bezier(.4,0,.2,1) forwards;
+	animation: ff7WindowGrow 0.48s cubic-bezier(.4,0,.2,1) forwards;
 }
 
 .panelOverlay.visible.closing{
-	animation: ff7WindowShrink 0.3s cubic-bezier(.4,0,.2,1) forwards;
+	animation: ff7WindowShrink 0.48s cubic-bezier(.4,0,.2,1) forwards;
 }
 
 .panelHeader, .panelHeaderUse{
@@ -1111,11 +1108,13 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	gap: 24px;
 	padding: 22px;
 	opacity: 0;
-	transition: opacity 0.22s ease;
+	transform: translateX(-26px);
+	transition: opacity 0.28s ease, transform 0.28s cubic-bezier(.4,0,.2,1);
 }
 
 .panelCard.show{
 	opacity: 1;
+	transform: translateX(0);
 }
 
 .panelCardPhoto{
@@ -1280,13 +1279,15 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	font: 14px 'Press Start 2P', monospace;
 	padding: 10px 22px;
 	opacity: 0;
-	transition: opacity 0.22s ease;
+	transform: translateY(-14px);
+	transition: opacity 0.26s ease, transform 0.26s cubic-bezier(.4,0,.2,1);
 	display: flex;
 	align-items: center;
 }
 
 .panelDescription.show{
 	opacity: 1;
+	transform: translateY(0);
 }
 
 .panelBody{
@@ -1298,11 +1299,14 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	display: flex;
 	gap: 0px;
 	opacity: 0;
-	transition: opacity 0.22s ease;
+	transform: translateX(30px) scaleX(0.96);
+	transform-origin: 0% 50%;
+	transition: opacity 0.3s ease, transform 0.3s cubic-bezier(.4,0,.2,1);
 }
 
 .panelBody.show{
 	opacity: 1;
+	transform: translateX(0) scaleX(1);
 }
 
 .panelBodyLeft, .panelBodyRight{

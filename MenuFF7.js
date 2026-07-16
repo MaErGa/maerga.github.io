@@ -539,7 +539,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		// y el punto fijo (transform-origin: 100% 0%) queda definido en el CSS.
 		const navRatio = rect.menuWidth / rect.width;
 		panelEl.style.setProperty('--navW', navRatio);
-		group.style.setProperty('--navW', navRatio);
 	}
 
 	// Si la ventana cambia de tamaño (o el celular rota) mientras un panel
@@ -557,8 +556,18 @@ document.addEventListener('DOMContentLoaded', function () {
 	window.addEventListener('resize', reposicionarPanelAbierto);
 	window.addEventListener('orientationchange', reposicionarPanelAbierto);
 
-	// Abre un panel: el menú principal se desvanece y el panel aparece
-	// con el título primero y el resto del contenido un instante después.
+	// Duración de la animación de la ventana (debe coincidir con el
+	// "animation: ... 0.48s" de .panelOverlay.visible.opening/closing en
+	// el CSS). El ancho ocupa el primer 20% (salto casi instantáneo,
+	// anclado arriba a la derecha) y el alto el 80% restante.
+	var PANEL_ANIM_MS = 480;
+	var PANEL_WIDTH_PHASE_MS = PANEL_ANIM_MS * 0.2;
+
+	// Abre un panel: la tarjeta de HP y el menú de comandos desaparecen de
+	// golpe (fade rápido en #group) en el mismo instante en que el panel
+	// "toma su lugar" y arranca a crecer; el título aparece apenas termina
+	// el salto de ancho, y el resto del contenido entra en cascada hacia
+	// el final del crecimiento en alto.
 	function openPanel(panelEl, headerEls, contentEls) {
 		playSound('menuAbrir');
 		positionPanel(panelEl, headerEls[headerEls.length - 1], headerEls.length > 1 ? headerEls[0] : null);
@@ -567,10 +576,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		// venga de un cierre anterior interrumpido a mitad de animación.
 		panelEl.classList.remove('opening', 'closing');
 		panelEl.classList.add('visible');
-		group.classList.remove('panelGrowing');
 		void panelEl.offsetHeight; // fuerza reflow para no saltarse el estado inicial
 
-		group.classList.add('panelOpen'); // el menú principal se achica (ancho, luego alto)
+		group.classList.add('panelOpen'); // la tarjeta de HP y el menú desaparecen (fade rápido)
 
 		window.requestAnimationFrame(function () {
 			panelEl.classList.add('opening'); // el panel crece (ancho, luego alto)
@@ -578,34 +586,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		setTimeout(function () {
 			headerEls.forEach(function (el) { el.classList.add('show'); });
-		}, 160);
+		}, PANEL_WIDTH_PHASE_MS + 30);
 
-		setTimeout(function () {
-			contentEls.forEach(function (el) { el.classList.add('show'); });
-		}, 320);
+		// Cascada: cada elemento de contentEls entra un instante después
+		// del anterior (card -> description -> body), en vez de todos
+		// a la vez, para imitar el efecto de paneles entrando en secuencia.
+		contentEls.forEach(function (el, i) {
+			setTimeout(function () {
+				el.classList.add('show');
+			}, PANEL_ANIM_MS * 0.85 + i * 170);
+		});
 	}
 
 	// Cierra un panel: primero se desvanece el contenido, luego el título,
-	// mientras el menú principal vuelve a aparecer.
+	// y recién cuando el panel ya terminó de achicarse en alto (y está
+	// por saltar de ancho completo a angosto) vuelven a aparecer de golpe
+	// la tarjeta de HP y el menú de comandos.
 	function closePanel(panelEl, headerEls, contentEls) {
 		playSound('cerrar');
-		contentEls.forEach(function (el) { el.classList.remove('show'); });
+		// Cascada inversa al cerrar: el último en entrar (body) es el
+		// primero en salir, para que el movimiento se sienta simétrico.
+		var reversed = contentEls.slice().reverse();
+		reversed.forEach(function (el, i) {
+			setTimeout(function () {
+				el.classList.remove('show');
+			}, i * 90);
+		});
 		panelEl.classList.remove('opening');
 		panelEl.classList.add('closing'); // el panel se achica (alto, luego ancho)
 
 		setTimeout(function () {
 			headerEls.forEach(function (el) { el.classList.remove('show'); });
-			group.classList.remove('panelOpen');
-			group.classList.add('panelGrowing'); // el menú principal vuelve a crecer (ancho, luego alto)
-		}, 110);
+			group.classList.remove('panelOpen'); // la tarjeta de HP y el menú reaparecen (fade rápido)
+		}, PANEL_ANIM_MS - PANEL_WIDTH_PHASE_MS);
 
 		setTimeout(function () {
 			panelEl.classList.remove('visible', 'closing');
-		}, 420);
-
-		setTimeout(function () {
-			group.classList.remove('panelGrowing');
-		}, 420);
+		}, PANEL_ANIM_MS);
 	}
 
 	function closeOnEscape(isOpenFn, closeFn) {
