@@ -498,9 +498,14 @@ document.addEventListener('DOMContentLoaded', function () {
 	const group = document.querySelector('#group');
 
 	// Calcula el rectángulo (en pantalla) que ocupan juntos la tarjeta de
-	// personaje (#section) y la lista del menú (#menu). Los paneles se
-	// posicionan exactamente sobre esa zona, para que parezca que el menú
-	// "se transforma" en el panel, en vez de aparecer en otro lugar.
+	// personaje (#section), la biografía (#biografia) y la lista del menú
+	// (#menu). Los paneles se posicionan exactamente sobre esa zona, para
+	// que parezca que el menú "se transforma" en el panel, en vez de
+	// aparecer en otro lugar.
+	// Nota: #section ahora envuelve nada más que la tarjeta de personaje
+	// (se achicó para que la biografía se vea como una ventana separada,
+	// igual que en jamiepates.com), por eso hace falta sumar #biografia
+	// a mano para que el panel siga llegando hasta abajo del todo.
 	//
 	// IMPORTANTE: getBoundingClientRect() devuelve coordenadas reales de
 	// pantalla (ya escaladas visualmente por el transform de #viewportScaler).
@@ -516,10 +521,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		const scalerRect = scaler.getBoundingClientRect();
 		const r1 = document.querySelector('#section').getBoundingClientRect();
 		const r2 = document.querySelector('#menu').getBoundingClientRect();
-		const left = (Math.min(r1.left, r2.left) - scalerRect.left) / scale;
-		const top = (Math.min(r1.top, r2.top) - scalerRect.top) / scale;
-		const right = (Math.max(r1.right, r2.right) - scalerRect.left) / scale;
-		const bottom = (Math.max(r1.bottom, r2.bottom) - scalerRect.top) / scale;
+		const r3 = document.querySelector('#biografia').getBoundingClientRect();
+		const left = (Math.min(r1.left, r2.left, r3.left) - scalerRect.left) / scale;
+		const top = (Math.min(r1.top, r2.top, r3.top) - scalerRect.top) / scale;
+		const right = (Math.max(r1.right, r2.right, r3.right) - scalerRect.left) / scale;
+		const bottom = (Math.max(r1.bottom, r2.bottom, r3.bottom) - scalerRect.top) / scale;
 		return { left: left, top: top, width: right - left, height: bottom - top, menuWidth: r2.width / scale };
 	}
 

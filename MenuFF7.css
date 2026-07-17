@@ -74,6 +74,7 @@ body{
 	cursor: default;
 	font-family: 'Press Start 2P', monospace;
 	overflow: hidden;
+	text-shadow: 2px 2px 0 #000;
 }
 
 /* Lienzo de tamaño fijo (1165x770) que se escala como una unidad para
@@ -199,7 +200,7 @@ cursor:pointer;
 	position: absolute;
 	margin: 35px 0px 0px 100px;
 	width: 925px;
-	height: 630px;
+	height: 650px;
 	background: radial-gradient(circle at -180px 0px, var(--win-c1) 300px, var(--win-c2) 500px, var(--win-c3));
 	border: 5px solid;
 	 -moz-border-radius: 15px;
@@ -244,6 +245,12 @@ cursor:pointer;
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
 	z-index: 1;
+	transform-origin: center center;
+	animation-name: zoomIn;
+	animation-duration: 0.45s;
+	animation-delay: 0.9s;
+	animation-timing-function: cubic-bezier(.25,.46,.45,.94);
+	animation-fill-mode: backwards;
 }
 
 .photoContainer{
@@ -817,6 +824,17 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	
 	100%{
 		color:white;
+	}
+}
+
+@keyframes zoomIn{
+	0%{
+		opacity: 0;
+		transform: scale(0.4);
+	}
+	100%{
+		opacity: 1;
+		transform: scale(1);
 	}
 }
 
