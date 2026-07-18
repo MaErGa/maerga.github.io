@@ -12,33 +12,109 @@ window.mff7Scale = 1;
 (function () {
 	var CANVAS_W = 1165;
 	var CANVAS_H = 770;
+	var FORCE_KEY = 'ff7ForceLandscape';
+
+	var scaler = null;
+	var rotateHint = null;
+	var rotateUndoBtn = null;
+
+	// "Forzado horizontal": el usuario tocó "Girar pantalla" y el lienzo
+	// se rota 90° por CSS para aprovechar mejor una pantalla angosta en
+	// vertical, sin que el usuario tenga que girar el celular en la mano.
+	function isForced() {
+		return localStorage.getItem(FORCE_KEY) === '1';
+	}
+	function setForced(v) {
+		if (v) localStorage.setItem(FORCE_KEY, '1');
+		else localStorage.removeItem(FORCE_KEY);
+	}
+
+	// Detecta "celular/tablet en vertical": ancho de pantalla chico +
+	// más alto que ancho. Un navegador de escritorio angostado a mano
+	// no debería disparar esto en la práctica (el layout mínimo útil
+	// para trabajar ya es más ancho que alto).
+	function isPortraitPhone() {
+		return window.innerWidth <= 900 && window.innerHeight > window.innerWidth;
+	}
 
 	function applyScale() {
-		var scaler = document.querySelector('#viewportScaler');
 		if (!scaler) return;
 
 		var vw = window.innerWidth;
 		var vh = window.innerHeight;
+		var forced = isForced() && isPortraitPhone();
+
+		var w = forced ? CANVAS_H : CANVAS_W;
+		var h = forced ? CANVAS_W : CANVAS_H;
 
 		// Factor de escala: el mayor posible que permita que el lienzo
 		// completo entre en el viewport, sin recortarlo.
-		var scale = Math.min(vw / CANVAS_W, vh / CANVAS_H);
+		var scale = Math.min(vw / w, vh / h);
 
 		// No agrandamos más allá del tamaño original (evita verse borroso
 		// o "gigante" en monitores muy anchos); en PC normal esto da 1.
 		scale = Math.min(scale, 1);
 
 		window.mff7Scale = scale;
-		scaler.style.transform = 'scale(' + scale + ')';
+		scaler.style.transform = forced
+			? 'rotate(90deg) scale(' + scale + ')'
+			: 'scale(' + scale + ')';
+
+		if (rotateUndoBtn) rotateUndoBtn.classList.toggle('visible', forced);
+	}
+
+	function updateHint() {
+		if (!rotateHint) return;
+		var shouldShow = isPortraitPhone() && !isForced();
+		rotateHint.classList.toggle('visible', shouldShow);
+	}
+
+	function refresh() {
+		updateHint();
+		applyScale();
+	}
+
+	function init() {
+		scaler = document.querySelector('#viewportScaler');
+		rotateHint = document.querySelector('#rotateHint');
+		rotateUndoBtn = document.querySelector('#rotateUndo');
+
+		var forceBtn = document.querySelector('#rotateHintForce');
+		var dismissBtn = document.querySelector('#rotateHintDismiss');
+
+		if (forceBtn) {
+			forceBtn.addEventListener('click', function () {
+				setForced(true);
+				refresh();
+			});
+		}
+		if (dismissBtn) {
+			dismissBtn.addEventListener('click', function () {
+				// Deja de sugerir girar por esta visita, sin forzar rotación.
+				if (rotateHint) rotateHint.classList.remove('visible');
+			});
+		}
+		if (rotateUndoBtn) {
+			rotateUndoBtn.addEventListener('click', function () {
+				setForced(false);
+				refresh();
+			});
+		}
+
+		refresh();
 	}
 
 	// Aplicar apenas el HTML esté listo (antes de que se vea el flash sin escalar)
-	document.addEventListener('DOMContentLoaded', applyScale);
-	// Recalcular en cualquier cambio de tamaño u orientación
-	window.addEventListener('resize', applyScale);
-	window.addEventListener('orientationchange', applyScale);
-	// Primer cálculo inmediato (por si DOMContentLoaded ya pasó)
-	applyScale();
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', init);
+	} else {
+		init();
+	}
+	// Recalcular en cualquier cambio de tamaño u orientación (esto es lo
+	// que detecta automáticamente cuando el usuario gira el celular de
+	// verdad: al pasar a horizontal, isPortraitPhone() da false solo).
+	window.addEventListener('resize', refresh);
+	window.addEventListener('orientationchange', refresh);
 })();
 
 

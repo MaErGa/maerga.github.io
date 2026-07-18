@@ -13,6 +13,20 @@
 	<link rel="stylesheet" href="MenuFF7.css?v=8">	 
 </head>
 <body>
+	<!-- Sugerencia de girar el dispositivo (solo se muestra en celulares en vertical) -->
+	<div id="rotateHint" class="rotateHint">
+		<div class="rotateHintIcon">
+			<span class="rotateHintPhone">📱</span>
+		</div>
+		<p class="rotateHintText">Para la mejor experiencia,<br>girá tu dispositivo</p>
+		<div class="rotateHintButtons">
+			<button type="button" id="rotateHintForce" class="rotateHintBtn rotateHintBtnPrimary">Girar pantalla</button>
+			<button type="button" id="rotateHintDismiss" class="rotateHintBtn">Continuar así</button>
+		</div>
+	</div>
+
+	<button type="button" id="rotateUndo" class="rotateUndoBtn">↺ Volver a vertical</button>
+
 	<div id="viewportScaler">
 	<div id ="screen"></div>
 	<div id="crtOverlay"></div>
@@ -53,7 +67,7 @@
 				</table>
 				<table id ="firstLevels" class = "levelsTable">
 						<tr>
-							<td>next level<div id ="firstLevelBar" class ="levelBar"></div><div class = "levelBarFont"></div></td>
+							<td>Next level<div id ="firstLevelBar" class ="levelBar"></div><div class = "levelBarFont"></div></td>
 						</tr>
 						<tr>
 							<td>&nbsp;</td>
