@@ -420,7 +420,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 
 .lv{
 	color:#20B2AA;  
-	letter-spacing: 5px;
+	letter-spacing: 1px;
 }
 
 .hp, .mp{
@@ -718,7 +718,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 
 #time{
 	position:absolute;
-	margin: 515px 0px 0px 0px;
+	margin: 530px 0px 0px 0px;
 	width: 250px;
 	height: 116px;
 	background: radial-gradient(circle at -40px -290px, var(--win-c1) 280px, var(--win-c2) 350px, var(--win-c3));
