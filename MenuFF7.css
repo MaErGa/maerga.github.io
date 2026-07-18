@@ -1,5 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+/* Reactor7 by Caveras: recreación fiel de la fuente real de FF7 (PS1),
+   con soporte completo de tildes/ñ y símbolos. Reemplaza a "Press Start
+   2P" como fuente principal; esta última queda solo de fallback por si
+   Reactor7 no llega a cargar. */
+@font-face {
+	font-family: 'Reactor7';
+	src: url('Assets/Fuentes/Reactor7.eot');
+	src: url('Assets/Fuentes/Reactor7.eot?#iefix') format('embedded-opentype'),
+		url('Assets/Fuentes/Reactor7.woff') format('woff'),
+		url('Assets/Fuentes/Reactor7.ttf') format('truetype'),
+		url('Assets/Fuentes/Reactor7.svg#Reactor7') format('svg');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
 :root{
 	--win-c1: #0053ad;
 	--win-c2: #001b85;
@@ -12,18 +28,18 @@
 }
 
 header, nav, section, article, aside, footer{
-	font: 16px 'Press Start 2P', monospace;
+	font: 28px 'Reactor7', 'Press Start 2P', monospace;
 	display:block;
 }
 
 h1{
-	font: 22px 'Press Start 2P', monospace;
+	font: 38px 'Reactor7', 'Press Start 2P', monospace;
 	margin-left: 100px;
 	color: black;
 }
 
 h2{
-	font: 16px 'Press Start 2P', monospace;
+	font: 28px 'Reactor7', 'Press Start 2P', monospace;
 	margin-left: 100px;
 	color:black;
 }
@@ -72,9 +88,15 @@ body{
 	align-items: center;
 	justify-content: center;
 	cursor: default;
-	font-family: 'Press Start 2P', monospace;
+	font-family: 'Reactor7', 'Press Start 2P', monospace;
 	overflow: hidden;
 	text-shadow: 2px 2px 0 #000;
+	/* Reactor7 es una fuente pixel-art: sin antialiasing se ve nítida,
+	   como en el juego original, en vez de difuminada. */
+	-webkit-font-smoothing: none;
+	-moz-osx-font-smoothing: grayscale;
+	font-smooth: never;
+	text-rendering: optimizeSpeed;
 }
 
 /* Lienzo de tamaño fijo (1165x770) que se escala como una unidad para
@@ -138,7 +160,7 @@ body{
 #brand{
 	display:block;
 	position: absolute;
-	font: 10px 'Press Start 2P', monospace;
+	font: 18px 'Reactor7', 'Press Start 2P', monospace;
 	margin: 60px 0px 0px 1270px;
 	color: black;
 	animation-name: hanging;
@@ -185,7 +207,7 @@ cursor:pointer;
 	opacity: 0;
 	display: block;
 	position: absolute;
-	font: 10px 'Press Start 2P', monospace;
+	font: 18px 'Reactor7', 'Press Start 2P', monospace;
 	margin: 550px 0px 0px 1158px;
 	color: white;
 	animation-name: appearing2;
@@ -239,7 +261,7 @@ cursor:pointer;
 	 -moz-border-radius: 15px;
 	 -webkit-border-radius: 15px;
 	padding: 25px 30px;
-	font: 17px 'Press Start 2P', monospace;
+	font: 30px 'Reactor7', 'Press Start 2P', monospace;
 	color: white;
 	line-height: 1.5;
 	overflow-y: auto;
@@ -284,7 +306,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	left: 0px;
 	width: 125px;
 	text-align: center;
-	font: 22px 'Press Start 2P', monospace;
+	font: 38px 'Reactor7', 'Press Start 2P', monospace;
 	color: #ff3030;
 	text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
 	z-index: 20;
@@ -305,7 +327,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 
 .damageNumber.crit{
 	color: #ffe234;
-	font-size: 28px;
+	font-size: 49px;
 	text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
 	             0 0 8px #ffaa00, 0 0 16px #ff6600;
 }
@@ -342,7 +364,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	box-sizing: border-box;
 	padding: 6px 0px;
 	text-align: center;
-	font: 17px 'Press Start 2P', monospace;
+	font: 30px 'Reactor7', 'Press Start 2P', monospace;
 	color: white;
 	background: radial-gradient(circle at -120px 0px, var(--win-c1) 200px, var(--win-c2) 350px, var(--win-c3));
 	border: 4px solid;
@@ -382,7 +404,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	border-spacing: 0px 0px;
 	line-height: 30px;
 	border-collapse: collapse;
-	font-size: 16px;
+	font-size: 28px;
 }
 
 .levelsTable{
@@ -651,7 +673,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 #menu li {
 	line-height:34px;
 	width: 0px;
-	font-size: 15px;
+	font-size: 26px;
 	cursor: default;
 }
 
@@ -696,9 +718,9 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 
 #time{
 	position:absolute;
-	margin: 530px 0px 0px 0px;
+	margin: 515px 0px 0px 0px;
 	width: 250px;
-	height: 101px;
+	height: 116px;
 	background: radial-gradient(circle at -40px -290px, var(--win-c1) 280px, var(--win-c2) 350px, var(--win-c3));
 	list-style: none;
 	border: 5px solid;
@@ -716,7 +738,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 #time li{
 	line-height: 38px;
 	padding: 5px 10px 10px 10px;
-	font-size: 14px;
+	font-size: 24px;
 }
 
 #currentTime{
@@ -1065,7 +1087,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	border-radius: 15px;
 	 -moz-border-radius: 15px;
 	 -webkit-border-radius: 15px;
-	font: 15px 'Press Start 2P', monospace;
+	font: 26px 'Reactor7', 'Press Start 2P', monospace;
 	padding: 12px 18px;
 	opacity: 0;
 	transition: opacity 0.2s ease;
@@ -1100,7 +1122,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
-	font: 14px 'Press Start 2P', monospace;
+	font: 24px 'Reactor7', 'Press Start 2P', monospace;
 	border-radius: 4px;
 	flex-shrink: 0;
 }
@@ -1147,18 +1169,25 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 }
 
 .panelCardName{
-	font: 18px 'Press Start 2P', monospace;
+	font: 32px 'Reactor7', 'Press Start 2P', monospace;
 }
 
 .panelCardInfo .lv, .panelCardInfo .hp, .panelCardInfo .mp{
 	color: #20B2AA;
 }
 
+/* La fila "LV 38 Furia" no tenía tamaño de letra propio y caía al
+   default del navegador (16px) -> con Reactor7 se veía diminuta al
+   lado del nombre (32px) y del HP/MP (23px). */
+.panelCardInfo > div:nth-child(2){
+	font-size: 23px;
+}
+
 .panelHpMp{
 	display: flex;
 	align-items: baseline;
 	gap: 10px;
-	font-size: 13px;
+	font-size: 23px;
 }
 
 .panelHpMpLabel{
@@ -1211,14 +1240,14 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 
 .equipLabel{
 	color: #20B2AA;
-	font-size: 13px;
+	font-size: 23px;
 	flex-shrink: 0;
 	white-space: nowrap;
 }
 
 .equipValor{
 	color: #ffffff;
-	font-size: 13px;
+	font-size: 23px;
 	flex-shrink: 0;
 	max-width: 110px;
 	white-space: nowrap;
@@ -1294,7 +1323,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	border-radius: 15px;
 	 -moz-border-radius: 15px;
 	 -webkit-border-radius: 15px;
-	font: 14px 'Press Start 2P', monospace;
+	font: 24px 'Reactor7', 'Press Start 2P', monospace;
 	padding: 10px 22px;
 	opacity: 0;
 	transform: translateY(-14px);
@@ -1334,7 +1363,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	border-radius: 15px;
 	 -moz-border-radius: 15px;
 	 -webkit-border-radius: 15px;
-	font: 17px 'Press Start 2P', monospace;
+	font: 30px 'Reactor7', 'Press Start 2P', monospace;
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
 }
@@ -1494,7 +1523,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	align-items: center;
 	gap: 30px;
 	margin-bottom: 28px;
-	font: 19px 'Press Start 2P', monospace;
+	font: 33px 'Reactor7', 'Press Start 2P', monospace;
 	color: #7CFFC4;
 }
 
@@ -1516,7 +1545,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 .configToggle{
 	display: flex;
 	gap: 40px;
-	font: 17px 'Press Start 2P', monospace;
+	font: 30px 'Reactor7', 'Press Start 2P', monospace;
 }
 
 .configToggle span{
@@ -1549,7 +1578,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
-	font-size: 20px;
+	font-size: 35px;
 	flex-shrink: 0;
 }
 
@@ -1562,7 +1591,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	display: flex;
 	flex-direction: column;
 	gap: 6px;
-	font: 14px 'Press Start 2P', monospace;
+	font: 24px 'Reactor7', 'Press Start 2P', monospace;
 	border: 2px solid white;
 	border-radius: 6px;
 	padding: 10px 16px;
@@ -1577,7 +1606,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 
 .colorPicker .sliders span.chan{
 	width: 20px;
-	font-size: 22px;
+	font-size: 38px;
 	font-weight: bold;
 }
 
@@ -1594,7 +1623,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	display: flex;
 	align-items: center;
 	gap: 14px;
-	font: 14px 'Press Start 2P', monospace;
+	font: 24px 'Reactor7', 'Press Start 2P', monospace;
 }
 
 .volumeSliderWrap input[type=range]{
@@ -1663,8 +1692,8 @@ footer2 {
     bottom: 15px;
     right: 20px;
     color: #8a8a8a; /* Gris claro retro */
-    font-family: 'Press Start 2P', monospace; /* Misma tipografía pixel-art del resto del sitio */
-    font-size: 11px;
+    font-family: 'Reactor7', 'Press Start 2P', monospace; /* Misma tipografía pixel-art del resto del sitio */
+    font-size: 19px;
     letter-spacing: 1px;
     z-index: 100; /* Asegura que quede por encima del fondo */
     text-shadow: 1px 1px 0px #000; /* Sombra negra para mejorar la lectura */
@@ -1721,7 +1750,7 @@ footer2 {
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	font-size: 13px;
+	font-size: 23px;
 	cursor: pointer;
 	color: #fff;
 }
@@ -1748,7 +1777,7 @@ footer2 {
 	display: flex;
 	flex-direction: column;
 	gap: 14px;
-	font-size: 14px;
+	font-size: 24px;
 }
 
 .equipSlotRow, .equipGrowthRow{
@@ -1770,7 +1799,7 @@ footer2 {
 
 .equipStatsTable td{
 	padding: 4px 0px;
-	font-size: 14px;
+	font-size: 24px;
 }
 
 .equipStatsTable td:first-child{
@@ -1798,7 +1827,7 @@ footer2 {
 .equipStatsTable .statArrow{
 	padding: 0px 8px;
 	color: #9aa0a8;
-	font-size: 12px;
+	font-size: 21px;
 }
 /*////////////////////////////////////////////////////////////////////////////////Panel: Equipo////////////////////////////////////////////////////////////////////////////////////*/
 
@@ -1838,7 +1867,7 @@ footer2 {
 	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
 	border: 5px solid;
 	border-radius: 15px;
-	font: 15px 'Press Start 2P', monospace;
+	font: 26px 'Reactor7', 'Press Start 2P', monospace;
 	padding: 12px 18px;
 	display: flex;
 	align-items: center;
@@ -1862,7 +1891,7 @@ footer2 {
 }
 
 .historiaChoiceBtn{
-	font: 16px 'Press Start 2P', monospace;
+	font: 28px 'Reactor7', 'Press Start 2P', monospace;
 	color: white;
 	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
 	border: 5px solid;
@@ -1944,7 +1973,7 @@ footer2 {
 	justify-content: center;
 	border-radius: 4px;
 	overflow: hidden;
-	font: 12px 'Press Start 2P', monospace;
+	font: 21px 'Reactor7', 'Press Start 2P', monospace;
 	color: #001b85;
 	text-align: center;
 	padding: 4px;
@@ -1969,13 +1998,13 @@ footer2 {
 	flex-direction: column;
 	justify-content: center;
 	gap: 6px;
-	font: 14px 'Press Start 2P', monospace;
+	font: 24px 'Reactor7', 'Press Start 2P', monospace;
 	min-width: 150px;
 }
 
 .historiaCardInfo .lv{
 	color: #20B2AA;
-	font-size: 12px;
+	font-size: 21px;
 }
 
 .historiaCardRight{
@@ -1996,7 +2025,7 @@ footer2 {
 .historiaCardRoleRow > div{
 	flex: 1;
 	padding: 8px 12px;
-	font-size: 13px;
+	font-size: 23px;
 }
 
 .historiaCardRoleLabel{
@@ -2007,7 +2036,7 @@ footer2 {
 	border: 3px solid white;
 	border-radius: 6px;
 	padding: 8px 12px;
-	font-size: 14px;
+	font-size: 24px;
 	background: rgba(0,0,0,0.25);
 }
 
@@ -2016,7 +2045,7 @@ footer2 {
 	align-items: center;
 	justify-content: center;
 	padding: 30px;
-	font: 16px 'Press Start 2P', monospace;
+	font: 28px 'Reactor7', 'Press Start 2P', monospace;
 	color: #ffe34d;
 	letter-spacing: 2px;
 }
