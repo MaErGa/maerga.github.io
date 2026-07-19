@@ -114,7 +114,21 @@ window.mff7Scale = 1;
 	// que detecta automáticamente cuando el usuario gira el celular de
 	// verdad: al pasar a horizontal, isPortraitPhone() da false solo).
 	window.addEventListener('resize', refresh);
-	window.addEventListener('orientationchange', refresh);
+	window.addEventListener('orientationchange', function () {
+		// Justo después de girar, algunos navegadores móviles todavía
+		// reportan innerWidth/innerHeight viejos por un instante (y la
+		// barra de direcciones puede tardar en asentarse), así que
+		// recalculamos ahora y de nuevo un toque después.
+		refresh();
+		setTimeout(refresh, 150);
+		setTimeout(refresh, 400);
+	});
+	// visualViewport sigue el tamaño realmente visible en móviles (más
+	// confiable que window.resize cuando aparece/oculta la barra del
+	// navegador), así que también recalculamos con eso si está disponible.
+	if (window.visualViewport) {
+		window.visualViewport.addEventListener('resize', refresh);
+	}
 })();
 
 

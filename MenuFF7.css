@@ -84,6 +84,12 @@ body{
 	background: black;
 	margin: 0px;
 	min-height: 100vh;
+	/* 100vh en celulares no siempre es el alto realmente visible (varía
+	   con la barra de direcciones al mostrarse/ocultarse), lo que hacía
+	   que el centrado quedara corrido hacia abajo, sobre todo después de
+	   rotar. 100dvh (dynamic viewport height) sí sigue el alto visible
+	   real; los navegadores que no lo soportan usan el 100vh de arriba. */
+	min-height: 100dvh;
 	display: flex;
 	align-items: center;
 	justify-content: center;
