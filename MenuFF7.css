@@ -416,7 +416,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 .levelsTable{
 	display: inline-block;
 	position: absolute;	
-	margin: 50px 0px 0px 20px;
+	margin: 50px 0px 0px 45px;
 	border-spacing: 0px 0px;
 	line-height: 28px;
 	border-collapse: collapse;
