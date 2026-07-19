@@ -167,7 +167,7 @@ const materias = [
 	{
 		nombre: "C#", color: "#E6C846", estrellas: 5,
 		descripcion: "Lenguaje principal para toda la lógica de juego en Unity.",
-		ap: 14200, apSiguiente: 5800,
+		master: true,
 		efectos: [
 			{ label: "Strength", valor: "-01", tipo: "down" },
 			{ label: "Magic",    valor: "+02", tipo: "up" },
@@ -177,7 +177,7 @@ const materias = [
 		habilidades: [
 			{ nombre: "C# (Variables y Sintaxis)", desbloqueada: true },
 			{ nombre: "C# 2 (Estructuras de Control)", desbloqueada: true },
-			{ nombre: "C# 3 (Programación Orientada a Objetos)", desbloqueada: false }
+			{ nombre: "C# 3 (Programación Orientada a Objetos)", desbloqueada: true }
 		]
 	},
 	{
@@ -215,7 +215,7 @@ const materias = [
 	{
 		nombre: "GitHub", color: "#D23232", estrellas: 5,
 		descripcion: "Almacenamiento en la nube y control de versiones de todos mis proyectos.",
-		ap: 18000, apSiguiente: 12000,
+		master: true,
 		efectos: [
 			{ label: "Strength", valor: "-02", tipo: "down" },
 			{ label: "Magic",    valor: "+04", tipo: "up" },
@@ -224,62 +224,72 @@ const materias = [
 		],
 		habilidades: [
 			{ nombre: "Summon GitHub (Invoca Pull Request)", desbloqueada: true },
-			{ nombre: "Summon GitHub x2", desbloqueada: false }
+			{ nombre: "Summon GitHub x2", desbloqueada: true }
 		]
 	},
 	{
-		nombre: "Blender", color: "#B464B4", estrellas: 2,
+		nombre: "Blender", color: "#B464B4", estrellas: 1,
 		descripcion: "Diseño y modelado 3D de entornos y personajes.",
 		ap: 800, apSiguiente: 4200,
 		efectos: [
 			{ label: "Dexterity", valor: "+02", tipo: "up" },
 			{ label: "Luck",      valor: "+04", tipo: "up" }
 		],
-		info: "Modelado 3D Pasivo"
+		info: "Modelado 3D Pasivo y Animación"
 	},
 	{
-		nombre: "Photoshop", color: "#B464B4", estrellas: 3,
+		nombre: "Photoshop", color: "#B464B4", estrellas: 2,
 		descripcion: "Edición de imágenes y assets para la interfaz y los sprites.",
 		ap: 6200, apSiguiente: 3800,
 		efectos: [
 			{ label: "Dexterity", valor: "+04", tipo: "up" },
 			{ label: "Luck",      valor: "+01", tipo: "up" }
 		],
-		info: "Edición Visual Pasiva"
+		info: "Diseño y Edición Visual (Nivel Medio)"
 	},
 	{
-		nombre: "Paquete Office", color: "#4682B4", estrellas: 3,
+		nombre: "Paquete Office", color: "#4682B4", estrellas: 2,
 		descripcion: "Manejo eficiente de herramientas ofimáticas y gestión de documentos.",
+		ap: 1800, apSiguiente: 1200,
+		efectos: [
+			{ label: "Luck", valor: "+03", tipo: "up" }
+		],
+		habilidades: [
+			{ nombre: "Procesador de Textos / Word", desbloqueada: true },
+			{ nombre: "Hojas de Cálculo / Excel", desbloqueada: true },
+			{ nombre: "Gestión de Correos y Trámites Online", desbloqueada: false }
+		]
+	},
+	{
+		nombre: "Red Local", color: "#4682B4", estrellas: 3,
+		descripcion: "Implantación, configuración y mantenimiento de los elementos de la red local.",
+		ap: 14200, apSiguiente: 5800,
+		efectos: [
+			{ label: "Strength", valor: "-01", tipo: "down" },
+			{ label: "Magic",    valor: "+02", tipo: "up" },
+			{ label: "MaxHP",    valor: "-02%", tipo: "down" },
+			{ label: "MaxMP",    valor: "+05%", tipo: "up" }
+		],
+		habilidades: [
+			{ nombre: "Elementos de la Red Local", desbloqueada: true },
+			{ nombre: "Implantación de Red", desbloqueada: true },
+			{ nombre: "Enrutamiento Avanzado", desbloqueada: false }
+		]
+	},
+	{
+		nombre: "Sistemas Microinformáticos", color: "#4682B4", estrellas: 5,
+		descripcion: "Materia principal: instalación, configuración y mantenimiento de software, hardware y periféricos.",
 		master: true,
 		efectos: [
-			{ label: "Luck", valor: "+05", tipo: "up" }
+			{ label: "Vitality", valor: "+04", tipo: "up" },
+			{ label: "Magic",    valor: "+02", tipo: "up" },
+			{ label: "MaxHP",    valor: "+05%", tipo: "up" },
+			{ label: "MaxMP",    valor: "+05%", tipo: "up" }
 		],
 		habilidades: [
-			{ nombre: "Documentación de Diseño (GDD)", desbloqueada: true }
-		]
-	},
-	{
-		nombre: "Redes", color: "#4682B4", estrellas: 3,
-		descripcion: "Implantación, configuración y mantenimiento de los elementos de la red local.",
-		ap: 3100, apSiguiente: 2900,
-		efectos: [
-			{ label: "Dexterity", valor: "+02", tipo: "up" },
-			{ label: "Spirit",    valor: "+02", tipo: "up" }
-		],
-		habilidades: [
-			{ nombre: "Protocolos TCP/IP", desbloqueada: true },
-			{ nombre: "Enrutamiento", desbloqueada: true }
-		]
-	},
-	{
-		nombre: "Sistema Microinformático", color: "#4682B4", estrellas: 5,
-		descripcion: "Instalación, configuración y mantenimiento de software, hardware y periféricos.",
-		ap: 500, apSiguiente: 2500,
-		efectos: [
-			{ label: "Vitality", valor: "+02", tipo: "up" }
-		],
-		habilidades: [
-			{ nombre: "Mantenimiento Hardware", desbloqueada: true }
+			{ nombre: "Montaje y Reparación de Equipos", desbloqueada: true },
+			{ nombre: "Diagnóstico y Comprobación", desbloqueada: true },
+			{ nombre: "Clonación de Equipos", desbloqueada: true }
 		]
 	},
 	{
@@ -291,9 +301,9 @@ const materias = [
 			{ label: "MaxHP",    valor: "+10%", tipo: "up" }
 		],
 		habilidades: [
-			{ nombre: "Entorno de Usuario", desbloqueada: true },
+			{ nombre: "Gestión de Archivos y Particiones", desbloqueada: true },
 			{ nombre: "Registro del Sistema", desbloqueada: true },
-			{ nombre: "Despliegue Comercial", desbloqueada: true }
+			{ nombre: "Despliegue de Entorno", desbloqueada: true }
 		]
 	},
 	{
@@ -306,12 +316,28 @@ const materias = [
 			{ label: "MaxMP",    valor: "+10%", tipo: "up" }
 		],
 		habilidades: [
-			{ nombre: "Terminal / Bash", desbloqueada: true },
-			{ nombre: "Permisos Sudo", desbloqueada: true },
+			{ nombre: "Utilidades Básicas del Sistema", desbloqueada: true },
+			{ nombre: "Manejo de Terminal / Bash", desbloqueada: true },
 			{ nombre: "Administración de Servidores", desbloqueada: false }
 		]
 	}
 ];
+
+// Regla fija: toda materia al máximo de estrellas (5) ya está en MASTER,
+// por lo tanto no necesita AP pendiente y tiene todas sus habilidades
+// desbloqueadas. Se normaliza acá para que la regla se cumpla siempre,
+// aunque en el futuro se agregue una materia nueva de 5 estrellas y nos
+// olvidemos de marcarla a mano más arriba.
+materias.forEach(function (materia) {
+	if (materia.estrellas === 5) {
+		materia.master = true;
+		delete materia.ap;
+		delete materia.apSiguiente;
+		if (materia.habilidades) {
+			materia.habilidades.forEach(function (hab) { hab.desbloqueada = true; });
+		}
+	}
+});
 
 // Historia: experiencia laboral y educación, en formato "save file" de FF7.
 // Reemplazá estos datos de ejemplo por los tuyos reales cuando quieras.
@@ -776,14 +802,24 @@ function actualizarNivelPorEdad() {
 	}
 	if (levelBarEl) { levelBarEl.style.width = (progreso * ANCHO_TRACK_LEVELBAR) + 'px'; }
 
-	// Mismo nivel en las tarjetas de los paneles (Proyectos, Materia, Equipo).
-	['#proyectosLevel', '#materiaLevel', '#equipoLevel'].forEach(function (selector) {
+	// Mismo nivel en las tarjetas de los paneles (Proyectos, Materia, Equipo, Estado).
+	['#proyectosLevel', '#materiaLevel', '#equipoLevel', '#estadoLevel'].forEach(function (selector) {
 		const el = document.querySelector(selector);
 		if (el) { el.textContent = edad; }
 		const statusSel = selector.replace('Level', 'Status');
 		const statusEl = document.querySelector(statusSel);
 		if (statusEl && !statusEl.textContent.trim()) { statusEl.textContent = ' Furia'; }
 	});
+
+	// "EXP"/"Siguiente nivel" del panel Estado: en vez de inventar puntos
+	// de experiencia sin sentido, se usan los días realmente vividos (EXP)
+	// y los días que faltan para el próximo cumpleaños/nivel, mismo
+	// progreso que ya llena la barra "Next level" de la tarjeta principal.
+	const MS_POR_DIA = 24 * 60 * 60 * 1000;
+	window.mff7DiasVividos = Math.floor((hoy - new Date(NACIMIENTO_ANIO, NACIMIENTO_MES, NACIMIENTO_DIA)) / MS_POR_DIA);
+	window.mff7DiasSiguiente = Math.max(0, Math.ceil((proximoCumple - hoy) / MS_POR_DIA));
+	window.mff7Progreso = progreso;
+	window.mff7AnchoTrackLevelBar = ANCHO_TRACK_LEVELBAR;
 
 	// Stats que crecen con el nivel: se escriben en la tarjeta principal
 	// (a HP/MP completos); el resto de los paneles los sincronizan solos
@@ -1121,6 +1157,16 @@ document.addEventListener('DOMContentLoaded', function () {
 		const hpValueEl = document.querySelector('#materiaHpValue');
 		const mpValueEl = document.querySelector('#materiaMpValue');
 
+		// Refresca la tarjeta de HP/MP de ESTE panel (no solo la tarjeta
+		// principal) con el valor actual. Se llama al abrir el panel y
+		// también cada vez que se equipa/desequipa una materia, para que
+		// el cambio se vea en tiempo real sin tener que cerrar el panel.
+		function sincronizarHpMpMateria() {
+			const matHpBarEl = document.querySelector('#materiaHpBar');
+			const matMpBarEl = document.querySelector('#materiaMpBar');
+			sincronizarHpMp(hpValueEl, mpValueEl, matHpBarEl, matMpBarEl);
+		}
+
 		let slotSeleccionado = null; // { datos, el }
 		const hintPorDefecto = 'Tocá una ranura y después una materia para equiparla (o desequipar).';
 
@@ -1231,6 +1277,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						deseleccionarSlot();
 						description.textContent = hintPorDefecto;
 						window.mff7ActualizarStatsYVida();
+						sincronizarHpMpMateria();
 						return;
 					}
 
@@ -1476,6 +1523,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						deseleccionarSlot();
 						playSound('materia');
 						window.mff7ActualizarStatsYVida();
+						sincronizarHpMpMateria();
 					} else {
 						description.textContent = materia.descripcion;
 					}
@@ -1489,9 +1537,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			deseleccionarSlot();
 			buildList();
 			refrescarEquipoYRanuras();
-			const matHpBarEl = document.querySelector('#materiaHpBar');
-			const matMpBarEl = document.querySelector('#materiaMpBar');
-			sincronizarHpMp(hpValueEl, mpValueEl, matHpBarEl, matMpBarEl);
+			sincronizarHpMpMateria();
 			description.textContent = hintPorDefecto;
 			selected.innerHTML = '&nbsp;';
 			openPanel(panel, [header], [card, description, body]);
@@ -1726,8 +1772,197 @@ document.addEventListener('DOMContentLoaded', function () {
 	})();
 
 	// ----------------------------------------------------------
-	// PANEL: HISTORIA (selector Work/Education → carga → tarjetas)
+	// PANEL: ESTADO (resumen de solo lectura: stats de personaje,
+	// stats de combate y el equipo/materia puestos ahora mismo)
 	// ----------------------------------------------------------
+	(function () {
+		const panel = document.querySelector('#panelEstado');
+		const header = document.querySelector('#estadoHeader');
+		const card = document.querySelector('#estadoCard');
+		const body = document.querySelector('#estadoBody');
+		const closeBtn = document.querySelector('#estadoClose');
+		const menuItem = document.querySelector('#menu li[number="9"]');
+
+		const hpValueEl = document.querySelector('#estadoHpValue');
+		const mpValueEl = document.querySelector('#estadoMpValue');
+		const levelEl = document.querySelector('#estadoLevel');
+
+		const expValorEl = document.querySelector('#estadoExpValor');
+		const expSiguienteEl = document.querySelector('#estadoExpSiguienteValor');
+		const expBarEl = document.querySelector('#estadoExpBar');
+		const limiteValorEl = document.querySelector('#estadoLimiteValor');
+		const limitBarEl = document.querySelector('#estadoLimitBar');
+
+		const tablaStatsEl = document.querySelector('#estadoStatsPersonaje');
+		const tablaCombateEl = document.querySelector('#estadoStatsCombate');
+		const nombreArmaEl = document.querySelector('#estadoNombreArma');
+		const nombreArmaduraEl = document.querySelector('#estadoNombreArmadura');
+		const nombreAccesorioEl = document.querySelector('#estadoNombreAccesorio');
+		const slotsArmaEl = document.querySelector('#estadoSlotsArma');
+		const slotsArmaduraEl = document.querySelector('#estadoSlotsArmadura');
+
+		// Etiquetas en español de los 6 stats fijos de personaje (mismos
+		// que statsBase / mapaEfectoStat, usados también en el panel Materia).
+		const etiquetasStat = {
+			strength: 'Fuerza', dexterity: 'Rapidez', vitality: 'Resistencia',
+			magic: 'Magia', spirit: 'Espíritu', luck: 'Suerte'
+		};
+		const ordenStats = ['strength', 'dexterity', 'vitality', 'magic', 'spirit', 'luck'];
+
+		function buscarItem(categoria, nombre) {
+			return (equipoItems[categoria] || []).find(function (it) { return it.nombre === nombre; }) || null;
+		}
+
+		function fila(label, valor) {
+			const tr = document.createElement('tr');
+			const tdLabel = document.createElement('td');
+			tdLabel.textContent = label;
+			const tdValor = document.createElement('td');
+			tdValor.textContent = valor;
+			tr.appendChild(tdLabel);
+			tr.appendChild(tdValor);
+			return tr;
+		}
+
+		// Ranuras de materia "de solo lectura" (sin click ni selección):
+		// reutiliza los colores reales puestos en el panel Materia si ya
+		// se inicializó, para que Arma/Prot. se vean igual que ahí.
+		function pintarSlotsSoloLectura(container, categoria) {
+			if (!container) { return; }
+			container.innerHTML = '';
+			const item = buscarItem(categoria, equipoActual[categoria]);
+			if (!item) { return; }
+			const ranurasVivas = window.obtenerRanurasMateriaVivas ? window.obtenerRanurasMateriaVivas(categoria) : null;
+			item.slots.forEach(function (datosPatron, i) {
+				const datos = (ranurasVivas && ranurasVivas[i]) ? ranurasVivas[i] : datosPatron;
+				const slot = document.createElement('span');
+				slot.className = 'slot' + (datos.linked ? ' linked' : '');
+				slot.style.backgroundImage    = "url('Assets/Imagenes/materia-slot.png')";
+				slot.style.backgroundSize     = '30px 30px';
+				slot.style.backgroundPosition = 'center';
+				slot.style.backgroundRepeat   = 'no-repeat';
+				slot.classList.toggle('filled', !!datos.color);
+				const orbEl = document.createElement('span');
+				orbEl.className = 'orbInSlot';
+				if (datos.color) {
+					aplicarOrbSprite(orbEl, datos.color);
+				} else {
+					orbEl.classList.add('orbHidden');
+				}
+				slot.appendChild(orbEl);
+				container.appendChild(slot);
+			});
+		}
+
+		// Los 6 stats fijos: base + bono plano de toda la materia equipada
+		// ahora mismo (misma fuente que usa el panel Materia).
+		function actualizarStatsPersonaje() {
+			tablaStatsEl.innerHTML = '';
+			const bonos = window.mff7ObtenerBonosMateria ? window.mff7ObtenerBonosMateria() : { flatStats: {} };
+			ordenStats.forEach(function (clave) {
+				const bono = (bonos.flatStats && bonos.flatStats[clave]) || 0;
+				const total = statsBase[clave] + bono;
+				tablaStatsEl.appendChild(fila(etiquetasStat[clave], total));
+			});
+		}
+
+		// Stats de combate combinando Arma + Prot. + Acces. a la vez (a
+		// diferencia del panel Equipo, que muestra una categoría por vez):
+		// los valores fijos (Ataque/Defensa/Ataque mágico) se suman entre
+		// los 3 ítems y suman también el bono de nivel; los porcentuales
+		// (Puntería/Evasión/Defensa mágica) se promedian entre los 3.
+		function actualizarStatsCombate() {
+			tablaCombateEl.innerHTML = '';
+			const items = [
+				buscarItem('arma', equipoActual.arma),
+				buscarItem('armadura', equipoActual.armadura),
+				buscarItem('accesorio', equipoActual.accesorio)
+			].filter(Boolean);
+
+			const ATAQUE_DEFENSA_POR_NIVEL = 2;
+			const nivel = window.mff7Nivel || window.mff7NivelBase || 0;
+			const nivelBase = window.mff7NivelBase || nivel;
+			const bonoNivel = (nivel - nivelBase) * ATAQUE_DEFENSA_POR_NIVEL;
+
+			function sumar(clave) {
+				return items.reduce(function (acc, it) { return acc + (it.stats[clave] || 0); }, 0);
+			}
+			function promedio(clave) {
+				if (!items.length) { return 0; }
+				return Math.round(sumar(clave) / items.length);
+			}
+
+			tablaCombateEl.appendChild(fila('Ataque', sumar('attack') + bonoNivel));
+			tablaCombateEl.appendChild(fila('Puntería', promedio('attackP')));
+			tablaCombateEl.appendChild(fila('Defensa', sumar('defense') + bonoNivel));
+			tablaCombateEl.appendChild(fila('Evasión', promedio('defenseP')));
+			tablaCombateEl.appendChild(fila('Ataque mágico', sumar('magicAtk') + bonoNivel));
+			tablaCombateEl.appendChild(fila('Defensa mágica', promedio('magicDefP')));
+			tablaCombateEl.appendChild(fila('Evasión mágica', 0));
+		}
+
+		function actualizarEquipo() {
+			if (nombreArmaEl) { nombreArmaEl.textContent = equipoActual.arma; }
+			if (nombreArmaduraEl) { nombreArmaduraEl.textContent = equipoActual.armadura; }
+			if (nombreAccesorioEl) { nombreAccesorioEl.textContent = equipoActual.accesorio; }
+			pintarSlotsSoloLectura(slotsArmaEl, 'arma');
+			pintarSlotsSoloLectura(slotsArmaduraEl, 'armadura');
+		}
+
+		// "EXP"/"Siguiente nivel": días vividos y días que faltan para el
+		// próximo cumpleaños/nivel (mismos datos que llenan la barra "Next
+		// level" de la tarjeta principal, ver actualizarNivelPorEdad()).
+		function actualizarExp() {
+			const ancho = window.mff7AnchoTrackLevelBar || 180;
+			if (expValorEl) { expValorEl.textContent = (window.mff7DiasVividos || 0) + ' días'; }
+			if (expSiguienteEl) { expSiguienteEl.textContent = (window.mff7DiasSiguiente || 0) + ' días'; }
+			if (expBarEl) { expBarEl.style.width = ((window.mff7Progreso || 0) * ancho) + 'px'; }
+		}
+
+		// "Nivel de Límite": se refleja tal cual desde la tarjeta principal
+		// (mismo número y mismo estado de barra: Normal/Furia/Tristeza/Break),
+		// para no duplicar ese dato a mano en dos lugares distintos.
+		function actualizarLimite() {
+			const mainLimitTd = document.querySelector('#firstLimitLevel');
+			const mainLimitBar = document.querySelector('#firstLimitBar');
+			if (limiteValorEl && mainLimitTd) {
+				const texto = mainLimitTd.textContent.replace(/\u00a0/g, ' ');
+				const match = texto.match(/(\d+)\s*$/);
+				limiteValorEl.textContent = match ? match[1] : texto.trim();
+			}
+			if (limitBarEl) {
+				limitBarEl.classList.remove('estadoLimitBreak', 'estadoLimitFury', 'estadoLimitSadness', 'estadoLimitNormal');
+				let estadoClase = 'estadoLimitNormal';
+				if (mainLimitBar) {
+					if (mainLimitBar.classList.contains('limitBarBreak')) { estadoClase = 'estadoLimitBreak'; }
+					else if (mainLimitBar.classList.contains('limitBarFury')) { estadoClase = 'estadoLimitFury'; }
+					else if (mainLimitBar.classList.contains('limitBarSadness')) { estadoClase = 'estadoLimitSadness'; }
+				}
+				limitBarEl.classList.add(estadoClase);
+			}
+		}
+
+		function open() {
+			if (levelEl) { levelEl.textContent = window.mff7Nivel || levelEl.textContent; }
+			actualizarStatsPersonaje();
+			actualizarStatsCombate();
+			actualizarEquipo();
+			actualizarExp();
+			actualizarLimite();
+			const estHpBarEl = document.querySelector('#estadoHpBar');
+			const estMpBarEl = document.querySelector('#estadoMpBar');
+			sincronizarHpMp(hpValueEl, mpValueEl, estHpBarEl, estMpBarEl);
+			openPanel(panel, [header], [card, body]);
+		}
+
+		function close() {
+			closePanel(panel, [header], [card, body]);
+		}
+
+		menuItem.addEventListener('click', open);
+		closeBtn.addEventListener('click', close);
+		closeOnEscape(function () { return panel.classList.contains('visible'); }, close);
+	})();
 	(function () {
 		const panel = document.querySelector('#panelHistoria');
 		const header = document.querySelector('#historiaHeader');

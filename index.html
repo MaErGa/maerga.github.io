@@ -95,12 +95,12 @@ Redes / Contacto: Accede a los enlaces de GitHub, LinkedIn y CV.
 				<li number ="1">Historia</li>
 				<li number ="2">Materia</li>
 				<li number ="3">Equipo</li>
+				<li number ="9">Estado</li>
 				<li number="4"><a href="Assets/CV/Matías_Errico_CV.pdf" target="_blank" class="enlace-limpio">CV</a></li>
 				<li number="5"><a href="https://maerga.itch.io/" target="_blank" class="enlace-limpio">Itch.io</a></li>
 				<li number="6"><a href="https://github.com/MaErGa" target="_blank" class="enlace-limpio">GitHub</a></li>
 				<li number="7"><a href="https://www.linkedin.com/in/matias-errico-garcia-474387402/" target="_blank" class="enlace-limpio">LinkedIn</a></li>
 				<li number ="8">Config</li>
-				<li number ="9" id = ""><br></li>
 				<li number ="10" id = ""></li>
 				<li number ="11"></li>
 			</ul>
@@ -247,6 +247,64 @@ Redes / Contacto: Accede a los enlaces de GitHub, LinkedIn y CV.
 				</table>
 			</div>
 			<ul class="panelList panelBodyRight" id="equipoList"></ul>
+		</div>
+	</div>
+
+	<!-- Panel: Estado -->
+	<div class="panelOverlay" id="panelEstado">
+		<div class="panelHeader" id="estadoHeader">
+			<span>Estado</span>
+			<span class="panelClose" id="estadoClose">X</span>
+		</div>
+		<div class="estadoWindow" id="estadoWindow">
+		<div class="panelCard estadoCard" id="estadoCard">
+			<img class="panelCardPhoto" src="./Assets/Imagenes/potrait.png" alt="Matías">
+			<div class="panelCardInfo">
+				<div class="panelCardName">Matías Errico</div>
+				<div><span class="lv">LV</span> <span id="estadoLevel">38</span><span id="estadoStatus" class="panelStatus"></span></div>
+				<div class="panelHpMp">
+					<span class="panelHpMpLabel hp">HP</span>
+					<span class="panelHpMpValue" id="estadoHpValue">2050/2050</span>
+				</div>
+				<div class="panelHpMpBarWrap"><div class="panelHpMpBar panelHpBar" id="estadoHpBar"></div></div>
+				<div class="panelHpMp">
+					<span class="panelHpMpLabel mp">MP</span>
+					<span class="panelHpMpValue" id="estadoMpValue">260/260</span>
+				</div>
+				<div class="panelHpMpBarWrap"><div class="panelHpMpBar panelMpBar" id="estadoMpBar"></div></div>
+			</div>
+			<div class="estadoExpBlock">
+				<div class="estadoExpRow"><span class="equipLabel">EXP:</span><span class="equipValor" id="estadoExpValor">0</span></div>
+				<div class="estadoExpRow estadoExpRowSig"><span class="equipLabel">Siguiente nivel:</span><span class="equipValor" id="estadoExpSiguienteValor">0</span></div>
+				<div class="estadoBarTrack"><div class="estadoBarFill levelBar" id="estadoExpBar"></div></div>
+			</div>
+			<div class="estadoLimiteBlock">
+				<div class="estadoExpRow"><span class="equipLabel">Nivel de Límite:</span><span class="equipValor" id="estadoLimiteValor">1</span></div>
+				<div class="estadoBarTrack"><div class="estadoBarFill" id="estadoLimitBar"></div></div>
+			</div>
+		</div>
+		<div class="panelBody estadoBody" id="estadoBody">
+			<div class="estadoStatsCol">
+				<table class="equipStatsTable" id="estadoStatsPersonaje"></table>
+				<table class="equipStatsTable estadoStatsCombate" id="estadoStatsCombate"></table>
+			</div>
+			<div class="estadoEquipCol">
+				<div class="equipRow">
+					<span class="equipLabel">Arma</span>
+					<span class="equipValor" id="estadoNombreArma">Ratón</span>
+				</div>
+				<div class="equipSlots" id="estadoSlotsArma"></div>
+				<div class="equipRow">
+					<span class="equipLabel">Prot.</span>
+					<span class="equipValor" id="estadoNombreArmadura">Teclado</span>
+				</div>
+				<div class="equipSlots" id="estadoSlotsArmadura"></div>
+				<div class="equipRow">
+					<span class="equipLabel">Acces.</span>
+					<span class="equipValor" id="estadoNombreAccesorio">Nintendo Switch</span>
+				</div>
+			</div>
+		</div>
 		</div>
 	</div>
 

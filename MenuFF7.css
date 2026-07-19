@@ -1952,6 +1952,184 @@ footer2 {
 }
 /*////////////////////////////////////////////////////////////////////////////////Panel: Equipo////////////////////////////////////////////////////////////////////////////////////*/
 
+/*////////////////////////////////////////////////////////////////////////////////Panel: Estado (pantalla de status estilo FF7)////////////////////////////////////////////////////////////////////////////////////*/
+
+/* La tarjeta de arriba suma, además del retrato/HP/MP de siempre, el
+   bloque de EXP y el de Nivel de Límite (a la derecha). */
+.estadoCard{
+	align-items: center;
+}
+
+.estadoExpBlock, .estadoLimiteBlock{
+	flex: 1;
+	min-width: 0px;
+	display: flex;
+	flex-direction: column;
+	/* alineados al fondo (en vez de centrados cada uno por separado): así
+	   la barra de "Nivel de Límite" (1 sola fila arriba) queda a la misma
+	   altura que la barra de "Siguiente nivel" (2 filas arriba), aunque
+	   tengan distinta cantidad de texto encima. */
+	align-self: stretch;
+	justify-content: flex-end;
+	gap: 6px;
+}
+
+.estadoExpRow{
+	display: flex;
+	align-items: baseline;
+	gap: 10px;
+	font-size: 22px;
+	white-space: nowrap;
+}
+
+.estadoExpRow .equipLabel{
+	font-size: 22px;
+}
+
+.estadoExpRow .equipValor{
+	font-size: 22px;
+	max-width: none;
+}
+
+.estadoExpRowSig{
+	margin-top: 2px;
+}
+
+.estadoBarTrack{
+	position: relative;
+	width: 180px;
+	max-width: 100%;
+	height: 10px;
+	background: rgb(65, 3, 3);
+	box-shadow: 0 0 0 1px rgba(0,0,0,0.55), inset 0 1px 1px rgba(255,255,255,0.35);
+}
+
+.estadoBarTrack .estadoBarFill{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 0px;
+}
+
+.estadoBarTrack .estadoBarFill.levelBar{
+	position: absolute;
+	margin: 0px;
+}
+
+/* Estado sin AP asignado a la barra de límite todavía -> se muestra
+   llena con el mismo efecto "Break" (arcoíris) que la tarjeta principal,
+   y se sincroniza en vivo con esa misma tarjeta desde el JS. */
+.estadoBarTrack .estadoBarFill.estadoLimitBreak{
+	width: 100%;
+	animation-name: rainbow;
+	animation-duration: 0.53s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+.estadoBarTrack .estadoBarFill.estadoLimitFury{
+	width: 100%;
+	background: linear-gradient(to bottom, rgb(152, 54, 52) 20%, rgb(255, 255, 255) 40%, rgb(211, 123, 124) 60%, rgb(211, 123, 124) 100%);
+}
+
+.estadoBarTrack .estadoBarFill.estadoLimitSadness{
+	width: 100%;
+	background: linear-gradient(to bottom, rgb(56, 54, 159) 20%, rgb(255, 255, 255) 40%, rgb(124, 124, 219) 60%, rgb(124, 124, 219) 100%);
+}
+
+.estadoBarTrack .estadoBarFill.estadoLimitNormal{
+	width: 100%;
+	background: linear-gradient(to bottom, rgb(158, 112, 138) 20%, rgb(255, 255, 255) 40%, rgb(229, 164, 201) 60%, rgb(229, 164, 201) 100%);
+}
+
+/* Ventana única para todo el panel Estado: antes la tarjeta de arriba y
+   la caja de stats pintaban el mismo degradado cada una por su cuenta,
+   y al ser dos cajas de distinto tamaño el degradado (que se calcula en
+   base al tamaño de cada caja) se veía con un tono distinto en cada una.
+   Ahora el degradado se pinta una sola vez en este contenedor que envuelve
+   a las dos, y la tarjeta/caja de stats quedan sin fondo propio (solo
+   aportan sus bordes), para que sea un único tono de azul continuo. */
+.estadoWindow{
+	position: absolute;
+	left: 0px;
+	top: 70px;
+	width: 100%;
+	bottom: 0px;
+	box-sizing: border-box;
+	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
+	border-radius: 15px;
+	 -moz-border-radius: 15px;
+	 -webkit-border-radius: 15px;
+	overflow: hidden;
+}
+
+#panelEstado .panelCard{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 236px;
+	background: none;
+	border-bottom: none;
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+}
+
+#panelEstado .panelBody{
+	position: absolute;
+	top: 236px;
+	left: 0px;
+	width: 100%;
+	bottom: 0px;
+}
+
+.estadoBody{
+	box-sizing: border-box;
+	background: none;
+	border: 5px solid;
+	border-radius: 15px;
+	 -moz-border-radius: 15px;
+	 -webkit-border-radius: 15px;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	padding: 20px 25px;
+	gap: 40px;
+	border-top: none;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+}
+
+.estadoStatsCol{
+	flex: 0 0 45%;
+	display: flex;
+	flex-direction: column;
+}
+
+.estadoStatsCombate{
+	margin-top: 16px;
+}
+
+.estadoEquipCol{
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 10px;
+}
+
+.estadoEquipCol .equipRow{
+	margin-top: 4px;
+}
+
+.estadoEquipCol .equipRow:first-child{
+	margin-top: 0px;
+}
+
+.estadoEquipCol .equipSlots{
+	width: 100%;
+}
+
 /*////////////////////////////////////////////////////////////////////////////////Panel: Historia////////////////////////////////////////////////////////////////////////////////////*/
 
 #panelHistoria{
