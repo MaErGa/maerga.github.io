@@ -2062,11 +2062,18 @@ footer2 {
    con precisión al ancho/alto disponible en cualquier dispositivo: ver
    la regla #viewportScaler al inicio de este archivo. */
 
-/* En pantallas angostas evitamos cualquier scroll/rebote accidental */
+/* En pantallas angostas evitamos cualquier scroll/rebote accidental.
+   Es clave que esto esté en el <html> y no solo en <body>: el lienzo
+   (1165x770) ocupa ese tamaño en el layout aunque después se achique
+   visualmente con transform, así que sin este bloqueo en <html> la
+   página entera podía quedar scrolleable en pantallas chicas -y
+   arrancar "corrida" hacia abajo al rotar en el celular. */
 html, body{
 	overscroll-behavior: none;
 	touch-action: manipulation;
 	-webkit-tap-highlight-color: transparent;
+	height: 100%;
+	overflow: hidden;
 }
 /*////////////////////////////////////////////////////////////////////////////////Sombras de texto + relieve de barras (añadido)////////////////////////////////////////////////////////////////////////////////////*/
 
