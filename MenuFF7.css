@@ -1279,6 +1279,45 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 		inset -1px 0 0 rgba(0, 0, 0, 0.15);
 }
 
+/* Grid compacto de los 6 stats de personaje (Materia card), a la derecha
+   de Arma/Armadura. Cada valor se recalcula en vivo al equipar/desequipar
+   materia (ver window.mff7ActualizarStatsYVida en el JS). */
+.statCharGrid{
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 4px 18px;
+	margin-top: 4px;
+}
+
+.statCharItem{
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	font-size: 16px;
+}
+
+.statCharLabel{
+	color: #20B2AA;
+	flex-shrink: 0;
+	width: 34px;
+}
+
+.statCharValor{
+	color: #ffffff;
+}
+
+.materiaStatBono{
+	font-size: 13px;
+}
+
+.materiaStatBono.statUp{
+	color: #F5E642;
+}
+
+.materiaStatBono.statDown{
+	color: #ff5050;
+}
+
 .slot{
 	display: inline-flex;
 	align-items: center;
@@ -1499,6 +1538,82 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 .starSprite.starEmpty::before{
 	background: rgba(255,255,255,0.12);
 	box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);
+}
+
+/* Bloque AP / To next level (o MASTER) del panel de Materia */
+.materiaApBlock{
+	margin-top: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.materiaApRow{
+	display: flex;
+	justify-content: space-between;
+	gap: 14px;
+	font-size: 22px;
+}
+
+.materiaApLabel{
+	color: #20B2AA;
+}
+
+.materiaApValor{
+	color: #fff;
+}
+
+.materiaApMaster .materiaApValor{
+	color: #F5E642;
+}
+
+/* Columnas "Ability list" / "Equip effect" del panel de Materia */
+.materiaDetailCols{
+	display: flex;
+	flex-wrap: wrap;
+	gap: 24px;
+	margin-top: 18px;
+}
+
+.materiaDetailCol{
+	flex: 1 1 40%;
+	min-width: 160px;
+}
+
+.materiaDetailTitle{
+	color: #20B2AA;
+	font-size: 20px;
+	margin-bottom: 8px;
+}
+
+.materiaAbilityList{
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+	font-size: 19px;
+	line-height: 1.7;
+}
+
+.materiaAbilityList li.unlocked{
+	color: #fff;
+}
+
+.materiaAbilityList li.locked{
+	color: #6a7078;
+}
+
+.materiaInfoText{
+	font-size: 19px;
+	color: #c8d0da;
+	line-height: 1.6;
+}
+
+.materiaEffectsTable{
+	margin-top: 0px;
+}
+
+.materiaEffectsTable td{
+	font-size: 21px;
 }
 
 /*////////////////////////////////////////////////////////////////////////////////Config panel////////////////////////////////////////////////////////////////////////////////////*/

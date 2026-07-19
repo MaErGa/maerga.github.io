@@ -155,21 +155,162 @@ const proyectos = [
 // Materia: cada habilidad tiene un color (define el orbe, las estrellas
 // y qué slots de Arma/Armadura se iluminan), una valoración de 1 a 5 estrellas
 // y una descripción corta.
+// Cada materia puede llevar además (todo opcional, no afecta a "estrellas"
+// que sigue siendo la fuente de verdad visual de las estrellas ni al color):
+//   ap            -> AP acumulada actual
+//   apSiguiente   -> AP que falta para el próximo nivel de la materia
+//   master        -> true si la materia ya está en MASTER (no pide más AP)
+//   efectos       -> [{ label, valor, tipo: 'up' | 'down' }] para "Equip effect"
+//   habilidades   -> [{ nombre, desbloqueada }] para "Ability list"
+//   info          -> texto corto para materias independientes sin ability list
 const materias = [
-	{ nombre: "C#", color: "#E6C846", estrellas: 5, descripcion: "Lenguaje principal para toda la lógica de juego en Unity." },
-	{ nombre: "Unity", color: "#32B464", estrellas: 4, descripcion: "Motor usado para desarrollar el RPG 2D y otros proyectos." },
-	{ nombre: "Visual Scripting", color: "#E6C846", estrellas: 3, descripcion: "Sistemas de nodos para prototipar lógica sin escribir código." },
-	{ nombre: "GitHub", color: "#D23232", estrellas: 5, descripcion: "Almacenamiento en la nube y control de versiones de todos mis proyectos." },
-	{ nombre: "Blender", color: "#B464B4", estrellas: 2, descripcion: "Diseño y modelado 3D de entornos y personajes." },
-	{ nombre: "Photoshop", color: "#B464B4", estrellas: 3, descripcion: "Edición de imágenes y assets para la interfaz y los sprites." },
-	{ nombre: "Paquete Office", color: "#4682B4", estrellas: 3, descripcion: "Manejo eficiente de herramientas ofimáticas y gestión de documentos." },
-	{ nombre: "Redes", color: "#4682B4", estrellas: 3, descripcion: "Implantación, configuración y mantenimiento de los elementos de la red local." },
-	{ nombre: "Sistema Microinformático", color: "#4682B4", estrellas: 5, descripcion: "Instalación, configuración y mantenimiento de software, hardware y periféricos." },
-	{ nombre: "Windows", color: "#4682B4", estrellas: 5, descripcion: "Administración de sistemas y creación de particiones en entornos Windows." },
-	{ nombre: "Linux", color: "#4682B4", estrellas: 3, descripcion: "Instalación, configuración y manejo de utilidades básicas en sistemas Linux." }
-
-	
-	
+	{
+		nombre: "C#", color: "#E6C846", estrellas: 5,
+		descripcion: "Lenguaje principal para toda la lógica de juego en Unity.",
+		ap: 14200, apSiguiente: 5800,
+		efectos: [
+			{ label: "Strength", valor: "-01", tipo: "down" },
+			{ label: "Magic",    valor: "+02", tipo: "up" },
+			{ label: "MaxHP",    valor: "-02%", tipo: "down" },
+			{ label: "MaxMP",    valor: "+05%", tipo: "up" }
+		],
+		habilidades: [
+			{ nombre: "C# (Variables y Sintaxis)", desbloqueada: true },
+			{ nombre: "C# 2 (Estructuras de Control)", desbloqueada: true },
+			{ nombre: "C# 3 (Programación Orientada a Objetos)", desbloqueada: false }
+		]
+	},
+	{
+		nombre: "Unity", color: "#32B464", estrellas: 4,
+		descripcion: "Motor usado para desarrollar el RPG 2D y otros proyectos.",
+		ap: 4500, apSiguiente: 3500,
+		efectos: [
+			{ label: "Strength", valor: "-01", tipo: "down" },
+			{ label: "Magic",    valor: "+01", tipo: "up" },
+			{ label: "MaxHP",    valor: "-02%", tipo: "down" },
+			{ label: "MaxMP",    valor: "+02%", tipo: "up" }
+		],
+		habilidades: [
+			{ nombre: "Unity (Físicas y Componentes)", desbloqueada: true },
+			{ nombre: "Unity 2 (Prefab e Instanciación)", desbloqueada: true },
+			{ nombre: "Unity 3 (Optimización de Build)", desbloqueada: false }
+		]
+	},
+	{
+		nombre: "Visual Scripting", color: "#E6C846", estrellas: 3,
+		descripcion: "Sistemas de nodos para prototipar lógica sin escribir código.",
+		ap: 2100, apSiguiente: 1900,
+		efectos: [
+			{ label: "Strength", valor: "-01", tipo: "down" },
+			{ label: "Magic",    valor: "+01", tipo: "up" },
+			{ label: "MaxHP",    valor: "-01%", tipo: "down" },
+			{ label: "MaxMP",    valor: "+02%", tipo: "up" }
+		],
+		habilidades: [
+			{ nombre: "Visual Script", desbloqueada: true },
+			{ nombre: "Visual Script 2 (Nodos Avanzados)", desbloqueada: true },
+			{ nombre: "Visual Script 3 (Custom Nodes)", desbloqueada: false }
+		]
+	},
+	{
+		nombre: "GitHub", color: "#D23232", estrellas: 5,
+		descripcion: "Almacenamiento en la nube y control de versiones de todos mis proyectos.",
+		ap: 18000, apSiguiente: 12000,
+		efectos: [
+			{ label: "Strength", valor: "-02", tipo: "down" },
+			{ label: "Magic",    valor: "+04", tipo: "up" },
+			{ label: "MaxHP",    valor: "-05%", tipo: "down" },
+			{ label: "MaxMP",    valor: "+15%", tipo: "up" }
+		],
+		habilidades: [
+			{ nombre: "Summon GitHub (Invoca Pull Request)", desbloqueada: true },
+			{ nombre: "Summon GitHub x2", desbloqueada: false }
+		]
+	},
+	{
+		nombre: "Blender", color: "#B464B4", estrellas: 2,
+		descripcion: "Diseño y modelado 3D de entornos y personajes.",
+		ap: 800, apSiguiente: 4200,
+		efectos: [
+			{ label: "Dexterity", valor: "+02", tipo: "up" },
+			{ label: "Luck",      valor: "+04", tipo: "up" }
+		],
+		info: "Modelado 3D Pasivo"
+	},
+	{
+		nombre: "Photoshop", color: "#B464B4", estrellas: 3,
+		descripcion: "Edición de imágenes y assets para la interfaz y los sprites.",
+		ap: 6200, apSiguiente: 3800,
+		efectos: [
+			{ label: "Dexterity", valor: "+04", tipo: "up" },
+			{ label: "Luck",      valor: "+01", tipo: "up" }
+		],
+		info: "Edición Visual Pasiva"
+	},
+	{
+		nombre: "Paquete Office", color: "#4682B4", estrellas: 3,
+		descripcion: "Manejo eficiente de herramientas ofimáticas y gestión de documentos.",
+		master: true,
+		efectos: [
+			{ label: "Luck", valor: "+05", tipo: "up" }
+		],
+		habilidades: [
+			{ nombre: "Documentación de Diseño (GDD)", desbloqueada: true }
+		]
+	},
+	{
+		nombre: "Redes", color: "#4682B4", estrellas: 3,
+		descripcion: "Implantación, configuración y mantenimiento de los elementos de la red local.",
+		ap: 3100, apSiguiente: 2900,
+		efectos: [
+			{ label: "Dexterity", valor: "+02", tipo: "up" },
+			{ label: "Spirit",    valor: "+02", tipo: "up" }
+		],
+		habilidades: [
+			{ nombre: "Protocolos TCP/IP", desbloqueada: true },
+			{ nombre: "Enrutamiento", desbloqueada: true }
+		]
+	},
+	{
+		nombre: "Sistema Microinformático", color: "#4682B4", estrellas: 5,
+		descripcion: "Instalación, configuración y mantenimiento de software, hardware y periféricos.",
+		ap: 500, apSiguiente: 2500,
+		efectos: [
+			{ label: "Vitality", valor: "+02", tipo: "up" }
+		],
+		habilidades: [
+			{ nombre: "Mantenimiento Hardware", desbloqueada: true }
+		]
+	},
+	{
+		nombre: "Windows", color: "#4682B4", estrellas: 5,
+		descripcion: "Administración de sistemas y creación de particiones en entornos Windows.",
+		master: true,
+		efectos: [
+			{ label: "Vitality", valor: "+05", tipo: "up" },
+			{ label: "MaxHP",    valor: "+10%", tipo: "up" }
+		],
+		habilidades: [
+			{ nombre: "Entorno de Usuario", desbloqueada: true },
+			{ nombre: "Registro del Sistema", desbloqueada: true },
+			{ nombre: "Despliegue Comercial", desbloqueada: true }
+		]
+	},
+	{
+		nombre: "Linux", color: "#4682B4", estrellas: 3,
+		descripcion: "Instalación, configuración y manejo de utilidades básicas en sistemas Linux.",
+		ap: 22000, apSiguiente: 8000,
+		efectos: [
+			{ label: "Vitality", valor: "+03", tipo: "up" },
+			{ label: "Spirit",   valor: "+03", tipo: "up" },
+			{ label: "MaxMP",    valor: "+10%", tipo: "up" }
+		],
+		habilidades: [
+			{ nombre: "Terminal / Bash", desbloqueada: true },
+			{ nombre: "Permisos Sudo", desbloqueada: true },
+			{ nombre: "Administración de Servidores", desbloqueada: false }
+		]
+	}
 ];
 
 // Historia: experiencia laboral y educación, en formato "save file" de FF7.
@@ -370,6 +511,94 @@ const equipoActual = {
 	arma: "Ratón",
 	armadura: "Teclado",
 	accesorio: "Nintendo Switch"
+};
+
+// ============================================================
+// STATS DE PERSONAJE (Strength / Magic / Vitality / Spirit /
+// Dexterity / Luck) — valor base fijo + lo que sumen las
+// materias equipadas actualmente (ver "efectos" en cada materia).
+// HP/MP máximos siguen su propio sistema (actualizarNivelPorEdad,
+// más abajo) y se combinan con el % de MaxHP/MaxMP que aporten
+// las materias equipadas.
+// ============================================================
+const statsBase = {
+	strength: 20,
+	magic: 20,
+	vitality: 20,
+	spirit: 20,
+	dexterity: 20,
+	luck: 20
+};
+
+// Relaciona el "label" usado en materia.efectos con la clave de statsBase.
+const mapaEfectoStat = {
+	Strength: 'strength',
+	Magic: 'magic',
+	Vitality: 'vitality',
+	Spirit: 'spirit',
+	Dexterity: 'dexterity',
+	Luck: 'luck'
+};
+
+// Convierte "+02", "-01", "+05%", "-02%" en { valor, esPorcentaje }.
+function parseEfectoMateria(valorStr) {
+	const esPorcentaje = valorStr.indexOf('%') !== -1;
+	const valor = parseInt(valorStr.replace('%', ''), 10) || 0;
+	return { valor: valor, esPorcentaje: esPorcentaje };
+}
+
+// Punto único de entrada: recalcula HP/MP máximos (base por nivel + % de
+// las materias equipadas) y los 6 stats de personaje (base + bono plano de
+// las materias equipadas), y refresca todo lo que depende de eso en pantalla.
+// Se llama cada vez que se equipa/desequipa una materia, cada vez que cambia
+// el nivel, y una vez más al terminar de armar la página (para aplicar la
+// materia "de fábrica" que ya viene puesta en los slots iniciales).
+window.mff7ActualizarStatsYVida = function () {
+	// Todavía no existe el panel de Materia (se llama antes de que su IIFE
+	// arranque): no hay nada que recalcular todavía.
+	if (!window.mff7ObtenerBonosMateria) { return; }
+	const bonos = window.mff7ObtenerBonosMateria();
+
+	const hpMaxBase = window.mff7HpMaxBase || 1;
+	const mpMaxBase = window.mff7MpMaxBase || 1;
+	const hpMaxFinal = Math.max(1, Math.round(hpMaxBase * (1 + (bonos.hpPercent || 0) / 100)));
+	const mpMaxFinal = Math.max(1, Math.round(mpMaxBase * (1 + (bonos.mpPercent || 0) / 100)));
+
+	if (window.mff7AjustarVidaMaxima) {
+		// El sistema de golpes/revivir ya está armado: le pasamos los nuevos
+		// máximos para que reescale la vida actual y refresque texto/barras
+		// en la tarjeta principal (de ahí lo toman el resto de paneles).
+		window.mff7AjustarVidaMaxima(hpMaxFinal, mpMaxFinal);
+	} else {
+		// Fallback (no debería pasar en uso normal): escribe directo los máximos.
+		const hpMaxEl = document.querySelector('#firstHpMax');
+		const hpMinEl = document.querySelector('#firstHpMin');
+		const mpMaxEl = document.querySelector('#firstMpMax');
+		const mpMinEl = document.querySelector('#firstMpMin');
+		if (hpMaxEl) { hpMaxEl.textContent = hpMaxFinal; }
+		if (hpMinEl) { hpMinEl.textContent = hpMaxFinal + '/'; }
+		if (mpMaxEl) { mpMaxEl.textContent = mpMaxFinal; }
+		if (mpMinEl) { mpMinEl.textContent = mpMaxFinal + '/'; }
+	}
+
+	// Tabla de 6 stats de personaje (Strength/Magic/Vitality/Spirit/
+	// Dexterity/Luck) en la tarjeta del panel Materia.
+	Object.keys(statsBase).forEach(function (clave) {
+		const el = document.querySelector('#statChar' + clave.charAt(0).toUpperCase() + clave.slice(1));
+		if (!el) { return; }
+		const bono = (bonos.flatStats && bonos.flatStats[clave]) || 0;
+		const total = statsBase[clave] + bono;
+		el.innerHTML = '';
+		const spanTotal = document.createElement('span');
+		spanTotal.textContent = total;
+		el.appendChild(spanTotal);
+		if (bono !== 0) {
+			const spanBono = document.createElement('span');
+			spanBono.className = 'materiaStatBono ' + (bono > 0 ? 'statUp' : 'statDown');
+			spanBono.textContent = ' (' + (bono > 0 ? '+' : '') + bono + ')';
+			el.appendChild(spanBono);
+		}
+	});
 };
 
 // ============================================================
@@ -576,6 +805,19 @@ function actualizarNivelPorEdad() {
 	// Equipo) puedan sumar el bono de nivel a los stats fijos del ítem.
 	window.mff7Nivel = edad;
 	window.mff7NivelBase = NIVEL_BASE;
+
+	// HP/MP "base" (solo por nivel, sin el % que aporten las materias
+	// equipadas). El sistema de materia los usa como punto de partida
+	// cada vez que hay que recalcular la vida máxima real.
+	window.mff7HpMaxBase = hpMax;
+	window.mff7MpMaxBase = mpMax;
+
+	// Si el resto de la página ya está armada (materia + sistema de vida),
+	// reaplicá enseguida el bono de las materias equipadas sobre esta base
+	// recién calculada. La primera vez que corre actualizarNivelPorEdad()
+	// (al arrancar) esto todavía no existe, así que se ignora sin romper
+	// nada: se llama una sola vez más al final de DOMContentLoaded.
+	if (window.mff7ActualizarStatsYVida) { window.mff7ActualizarStatsYVida(); }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -988,6 +1230,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						refrescarSlotVisual(slot, datos);
 						deseleccionarSlot();
 						description.textContent = hintPorDefecto;
+						window.mff7ActualizarStatsYVida();
 						return;
 					}
 
@@ -1012,7 +1255,33 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (nombreArmaduraEl) { nombreArmaduraEl.textContent = equipoActual.armadura; }
 			buildSlots(slotsArmaEl, ranurasArma);
 			buildSlots(slotsArmaduraEl, ranurasArmadura);
+			if (window.mff7ActualizarStatsYVida) { window.mff7ActualizarStatsYVida(); }
 		}
+
+		// Suma los efectos de TODAS las materias puestas ahora mismo (Arma +
+		// Armadura), separando los stats planos (Strength, Magic, etc.) de
+		// los porcentuales de vida (MaxHP/MaxMP), para que mff7ActualizarStatsYVida
+		// pueda aplicarlos sobre la base de nivel y sobre los 6 stats fijos.
+		window.mff7ObtenerBonosMateria = function () {
+			const flatStats = {};
+			let hpPercent = 0;
+			let mpPercent = 0;
+
+			ranurasArma.concat(ranurasArmadura).forEach(function (datos) {
+				if (!datos.nombre) { return; }
+				const materia = buscarMateriaPorNombre(datos.nombre);
+				if (!materia || !materia.efectos) { return; }
+				materia.efectos.forEach(function (efecto) {
+					const parsed = parseEfectoMateria(efecto.valor);
+					if (efecto.label === 'MaxHP') { hpPercent += parsed.valor; return; }
+					if (efecto.label === 'MaxMP') { mpPercent += parsed.valor; return; }
+					const clave = mapaEfectoStat[efecto.label];
+					if (clave) { flatStats[clave] = (flatStats[clave] || 0) + parsed.valor; }
+				});
+			});
+
+			return { flatStats: flatStats, hpPercent: hpPercent, mpPercent: mpPercent };
+		};
 
 		// Acceso de solo lectura a las ranuras "vivas" (con los colores de
 		// materia realmente equipados), para que el panel Equipo pueda
@@ -1028,6 +1297,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		// la primera vez que se abre.
 		ranurasArma = regenerarRanuras('arma', ranurasArma);
 		ranurasArmadura = regenerarRanuras('armadura', ranurasArmadura);
+		window.mff7ActualizarStatsYVida();
 
 		function highlightSlots(nombre) {
 			document.querySelectorAll('#materiaSlotsArma .slot, #materiaSlotsArmadura .slot').forEach(function (slot) {
@@ -1058,6 +1328,105 @@ document.addEventListener('DOMContentLoaded', function () {
 			});
 		}
 
+		// Formatea números grandes con separador de miles ("14.200"), igual
+		// que el resto del sitio (ver Gil / EXP en la tarjeta principal).
+		function formatearAP(n) {
+			return Number(n).toLocaleString('es-ES');
+		}
+
+		// Fila "AP" / "To next level" (o "MASTER" cuando la materia ya no
+		// necesita más AP), igual que la esquina superior derecha del
+		// recuadro de materia equipada en el juego original.
+		function buildApBlock(materia) {
+			const bloque = document.createElement('div');
+			bloque.className = 'materiaApBlock';
+
+			if (materia.master) {
+				const filaMaster = document.createElement('div');
+				filaMaster.className = 'materiaApRow materiaApMaster';
+				filaMaster.innerHTML = '<span class="materiaApLabel">AP</span><span class="materiaApValor">MASTER</span>';
+				bloque.appendChild(filaMaster);
+				return bloque;
+			}
+
+			if (typeof materia.ap === 'number') {
+				const filaAp = document.createElement('div');
+				filaAp.className = 'materiaApRow';
+				filaAp.innerHTML = '<span class="materiaApLabel">AP</span><span class="materiaApValor">' + formatearAP(materia.ap) + '</span>';
+				bloque.appendChild(filaAp);
+			}
+			if (typeof materia.apSiguiente === 'number') {
+				const filaSig = document.createElement('div');
+				filaSig.className = 'materiaApRow';
+				filaSig.innerHTML = '<span class="materiaApLabel">To next level</span><span class="materiaApValor">' + formatearAP(materia.apSiguiente) + '</span>';
+				bloque.appendChild(filaSig);
+			}
+			return bloque;
+		}
+
+		// Columnas "Ability list" (o el texto "info" para materias
+		// independientes sin habilidades) y "Equip effect", igual que el
+		// recuadro inferior del menú de Materia original. Las habilidades
+		// marcadas como no desbloqueadas se muestran en gris.
+		function buildDetailCols(materia) {
+			const cols = document.createElement('div');
+			cols.className = 'materiaDetailCols';
+
+			const colIzquierda = document.createElement('div');
+			colIzquierda.className = 'materiaDetailCol';
+			if (materia.habilidades && materia.habilidades.length) {
+				const titulo = document.createElement('div');
+				titulo.className = 'materiaDetailTitle';
+				titulo.textContent = 'Ability list';
+				colIzquierda.appendChild(titulo);
+				const lista = document.createElement('ul');
+				lista.className = 'materiaAbilityList';
+				materia.habilidades.forEach(function (hab) {
+					const li = document.createElement('li');
+					li.textContent = hab.nombre;
+					li.className = hab.desbloqueada ? 'unlocked' : 'locked';
+					lista.appendChild(li);
+				});
+				colIzquierda.appendChild(lista);
+			} else if (materia.info) {
+				const titulo = document.createElement('div');
+				titulo.className = 'materiaDetailTitle';
+				titulo.textContent = 'Info';
+				colIzquierda.appendChild(titulo);
+				const info = document.createElement('div');
+				info.className = 'materiaInfoText';
+				info.textContent = materia.info;
+				colIzquierda.appendChild(info);
+			}
+
+			const colDerecha = document.createElement('div');
+			colDerecha.className = 'materiaDetailCol';
+			if (materia.efectos && materia.efectos.length) {
+				const titulo = document.createElement('div');
+				titulo.className = 'materiaDetailTitle';
+				titulo.textContent = 'Equip effect';
+				colDerecha.appendChild(titulo);
+				const tabla = document.createElement('table');
+				tabla.className = 'equipStatsTable materiaEffectsTable';
+				materia.efectos.forEach(function (efecto) {
+					const fila = document.createElement('tr');
+					const tdLabel = document.createElement('td');
+					tdLabel.textContent = efecto.label;
+					const tdValor = document.createElement('td');
+					tdValor.textContent = efecto.valor;
+					tdValor.className = efecto.tipo === 'up' ? 'statUp' : 'statDown';
+					fila.appendChild(tdLabel);
+					fila.appendChild(tdValor);
+					tabla.appendChild(fila);
+				});
+				colDerecha.appendChild(tabla);
+			}
+
+			if (colIzquierda.children.length) { cols.appendChild(colIzquierda); }
+			if (colDerecha.children.length) { cols.appendChild(colDerecha); }
+			return cols;
+		}
+
 		function showMateria(materia) {
 			selected.innerHTML = '';
 			const row = document.createElement('div');
@@ -1073,6 +1442,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			row.appendChild(nombre);
 			selected.appendChild(row);
 			selected.appendChild(buildStars(materia.estrellas, materia.color));
+			selected.appendChild(buildApBlock(materia));
+			selected.appendChild(buildDetailCols(materia));
 			highlightSlots(materia.nombre);
 		}
 
@@ -1104,6 +1475,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						description.textContent = materia.nombre + ' equipada.';
 						deseleccionarSlot();
 						playSound('materia');
+						window.mff7ActualizarStatsYVida();
 					} else {
 						description.textContent = materia.descripcion;
 					}
@@ -1730,8 +2102,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			return n.toLocaleString('es-ES');
 		}
 
-		const hpMax = leerNumero(hpMaxEl.textContent);
-		const mpMax = leerNumero(mpMaxEl.textContent);
+		let hpMax = leerNumero(hpMaxEl.textContent);
+		let mpMax = leerNumero(mpMaxEl.textContent);
 		let hpActual = leerNumero(hpMinEl.textContent.replace('/', ''));
 		let mpActual = leerNumero(mpMinEl.textContent.replace('/', ''));
 		let estaKO = false;
@@ -1779,6 +2151,28 @@ document.addEventListener('DOMContentLoaded', function () {
 			const sinMp = mpActual < MP_REVIVE_MIN;
 			reviveBtn.classList.toggle('disabled', sinMp);
 		}
+
+		// Llamado desde el sistema de materia cada vez que se equipa/desequipa
+		// algo con efecto de MaxHP/MaxMP: reescala la vida y magia actuales
+		// en la misma proporción que tenían (no las llena ni las vacía de
+		// golpe), y refresca el texto y las barras en la tarjeta principal
+		// (de ahí lo toman el resto de paneles al abrirse).
+		function ajustarVidaMaxima(nuevoHpMax, nuevoMpMax) {
+			hpActual = estaKO ? 0 : (hpMax > 0 ? Math.round((hpActual / hpMax) * nuevoHpMax) : nuevoHpMax);
+			hpMax = nuevoHpMax;
+			hpActual = Math.min(hpActual, hpMax);
+
+			mpActual = mpMax > 0 ? Math.round((mpActual / mpMax) * nuevoMpMax) : nuevoMpMax;
+			mpMax = nuevoMpMax;
+			mpActual = Math.min(mpActual, mpMax);
+
+			hpMaxEl.textContent = hpMax;
+			mpMaxEl.textContent = mpMax;
+			actualizarHpTexto();
+			actualizarMpTexto();
+			actualizarEstadoRevive();
+		}
+		window.mff7AjustarVidaMaxima = ajustarVidaMaxima;
 
 		function golpear() {
 			if (estaKO) { playSound('error'); return; } // ya está en KO: sonido de error
