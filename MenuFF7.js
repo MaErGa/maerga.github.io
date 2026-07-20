@@ -181,9 +181,9 @@ const materias = [
 		]
 	},
 	{
-		nombre: "Unity", color: "#32B464", estrellas: 4,
+		nombre: "Unity", color: "#32B464", estrellas: 5,
 		descripcion: "Motor usado para desarrollar el RPG 2D y otros proyectos.",
-		ap: 4500, apSiguiente: 3500,
+		master: true,
 		efectos: [
 			{ label: "Strength", valor: "-01", tipo: "down" },
 			{ label: "Magic",    valor: "+01", tipo: "up" },
@@ -193,7 +193,7 @@ const materias = [
 		habilidades: [
 			{ nombre: "Unity (Físicas y Componentes)", desbloqueada: true },
 			{ nombre: "Unity 2 (Prefab e Instanciación)", desbloqueada: true },
-			{ nombre: "Unity 3 (Optimización de Build)", desbloqueada: false }
+			{ nombre: "Unity 3 (Optimización de Build)", desbloqueada: true }
 		]
 	},
 	{
