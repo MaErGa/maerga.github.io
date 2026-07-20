@@ -1965,13 +1965,12 @@ footer2 {
 	min-width: 0px;
 	display: flex;
 	flex-direction: column;
-	/* alineados al fondo (en vez de centrados cada uno por separado): así
-	   la barra de "Nivel de Límite" (1 sola fila arriba) queda a la misma
-	   altura que la barra de "Siguiente nivel" (2 filas arriba), aunque
-	   tengan distinta cantidad de texto encima. */
-	align-self: stretch;
-	justify-content: flex-end;
+	justify-content: center;
 	gap: 6px;
+}
+
+.estadoExpRowGhost{
+	visibility: hidden;
 }
 
 .estadoExpRow{

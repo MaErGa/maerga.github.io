@@ -1850,6 +1850,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					orbEl.classList.add('orbHidden');
 				}
 				slot.appendChild(orbEl);
+				slot.addEventListener('mouseenter', function () { playSound('slider'); });
 				container.appendChild(slot);
 			});
 		}
