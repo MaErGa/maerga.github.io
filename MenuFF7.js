@@ -470,6 +470,12 @@ const equipoItems = {
 			descripcion: "Almacenamiento ultrarrápido. Transporta datos a velocidad de vértigo. Aumenta la magia y la velocidad de reacción.",
 			stats: { attack: 16, attackP: 74, defense: 20, defenseP: 12, magicAtk: 22, magicDefP: 18 },
 			slots: patronSlots(1, 3)
+		},
+		{
+			nombre: "Pendrive",
+			descripcion: "Almacenamiento de bolsillo, siempre a mano para mover archivos rápido. También hace de USB booteable para instalar y reparar sistemas operativos sobre la marcha.",
+			stats: { attack: 12, attackP: 64, defense: 16, defenseP: 14, magicAtk: 10, magicDefP: 12 },
+			slots: patronSlots(0, 2)
 		}
 	],
 	armadura: [

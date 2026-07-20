@@ -1909,8 +1909,9 @@ footer2 {
 
 .equipSlotRow .equipLabel, .equipGrowthRow .equipLabel{
 	color: #20B2AA;
-	width: 70px;
+	width: 150px;
 	flex-shrink: 0;
+	white-space: nowrap;
 }
 
 .equipStatsTable{
