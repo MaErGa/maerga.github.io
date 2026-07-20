@@ -1576,6 +1576,14 @@ document.addEventListener('DOMContentLoaded', function () {
 	// PANEL: EQUIPO (Arma / Armadura / Accesorio)
 	// ----------------------------------------------------------
 	(function () {
+		// En dispositivos táctiles no existe un "hover" real: el toque
+		// dispara directamente el click, que equipaba el ítem antes de
+		// que se llegara a ver la comparación de stats (el mouseenter
+		// que pinta el preview no da tiempo a mostrarse). Para táctil
+		// usamos un patrón de dos toques: 1º toque = ver comparación,
+		// 2º toque sobre el mismo ítem = confirmar equipo.
+		const esTactil = window.matchMedia && window.matchMedia('(hover: none)').matches;
+
 		const panel = document.querySelector('#panelEquipo');
 		const header = document.querySelector('#equipoHeader');
 		const card = document.querySelector('#equipoCard');
@@ -1713,6 +1721,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		function buildList(categoria, itemEquipado) {
 			list.innerHTML = '';
+			// Ítem actualmente "previsualizado" con el 1º toque en táctil
+			// (todavía no equipado). Se resetea cada vez que se reconstruye
+			// la lista (cambio de categoría, de ítem equipado, etc).
+			let itemPreviewTactil = null;
+			let liPreviewTactil = null;
+
+			function equipar(item) {
+				equipoActual[categoria] = item.nombre;
+				actualizarValoresEquipados();
+				description.textContent = item.nombre + ' equipado.';
+				seleccionarCategoria(categoria);
+				document.dispatchEvent(new Event('equipoActualizado'));
+				playSound('materia');
+			}
+
 			equipoItems[categoria].forEach(function (item) {
 				const li = document.createElement('li');
 				li.textContent = item.nombre;
@@ -1730,12 +1753,29 @@ document.addEventListener('DOMContentLoaded', function () {
 				});
 
 				li.addEventListener('click', function () {
-					equipoActual[categoria] = item.nombre;
-					actualizarValoresEquipados();
-					description.textContent = item.nombre + ' equipado.';
-					seleccionarCategoria(categoria);
-					document.dispatchEvent(new Event('equipoActualizado'));
-					playSound('materia');
+					// El propio ítem ya equipado no necesita comparación:
+					// tocarlo no hace nada (no hay nada que confirmar).
+					if (item.nombre === equipoActual[categoria]) { return; }
+
+					if (esTactil && itemPreviewTactil !== item) {
+						// 1er toque: solo mostramos la comparación de stats,
+						// sin equipar todavía.
+						if (liPreviewTactil) {
+							liPreviewTactil.classList.remove('previewTactil');
+						}
+						itemPreviewTactil = item;
+						liPreviewTactil = li;
+						li.classList.add('previewTactil');
+						description.textContent = item.descripcion;
+						refrescarCabecera(item);
+						mostrarStats(itemEquipado, item);
+						playSound('slider');
+						return;
+					}
+
+					// Ratón (un solo click, ya vimos el preview con el hover)
+					// o 2º toque en táctil sobre el mismo ítem: confirmamos.
+					equipar(item);
 				});
 
 				list.appendChild(li);
