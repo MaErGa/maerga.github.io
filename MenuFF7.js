@@ -169,8 +169,8 @@ const materias = [
 		descripcion: "Lenguaje principal para toda la lógica de juego en Unity.",
 		master: true,
 		efectos: [
-			{ label: "Strength", valor: "-01", tipo: "down" },
-			{ label: "Magic",    valor: "+02", tipo: "up" },
+			{ label: "Fuerza", valor: "-01", tipo: "down" },
+			{ label: "Magia",    valor: "+02", tipo: "up" },
 			{ label: "MaxHP",    valor: "-02%", tipo: "down" },
 			{ label: "MaxMP",    valor: "+05%", tipo: "up" }
 		],
@@ -185,8 +185,8 @@ const materias = [
 		descripcion: "Motor usado para desarrollar el RPG 2D y otros proyectos.",
 		master: true,
 		efectos: [
-			{ label: "Strength", valor: "-01", tipo: "down" },
-			{ label: "Magic",    valor: "+01", tipo: "up" },
+			{ label: "Fuerza", valor: "-01", tipo: "down" },
+			{ label: "Magia",    valor: "+01", tipo: "up" },
 			{ label: "MaxHP",    valor: "-02%", tipo: "down" },
 			{ label: "MaxMP",    valor: "+02%", tipo: "up" }
 		],
@@ -201,8 +201,8 @@ const materias = [
 		descripcion: "Sistemas de nodos para prototipar lógica sin escribir código.",
 		ap: 2100, apSiguiente: 1900,
 		efectos: [
-			{ label: "Strength", valor: "-01", tipo: "down" },
-			{ label: "Magic",    valor: "+01", tipo: "up" },
+			{ label: "Fuerza", valor: "-01", tipo: "down" },
+			{ label: "Magia",    valor: "+01", tipo: "up" },
 			{ label: "MaxHP",    valor: "-01%", tipo: "down" },
 			{ label: "MaxMP",    valor: "+02%", tipo: "up" }
 		],
@@ -217,8 +217,8 @@ const materias = [
 		descripcion: "Almacenamiento en la nube y control de versiones de todos mis proyectos.",
 		master: true,
 		efectos: [
-			{ label: "Strength", valor: "-02", tipo: "down" },
-			{ label: "Magic",    valor: "+04", tipo: "up" },
+			{ label: "Fuerza", valor: "-02", tipo: "down" },
+			{ label: "Magia",    valor: "+04", tipo: "up" },
 			{ label: "MaxHP",    valor: "-05%", tipo: "down" },
 			{ label: "MaxMP",    valor: "+15%", tipo: "up" }
 		],
@@ -232,8 +232,8 @@ const materias = [
 		descripcion: "Diseño y modelado 3D de entornos y personajes.",
 		ap: 800, apSiguiente: 4200,
 		efectos: [
-			{ label: "Dexterity", valor: "+02", tipo: "up" },
-			{ label: "Luck",      valor: "+04", tipo: "up" }
+			{ label: "Rapidez", valor: "+02", tipo: "up" },
+			{ label: "Suerte",      valor: "+04", tipo: "up" }
 		],
 		info: "Modelado 3D Pasivo y Animación"
 	},
@@ -242,8 +242,8 @@ const materias = [
 		descripcion: "Edición de imágenes y assets para la interfaz y los sprites.",
 		ap: 6200, apSiguiente: 3800,
 		efectos: [
-			{ label: "Dexterity", valor: "+04", tipo: "up" },
-			{ label: "Luck",      valor: "+01", tipo: "up" }
+			{ label: "Rapidez", valor: "+04", tipo: "up" },
+			{ label: "Suerte",      valor: "+01", tipo: "up" }
 		],
 		info: "Diseño y Edición Visual (Nivel Medio)"
 	},
@@ -252,7 +252,7 @@ const materias = [
 		descripcion: "Manejo eficiente de herramientas ofimáticas y gestión de documentos.",
 		ap: 1800, apSiguiente: 1200,
 		efectos: [
-			{ label: "Luck", valor: "+03", tipo: "up" }
+			{ label: "Suerte", valor: "+03", tipo: "up" }
 		],
 		habilidades: [
 			{ nombre: "Procesador de Textos / Word", desbloqueada: true },
@@ -265,8 +265,8 @@ const materias = [
 		descripcion: "Implantación, configuración y mantenimiento de los elementos de la red local.",
 		ap: 14200, apSiguiente: 5800,
 		efectos: [
-			{ label: "Strength", valor: "-01", tipo: "down" },
-			{ label: "Magic",    valor: "+02", tipo: "up" },
+			{ label: "Fuerza", valor: "-01", tipo: "down" },
+			{ label: "Magia",    valor: "+02", tipo: "up" },
 			{ label: "MaxHP",    valor: "-02%", tipo: "down" },
 			{ label: "MaxMP",    valor: "+05%", tipo: "up" }
 		],
@@ -281,8 +281,8 @@ const materias = [
 		descripcion: "Materia principal: instalación, configuración y mantenimiento de software, hardware y periféricos.",
 		master: true,
 		efectos: [
-			{ label: "Vitality", valor: "+04", tipo: "up" },
-			{ label: "Magic",    valor: "+02", tipo: "up" },
+			{ label: "Resistencia", valor: "+04", tipo: "up" },
+			{ label: "Magia",    valor: "+02", tipo: "up" },
 			{ label: "MaxHP",    valor: "+05%", tipo: "up" },
 			{ label: "MaxMP",    valor: "+05%", tipo: "up" }
 		],
@@ -297,7 +297,7 @@ const materias = [
 		descripcion: "Administración de sistemas y creación de particiones en entornos Windows.",
 		master: true,
 		efectos: [
-			{ label: "Vitality", valor: "+05", tipo: "up" },
+			{ label: "Resistencia", valor: "+05", tipo: "up" },
 			{ label: "MaxHP",    valor: "+10%", tipo: "up" }
 		],
 		habilidades: [
@@ -311,8 +311,8 @@ const materias = [
 		descripcion: "Instalación, configuración y manejo de utilidades básicas en sistemas Linux.",
 		ap: 22000, apSiguiente: 8000,
 		efectos: [
-			{ label: "Vitality", valor: "+03", tipo: "up" },
-			{ label: "Spirit",   valor: "+03", tipo: "up" },
+			{ label: "Resistencia", valor: "+03", tipo: "up" },
+			{ label: "Espíritu",   valor: "+03", tipo: "up" },
 			{ label: "MaxMP",    valor: "+10%", tipo: "up" }
 		],
 		habilidades: [
@@ -540,8 +540,8 @@ const equipoActual = {
 };
 
 // ============================================================
-// STATS DE PERSONAJE (Strength / Magic / Vitality / Spirit /
-// Dexterity / Luck) — valor base fijo + lo que sumen las
+// STATS DE PERSONAJE (Fuerza / Magia / Resistencia / Espíritu /
+// Rapidez / Suerte) — valor base fijo + lo que sumen las
 // materias equipadas actualmente (ver "efectos" en cada materia).
 // HP/MP máximos siguen su propio sistema (actualizarNivelPorEdad,
 // más abajo) y se combinan con el % de MaxHP/MaxMP que aporten
@@ -558,12 +558,12 @@ const statsBase = {
 
 // Relaciona el "label" usado en materia.efectos con la clave de statsBase.
 const mapaEfectoStat = {
-	Strength: 'strength',
-	Magic: 'magic',
-	Vitality: 'vitality',
-	Spirit: 'spirit',
-	Dexterity: 'dexterity',
-	Luck: 'luck'
+	Fuerza: 'strength',
+	Magia: 'magic',
+	Resistencia: 'vitality',
+	Espíritu: 'spirit',
+	Rapidez: 'dexterity',
+	Suerte: 'luck'
 };
 
 // Convierte "+02", "-01", "+05%", "-02%" en { valor, esPorcentaje }.
@@ -607,8 +607,8 @@ window.mff7ActualizarStatsYVida = function () {
 		if (mpMinEl) { mpMinEl.textContent = mpMaxFinal + '/'; }
 	}
 
-	// Tabla de 6 stats de personaje (Strength/Magic/Vitality/Spirit/
-	// Dexterity/Luck) en la tarjeta del panel Materia.
+	// Tabla de 6 stats de personaje (Fuerza/Magia/Resistencia/Espíritu/
+	// Rapidez/Suerte) en la tarjeta del panel Materia.
 	Object.keys(statsBase).forEach(function (clave) {
 		const el = document.querySelector('#statChar' + clave.charAt(0).toUpperCase() + clave.slice(1));
 		if (!el) { return; }
@@ -1306,7 +1306,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 
 		// Suma los efectos de TODAS las materias puestas ahora mismo (Arma +
-		// Armadura), separando los stats planos (Strength, Magic, etc.) de
+		// Armadura), separando los stats planos (Fuerza, Magia, etc.) de
 		// los porcentuales de vida (MaxHP/MaxMP), para que mff7ActualizarStatsYVida
 		// pueda aplicarlos sobre la base de nivel y sobre los 6 stats fijos.
 		window.mff7ObtenerBonosMateria = function () {
@@ -1405,7 +1405,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (typeof materia.apSiguiente === 'number') {
 				const filaSig = document.createElement('div');
 				filaSig.className = 'materiaApRow';
-				filaSig.innerHTML = '<span class="materiaApLabel">To next level</span><span class="materiaApValor">' + formatearAP(materia.apSiguiente) + '</span>';
+				filaSig.innerHTML = '<span class="materiaApLabel">Siguiente nivel</span><span class="materiaApValor">' + formatearAP(materia.apSiguiente) + '</span>';
 				bloque.appendChild(filaSig);
 			}
 			return bloque;
@@ -1424,7 +1424,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (materia.habilidades && materia.habilidades.length) {
 				const titulo = document.createElement('div');
 				titulo.className = 'materiaDetailTitle';
-				titulo.textContent = 'Ability list';
+				titulo.textContent = 'Lista de habilidades';
 				colIzquierda.appendChild(titulo);
 				const lista = document.createElement('ul');
 				lista.className = 'materiaAbilityList';
@@ -1438,7 +1438,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			} else if (materia.info) {
 				const titulo = document.createElement('div');
 				titulo.className = 'materiaDetailTitle';
-				titulo.textContent = 'Info';
+				titulo.textContent = 'Información';
 				colIzquierda.appendChild(titulo);
 				const info = document.createElement('div');
 				info.className = 'materiaInfoText';
@@ -1451,7 +1451,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (materia.efectos && materia.efectos.length) {
 				const titulo = document.createElement('div');
 				titulo.className = 'materiaDetailTitle';
-				titulo.textContent = 'Equip effect';
+				titulo.textContent = 'Efecto del equipo';
 				colDerecha.appendChild(titulo);
 				const tabla = document.createElement('table');
 				tabla.className = 'equipStatsTable materiaEffectsTable';
