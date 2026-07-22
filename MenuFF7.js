@@ -635,18 +635,25 @@ const historiaEducacion = [
 // Materia ya puesta de fábrica en las primeras ranuras de Arma/Armadura,
 // para que el panel no arranque vacío. Se aplican sobre el patrón de slots
 // del arma/armadura equipada actualmente (ver equipoActual más abajo).
+// Se referencian por NOMBRE (no por posición en el array) para que agregar
+// materias nuevas en el medio de la lista no corra el equipo inicial.
+function buscarMateriaSemilla(nombre) {
+	var m = materias.find(function (x) { return x.nombre === nombre; });
+	return m ? { nombre: m.nombre, color: m.color } : null;
+}
 const materiaInicialArma = [
-	{ nombre: materias[0].nombre, color: materias[0].color },
-	{ nombre: materias[1].nombre, color: materias[1].color },
-	{ nombre: materias[2].nombre, color: materias[2].color },
-	{ nombre: materias[3].nombre, color: materias[3].color },
-	{ nombre: materias[7].nombre, color: materias[7].color },
-	{ nombre: materias[8].nombre, color: materias[8].color }
+	buscarMateriaSemilla('C#'),
+	buscarMateriaSemilla('Unity'),
+	buscarMateriaSemilla('Visual Scripting'),
+	buscarMateriaSemilla('Claude Code'),
+	buscarMateriaSemilla('Paquete Office'),
+	buscarMateriaSemilla('Red Local')
 ];
 const materiaInicialArmadura = [
-	{ nombre: materias[4].nombre, color: materias[4].color },
-	{ nombre: materias[5].nombre, color: materias[5].color },
-	{ nombre: materias[6].nombre, color: materias[6].color }
+	buscarMateriaSemilla('GitHub'),
+	buscarMateriaSemilla('Blender'),
+	buscarMateriaSemilla('Photoshop'),
+	buscarMateriaSemilla('JavaScript')
 ];
 
 // ============================================================
