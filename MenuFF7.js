@@ -148,7 +148,7 @@ const proyectos = [
 		icono: "Assets/Imagenes/icon_pirate.png"
 	},
 	{
-		nombre: "Dragon Quest -Minstrel Song- ",
+		nombre: "Dragon Quest -Mistrel Song- ",
 		descripcion: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
 		link: "https://maerga.itch.io/dragon-quest-mistreal-song",
 		icono: "Assets/Imagenes/icon_dragon.png"
@@ -2971,6 +2971,41 @@ document.addEventListener('DOMContentLoaded', function () {
 				idx = e.key === KONAMI[0] ? 1 : 0;
 			}
 		});
+	})();
+
+	// ============================================================
+	// UBICACIÓN — el cuadro inferior ("Menú Principal") cambia de
+	// nombre al hacer clic en el botón circular (↻), igual que el
+	// portafolio de Jamie Pates. Elige al azar entre localizaciones
+	// icónicas de FF7 (incluidas dos "???" sin descubrir) y nunca
+	// repite la misma dos veces seguidas.
+	// ============================================================
+	(function () {
+		const locationEl = document.querySelector('#footerLocation');
+		const rerollBtn = document.querySelector('#footerReroll');
+		if (!locationEl || !rerollBtn) { return; }
+
+		const ubicaciones = [
+			'Midgar', 'Sector 7 - Los Bajos Fondos', 'Mercado Muro', 'Kalm',
+			'Granja de Chocobos', 'Monte Nibel', 'Nibelheim', 'Fuerte Cóndor',
+			'Junon', 'Costa del Sol', 'Corel', 'Plato Dorado', 'Cañón Cósmico',
+			'Gongaga', 'Cueva de los Gi', 'Wutai', 'Ciudad Cohete', 'Aldea de los Huesos',
+			'Bosque Durmiente', 'Ciudad de los Ancianos', 'Posada del Carámbano',
+			'Gran Glaciar', 'Mideel', 'Cráter Norte', '???', '???'
+		];
+
+		let anterior = null;
+		function siguienteUbicacion() {
+			let candidata;
+			do {
+				candidata = ubicaciones[Math.floor(Math.random() * ubicaciones.length)];
+			} while (candidata === anterior && ubicaciones.length > 1);
+			anterior = candidata;
+			locationEl.textContent = candidata;
+			playSound('slider');
+		}
+
+		rerollBtn.addEventListener('click', siguienteUbicacion);
 	})();
 
 });

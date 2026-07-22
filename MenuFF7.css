@@ -797,6 +797,45 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	 z-index: 3;
 }
 
+/* Botón para pedir una nueva ubicación al azar en el footer, con el
+   sprite original (como el ↻ del portafolio de Jamie Pates). Permanece
+   oculto hasta pasar el ratón por el panel de localización, y gira
+   (lento) mientras el cursor está encima suyo. */
+.footerRerollBtn{
+	margin-left: auto;
+	margin-right: 18px;
+	width: 34px;
+	height: 34px;
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+#footer:hover .footerRerollBtn{
+	opacity: 1;
+}
+
+.footerRerollIcon{
+	width: 28px;
+	height: 28px;
+	image-rendering: pixelated;
+	image-rendering: crisp-edges;
+	-ms-interpolation-mode: nearest-neighbor;
+}
+
+@keyframes footerRerollSpin{
+	from{ transform: rotate(0deg); }
+	to{ transform: rotate(360deg); }
+}
+
+.footerRerollBtn:hover .footerRerollIcon{
+	animation: footerRerollSpin 1.8s linear infinite;
+}
+
 /*////////////////////////////////////////////////////////////////////////////////Animation area////////////////////////////////////////////////////////////////////////////////////*/
 
   @keyframes movingUp{
