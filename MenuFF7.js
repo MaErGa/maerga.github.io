@@ -1471,7 +1471,33 @@ document.addEventListener('DOMContentLoaded', function () {
 						return;
 					}
 
-					deseleccionarSlot();
+					if (slotSeleccionado) {
+						// Ya había una ranura seleccionada y se tocó otra distinta:
+						// se intercambian los contenidos de ambas ranuras. Si la
+						// ranura de destino estaba vacía, el intercambio funciona
+						// igual: la materia se mueve y el origen queda vacío.
+						const origenDatos = slotSeleccionado.datos;
+						const origenEl = slotSeleccionado.el;
+						const habiaOrigen = !!origenDatos.color;
+						const habiaDestino = !!datos.color;
+						const colorTmp = origenDatos.color;
+						const nombreTmp = origenDatos.nombre;
+						origenDatos.color = datos.color;
+						origenDatos.nombre = datos.nombre;
+						datos.color = colorTmp;
+						datos.nombre = nombreTmp;
+						refrescarSlotVisual(origenEl, origenDatos);
+						refrescarSlotVisual(slot, datos);
+						deseleccionarSlot();
+						playSound('materia');
+						description.textContent = (habiaOrigen && habiaDestino)
+							? 'Materias intercambiadas entre ranuras.'
+							: 'Materia movida a la otra ranura.';
+						window.mff7ActualizarStatsYVida();
+						sincronizarHpMpMateria();
+						return;
+					}
+
 					slotSeleccionado = { datos: datos, el: slot };
 					slot.classList.add('selected');
 					description.textContent = datos.color
