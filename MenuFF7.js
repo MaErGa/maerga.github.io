@@ -654,6 +654,12 @@ const equipoItems = {
 	],
 	accesorio: [
 		{
+			nombre: "Smartphone",
+			descripcion: "Siempre a mano: comunicación, testeo responsive y consulta rápida de documentación. Prioriza magia y rapidez sobre fuerza bruta.",
+			stats: { attack: 6, attackP: 42, defense: 10, defenseP: 6, magicAtk: 16, magicDefP: 12 },
+			slots: patronSlots(0, 2)
+		},
+		{
 			nombre: "Auriculares JBL 510BT",
 			descripcion: "Aislamiento sonoro para concentración total. Refuerza la defensa mágica.",
 			stats: { attack: 10, attackP: 60, defense: 22, defenseP: 14, magicAtk: 8, magicDefP: 22 },
@@ -667,31 +673,31 @@ const equipoItems = {
 		},
 		{
 			nombre: "PlayStation 4",
-			descripcion: "Potencia de la octava generación. Sube ataque y defensa por igual.",
+			descripcion: "Potencia de la octava generación con el mando DualShock 4 en la mano. Sube ataque y defensa por igual.",
 			stats: { attack: 16, attackP: 65, defense: 18, defenseP: 12, magicAtk: 6, magicDefP: 6 },
 			slots: patronSlots(1, 1)
 		},
 		{
 			nombre: "PlayStation 2",
-			descripcion: "La consola más vendida de la historia. Defensa% sólida.",
+			descripcion: "La consola más vendida de la historia, con su mando DualShock 2 incluido. Defensa% sólida.",
 			stats: { attack: 10, attackP: 55, defense: 16, defenseP: 18, magicAtk: 8, magicDefP: 8 },
 			slots: patronSlots(1, 1)
 		},
 		{
 			nombre: "SNES Classic Mini",
-			descripcion: "Nostalgia de 16 bits. Gran impulso a la magia.",
+			descripcion: "Nostalgia de 16 bits con el mando original de SNES en la mano. Gran impulso a la magia.",
 			stats: { attack: 6, attackP: 45, defense: 10, defenseP: 6, magicAtk: 20, magicDefP: 14 },
 			slots: patronSlots(0, 2)
 		},
 		{
 			nombre: "Mega Drive Classic Mini",
-			descripcion: "Velocidad y acción de 16 bits. Favorece el ataque directo.",
+			descripcion: "Velocidad y acción de 16 bits con el mando de 3 botones en la mano. Favorece el ataque directo.",
 			stats: { attack: 20, attackP: 58, defense: 8, defenseP: 6, magicAtk: 4, magicDefP: 4 },
 			slots: patronSlots(0, 2)
 		},
 		{
 			nombre: "PlayStation Classic Mini",
-			descripcion: "Una colección compacta de clásicos. Defensa equilibrada.",
+			descripcion: "Una colección compacta de clásicos, con el mando original de PS1. Defensa equilibrada.",
 			stats: { attack: 8, attackP: 48, defense: 14, defenseP: 16, magicAtk: 8, magicDefP: 10 },
 			slots: patronSlots(0, 2)
 		}
