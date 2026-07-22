@@ -455,13 +455,13 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 }
 
 #firstHpMin, #secondHpMin, #thirdHpMin{
-	text-align: left;
+	text-align: right;
 	width: 82px;
 	letter-spacing: 0.8px;
 }
 
 #firstHpMax, #secondHpMax, #thirdHpMax{
-	text-align: right;
+	text-align: left;
 	width: 70px;
 	letter-spacing: 0.8px;
 }
@@ -473,7 +473,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 }
 
 #firstMpMax, #secondMpMax, #thirdMpMax{
-	text-align: right;
+	text-align: left;
 	width: 70px;
 	letter-spacing: 0.8px;
 }
@@ -1167,7 +1167,11 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
-	font: 24px 'Reactor7', 'Press Start 2P', monospace;
+	font: 26px 'Reactor7', 'Press Start 2P', monospace;
+	font-weight: bold;
+	color: white;
+	text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
+	             2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000;
 	border-radius: 4px;
 	flex-shrink: 0;
 }
@@ -1175,6 +1179,7 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 .panelClose:hover{
 	background: white;
 	color: var(--win-c2);
+	text-shadow: none;
 }
 
 .panelCard{
