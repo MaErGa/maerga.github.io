@@ -233,6 +233,56 @@ const materias = [
 		]
 	},
 	{
+		nombre: "HTML", color: "#E6C846", estrellas: 3,
+		descripcion: "Estructura base de mis portafolios; aprendido en el curso de desarrollo de páginas web de Google.",
+		ap: 3400, apSiguiente: 2600,
+		efectos: [
+			{ label: "Fuerza", valor: "-01", tipo: "down" },
+			{ label: "Magia",    valor: "+01", tipo: "up" },
+			{ label: "MaxHP",    valor: "-01%", tipo: "down" },
+			{ label: "MaxMP",    valor: "+02%", tipo: "up" }
+		],
+		habilidades: [
+			{ nombre: "HTML (Estructura Semántica)", desbloqueada: true },
+			{ nombre: "HTML 2 (Formularios y Accesibilidad)", desbloqueada: true },
+			{ nombre: "HTML 3 (SEO y Metadatos)", desbloqueada: false }
+		]
+	},
+	{
+		nombre: "CSS", color: "#E6C846", estrellas: 4,
+		descripcion: "Estilos, temas y animaciones de mis portafolios; base del curso de Google, ampliada a fondo en proyectos propios.",
+		ap: 8600, apSiguiente: 3200,
+		efectos: [
+			{ label: "Fuerza", valor: "-01", tipo: "down" },
+			{ label: "Magia",    valor: "+02", tipo: "up" },
+			{ label: "MaxHP",    valor: "-01%", tipo: "down" },
+			{ label: "MaxMP",    valor: "+03%", tipo: "up" }
+		],
+		habilidades: [
+			{ nombre: "CSS (Selectores y Box Model)", desbloqueada: true },
+			{ nombre: "CSS 2 (Flexbox y Grid)", desbloqueada: true },
+			{ nombre: "CSS 3 (Animaciones y Temas por Variables)", desbloqueada: true },
+			{ nombre: "CSS 4 (Preprocesadores / Sass)", desbloqueada: false }
+		]
+	},
+	{
+		nombre: "JavaScript", color: "#E6C846", estrellas: 4,
+		descripcion: "Lógica e interactividad de mis portafolios web; aprendido de forma autodidacta a base de proyectos reales.",
+		ap: 9800, apSiguiente: 2800,
+		efectos: [
+			{ label: "Fuerza", valor: "-01", tipo: "down" },
+			{ label: "Magia",    valor: "+02", tipo: "up" },
+			{ label: "MaxHP",    valor: "-02%", tipo: "down" },
+			{ label: "MaxMP",    valor: "+04%", tipo: "up" }
+		],
+		habilidades: [
+			{ nombre: "JavaScript (Sintaxis y DOM)", desbloqueada: true },
+			{ nombre: "JavaScript 2 (Eventos y Manipulación Dinámica)", desbloqueada: true },
+			{ nombre: "JavaScript 3 (Async / Fetch API)", desbloqueada: true },
+			{ nombre: "JavaScript 4 (Frameworks Modernos)", desbloqueada: false }
+		]
+	},
+	{
 		nombre: "GitHub", color: "#D23232", estrellas: 5,
 		descripcion: "Almacenamiento en la nube y control de versiones de todos mis proyectos.",
 		master: true,
