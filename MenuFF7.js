@@ -2923,13 +2923,16 @@ document.addEventListener('DOMContentLoaded', function () {
 	})();
 
 	// ----------------------------------------------------------
-	// RELOJ DE TIEMPO (arranca en 0:00:00 al cargar la página)
+	// RELOJ DE TIEMPO (acumula tiempo real entre visitas, guardado
+	// en localStorage — no vuelve a 0:00:00 al recargar la página)
 	// ----------------------------------------------------------
 	(function () {
 		const elemento = document.querySelector('#currentTime');
 		if (!elemento) return;
 
-		const inicio = Date.now();
+		const CLAVE_TIEMPO = 'mff7TiempoJugado';
+		const acumuladoPrevio = parseInt(localStorage.getItem(CLAVE_TIEMPO), 10) || 0;
+		const inicio = Date.now() - (acumuladoPrevio * 1000);
 
 		function dosDigitos(n) { return String(n).padStart(2, '0'); }
 
@@ -2943,6 +2946,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		function actualizar() {
 			const totalSegundos = Math.floor((Date.now() - inicio) / 1000);
 			elemento.innerHTML = formatear(totalSegundos);
+			localStorage.setItem(CLAVE_TIEMPO, totalSegundos);
 		}
 
 		actualizar();
@@ -3006,6 +3010,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 
 		rerollBtn.addEventListener('click', siguienteUbicacion);
+
+		// Aleatoria ya desde la carga inicial, sin esperar el primer clic.
+		siguienteUbicacion();
 	})();
 
 });
