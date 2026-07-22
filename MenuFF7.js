@@ -148,7 +148,7 @@ const proyectos = [
 		icono: "Assets/Imagenes/icon_pirate.png"
 	},
 	{
-		nombre: "Dragon Quest -Mistrel Song- ",
+		nombre: "Dragon Quest -Minstrel Song- ",
 		descripcion: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
 		link: "https://maerga.itch.io/dragon-quest-mistreal-song",
 		icono: "Assets/Imagenes/icon_dragon.png"
