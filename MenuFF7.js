@@ -2990,12 +2990,22 @@ document.addEventListener('DOMContentLoaded', function () {
 		if (!locationEl || !rerollBtn) { return; }
 
 		const ubicaciones = [
-			'Midgar', 'Sector 7 - Los Bajos Fondos', 'Mercado Muro', 'Kalm',
-			'Granja de Chocobos', 'Monte Nibel', 'Nibelheim', 'Fuerte Cóndor',
-			'Junon', 'Costa del Sol', 'Corel', 'Plato Dorado', 'Cañón Cósmico',
-			'Gongaga', 'Cueva de los Gi', 'Wutai', 'Ciudad Cohete', 'Aldea de los Huesos',
-			'Bosque Durmiente', 'Ciudad de los Ancianos', 'Posada del Carámbano',
-			'Gran Glaciar', 'Mideel', 'Cráter Norte', '???', '???'
+			// Mundo clásico (FFVII original)
+			'Midgar', 'Sector 7 Slums', 'Wall Market', 'Kalm',
+			'Chocobo Farm', 'Mt. Nibel', 'Nibelheim', 'Fort Condor',
+			'Junon', 'Costa del Sol', 'Corel', 'Gold Saucer', 'Cosmo Canyon',
+			'Gongaga', 'Cave of the Gi', 'Wutai', 'Rocket Town', 'Bone Village',
+			'Sleeping Forest', 'City of the Ancients', 'Icicle Inn',
+			'Great Glacier', 'Mideel', 'Northern Crater',
+			// Gold Saucer — plazas
+			'Battle Square', 'Chocobo Square', 'Wonder Square', 'Speed Square',
+			'Event Square', 'Ghost Square', 'Skywheel Square',
+			// Midgar (FFVII Remake)
+			'Honeybee Inn', 'Seventh Heaven', 'Corneo Colosseum',
+			'Midgar Expressway', 'Shinra Underground Test Site',
+			// Mundo abierto (FFVII Rebirth)
+			'Grasslands', 'Mt. Corel', 'North Corel', 'Shinra Mansion',
+			'???', '???'
 		];
 
 		let anterior = null;
