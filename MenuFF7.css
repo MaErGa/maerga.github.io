@@ -1639,6 +1639,104 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	opacity: 1;
 }
 
+.sortMenu{
+	z-index: 5;
+}
+
+.sortMenuBtn{
+	cursor: pointer;
+	color: #cfd8ea;
+	background: transparent;
+	border: none;
+	font: inherit;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 0;
+}
+
+.sortMenuBtn:hover,
+.sortMenu.open .sortMenuBtn{
+	color: #7CFFC4;
+}
+
+.sortMenuArrow{
+	display: inline-block;
+	margin-left: 6px;
+}
+
+.sortMenuList{
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	margin-top: 4px;
+	min-width: 220px;
+	list-style: none;
+	padding: 6px 0;
+	border: 3px solid #cfd8ea;
+	border-radius: 8px;
+	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
+	box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+}
+
+.sortMenu.open .sortMenuList{
+	display: block;
+}
+
+.sortMenuList li{
+	padding: 6px 18px;
+	color: #e6ecff;
+	cursor: pointer;
+}
+
+.sortMenuList li:hover{
+	background: rgba(124,255,196,0.25);
+}
+
+.sortMenuList li.active{
+	color: #7CFFC4;
+}
+
+.panelList li[draggable="true"]{
+	cursor: grab;
+}
+
+.panelList li.dragOver{
+	border-top: 2px solid #7CFFC4;
+}
+
+.panelList li.dragging{
+	opacity: 0.4;
+}
+
+#proyectosList li{
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding-right: 28px;
+}
+
+#proyectosList li .proyectoIcono{
+	width: 34px;
+	height: 34px;
+	object-fit: contain;
+	image-rendering: pixelated;
+	flex-shrink: 0;
+}
+
+#proyectosList li .proyectoNombre{
+	flex: 1;
+}
+
+#proyectosList li .proyectoCantidad{
+	color: #cfd8ea;
+	opacity: 0.85;
+}
+
 .configRow{
 	display: flex;
 	align-items: center;

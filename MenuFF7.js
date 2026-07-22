@@ -138,17 +138,20 @@ const proyectos = [
 	{
 		nombre: "Duel Calculator",
 		descripcion: "Calculadora interactiva de puntos de vida (LP) para Yu-Gi-Oh! con diseño responsivo. Desarrollada con HTML, CSS y JavaScript nativo para ofrecer un control rápido y preciso durante los duelos.",
-		link: "https://MaErGa.github.io/duelcalculator/"
+		link: "https://MaErGa.github.io/duelcalculator/",
+		icono: "Assets/Imagenes/icon_calculator.png"
 	},
 	{
 		nombre: "Pirate Plataformer",
 		descripcion: "Juego de plataformas para la segunda evaluación del curso Programación de Videojuegos con Unity.",
-		link: "https://maerga.itch.io/pirate-plataformer-alpha-version"
+		link: "https://maerga.itch.io/pirate-plataformer-alpha-version",
+		icono: "Assets/Imagenes/icon_pirate.png"
 	},
 	{
 		nombre: "Dragon Quest -Mistrel Song- ",
 		descripcion: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
-		link: "https://maerga.itch.io/dragon-quest-mistreal-song"
+		link: "https://maerga.itch.io/dragon-quest-mistreal-song",
+		icono: "Assets/Imagenes/icon_dragon.png"
 	}
 ];
 
@@ -210,6 +213,23 @@ const materias = [
 			{ nombre: "Visual Script", desbloqueada: true },
 			{ nombre: "Visual Script 2 (Nodos Avanzados)", desbloqueada: true },
 			{ nombre: "Visual Script 3 (Custom Nodes)", desbloqueada: false }
+		]
+	},
+	{
+		nombre: "Claude Code", color: "#E6C846", estrellas: 3,
+		descripcion: "Asistente de IA en terminal para programación agéntica: generación de código, refactorización, debugging y automatización de tareas repetitivas.",
+		ap: 7400, apSiguiente: 4600,
+		efectos: [
+			{ label: "Fuerza", valor: "-01", tipo: "down" },
+			{ label: "Magia",    valor: "+01", tipo: "up" },
+			{ label: "MaxHP",    valor: "-01%", tipo: "down" },
+			{ label: "MaxMP",    valor: "+03%", tipo: "up" }
+		],
+		habilidades: [
+			{ nombre: "Programación Agéntica", desbloqueada: true },
+			{ nombre: "Refactorización de Código", desbloqueada: true },
+			{ nombre: "Debugging Asistido", desbloqueada: true },
+			{ nombre: "Automatización de Tareas", desbloqueada: false }
 		]
 	},
 	{
@@ -322,6 +342,146 @@ const materias = [
 		]
 	}
 ];
+
+// ORDEN MANUAL / AUTO — paneles Materia y Equipo
+// Cada lista (materiaOrden, equipoOrden_arma, etc.) guarda en localStorage
+// el modo elegido ('manual' | 'auto') y, si es manual, el orden personalizado
+// como un array de nombres. En Auto siempre se recalcula desde cero y no se
+// toca lo guardado en Manual, así el usuario puede ir y volver sin perder su orden.
+function mff7CargarModoOrden(clave) {
+	return localStorage.getItem(clave + 'Modo') || 'manual';
+}
+function mff7GuardarModoOrden(clave, modo) {
+	localStorage.setItem(clave + 'Modo', modo);
+}
+function mff7CargarOrdenManual(clave) {
+	var guardado = localStorage.getItem(clave + 'Orden');
+	return guardado ? JSON.parse(guardado) : null;
+}
+function mff7GuardarOrdenManual(clave, nombres) {
+	localStorage.setItem(clave + 'Orden', JSON.stringify(nombres));
+}
+
+// Aplica un orden de nombres guardado sobre una lista de datos. Si un nombre
+// guardado ya no existe (se borró del array fuente) se ignora, y si aparece
+// un ítem nuevo que todavía no tiene posición guardada, se agrega al final.
+function mff7OrdenarPorNombres(lista, nombres, claveNombre) {
+	claveNombre = claveNombre || 'nombre';
+	if (!nombres) { return lista.slice(); }
+	var mapa = {};
+	lista.forEach(function (it) { mapa[it[claveNombre]] = it; });
+	var ordenada = nombres.map(function (n) { return mapa[n]; }).filter(Boolean);
+	lista.forEach(function (it) { if (ordenada.indexOf(it) === -1) { ordenada.push(it); } });
+	return ordenada;
+}
+
+function mff7OrdenarPorNombreAlfabetico(lista, claveNombre) {
+	claveNombre = claveNombre || 'nombre';
+	return lista.slice().sort(function (a, b) {
+		return a[claveNombre].localeCompare(b[claveNombre], 'es');
+	});
+}
+
+// Orden "Tipo" del panel Materia: agrupa por color al estilo FF7 (Verde =
+// Magia, Amarillo = Comando, Morado = Independiente, Azul = Apoyo, Rojo =
+// Invocación al final, como cierre vistoso).
+const MFF7_ORDEN_COLOR_MATERIA = ["#32B464", "#E6C846", "#B464B4", "#4682B4", "#D23232"];
+function mff7OrdenarMateriasPorTipo(lista) {
+	return lista.slice().sort(function (a, b) {
+		var ia = MFF7_ORDEN_COLOR_MATERIA.indexOf(a.color);
+		var ib = MFF7_ORDEN_COLOR_MATERIA.indexOf(b.color);
+		if (ia === -1) { ia = MFF7_ORDEN_COLOR_MATERIA.length; }
+		if (ib === -1) { ib = MFF7_ORDEN_COLOR_MATERIA.length; }
+		if (ia !== ib) { return ia - ib; }
+		return b.estrellas - a.estrellas;
+	});
+}
+function mff7OrdenarMateriasPorEstrellas(lista) {
+	return lista.slice().sort(function (a, b) { return b.estrellas - a.estrellas; });
+}
+function mff7OrdenarMateriasPorAp(lista) {
+	// Las materias en MASTER (5 estrellas) no tienen "ap" propio: se tratan
+	// como AP infinita para que encabecen el orden, igual que en el juego.
+	return lista.slice().sort(function (a, b) {
+		var apA = a.master ? Infinity : (a.ap || 0);
+		var apB = b.master ? Infinity : (b.ap || 0);
+		return apB - apA;
+	});
+}
+function mff7OrdenarEquipoPorStat(lista, stat) {
+	return lista.slice().sort(function (a, b) { return b.stats[stat] - a.stats[stat]; });
+}
+
+// Habilita arrastrar y soltar sobre los <li> de una lista ya construida
+// (deben tener draggable = true y dataset.nombreOrden puesto de antemano).
+// obtenerOrdenActual() debe devolver el array de nombres visible ahora mismo;
+// onReordenar(nuevoOrden) recibe ese array ya con el cambio aplicado.
+function mff7HabilitarDragList(ul, obtenerOrdenActual, onReordenar) {
+	var dragEl = null;
+	Array.prototype.forEach.call(ul.children, function (li) {
+		li.addEventListener('dragstart', function () {
+			dragEl = li;
+			li.classList.add('dragging');
+		});
+		li.addEventListener('dragend', function () {
+			li.classList.remove('dragging');
+			Array.prototype.forEach.call(ul.children, function (x) { x.classList.remove('dragOver'); });
+		});
+		li.addEventListener('dragover', function (e) {
+			e.preventDefault();
+			if (li !== dragEl) { li.classList.add('dragOver'); }
+		});
+		li.addEventListener('dragleave', function () {
+			li.classList.remove('dragOver');
+		});
+		li.addEventListener('drop', function (e) {
+			e.preventDefault();
+			li.classList.remove('dragOver');
+			if (!dragEl || dragEl === li) { return; }
+			var nombres = obtenerOrdenActual();
+			var desde = nombres.indexOf(dragEl.dataset.nombreOrden);
+			var hasta = nombres.indexOf(li.dataset.nombreOrden);
+			if (desde === -1 || hasta === -1) { return; }
+			nombres.splice(hasta, 0, nombres.splice(desde, 1)[0]);
+			onReordenar(nombres);
+		});
+	});
+}
+
+// Wire genérico del menú desplegable "Ordenar" (igual comportamiento que
+// el "Ordenar" de los ítems en el juego original: un botón que despliega
+// una lista de criterios; el elegido queda marcado y persiste en localStorage).
+function mff7WireSortMenu(elMenu, clave, onCambio) {
+	if (!elMenu) { return; }
+	const boton = elMenu.querySelector('.sortMenuBtn');
+	const opciones = elMenu.querySelectorAll('.sortMenuList li');
+
+	function marcarActiva(criterio) {
+		opciones.forEach(function (o) { o.classList.toggle('active', o.dataset.criterio === criterio); });
+	}
+
+	boton.addEventListener('click', function (e) {
+		e.stopPropagation();
+		elMenu.classList.toggle('open');
+		playSound('slider');
+	});
+
+	document.addEventListener('click', function () {
+		elMenu.classList.remove('open');
+	});
+
+	opciones.forEach(function (opt) {
+		opt.addEventListener('click', function (e) {
+			e.stopPropagation();
+			mff7GuardarModoOrden(clave, opt.dataset.criterio);
+			marcarActiva(opt.dataset.criterio);
+			elMenu.classList.remove('open');
+			playSound('materia');
+			onCambio(opt.dataset.criterio);
+		});
+	});
+	marcarActiva(mff7CargarModoOrden(clave));
+}
 
 // Regla fija: toda materia al máximo de estrellas (5) ya está en MASTER,
 // por lo tanto no necesita AP pendiente y tiene todas sus habilidades
@@ -1087,7 +1247,25 @@ document.addEventListener('DOMContentLoaded', function () {
 			list.innerHTML = '';
 			proyectos.forEach(function (proyecto) {
 				const li = document.createElement('li');
-				li.textContent = proyecto.nombre;
+
+				if (proyecto.icono) {
+					const icono = document.createElement('img');
+					icono.className = 'proyectoIcono';
+					icono.src = proyecto.icono;
+					icono.alt = '';
+					li.appendChild(icono);
+				}
+
+				const nombre = document.createElement('span');
+				nombre.className = 'proyectoNombre';
+				nombre.textContent = proyecto.nombre;
+				li.appendChild(nombre);
+
+				const cantidad = document.createElement('span');
+				cantidad.className = 'proyectoCantidad';
+				cantidad.textContent = ': 1';
+				li.appendChild(cantidad);
+
 				li.addEventListener('mouseenter', function () { showProyecto(proyecto); playSound('slider'); });
 				li.addEventListener('click', function () {
 					showProyecto(proyecto);
@@ -1500,10 +1678,29 @@ document.addEventListener('DOMContentLoaded', function () {
 			highlightSlots(materia.nombre);
 		}
 
+		const ORDEN_CLAVE_MATERIA = 'mff7MateriaOrden';
+		const orderToggleEl = document.querySelector('#materiaOrderToggle');
+
+		function ordenarMaterias(criterio) {
+			switch (criterio) {
+				case 'nombre':    return mff7OrdenarPorNombreAlfabetico(materias);
+				case 'estrellas': return mff7OrdenarMateriasPorEstrellas(materias);
+				case 'tipo':      return mff7OrdenarMateriasPorTipo(materias);
+				case 'ap':        return mff7OrdenarMateriasPorAp(materias);
+				default:          return mff7OrdenarPorNombres(materias, mff7CargarOrdenManual(ORDEN_CLAVE_MATERIA));
+			}
+		}
+
 		function buildList() {
 			list.innerHTML = '';
-			materias.forEach(function (materia) {
+			const criterio = mff7CargarModoOrden(ORDEN_CLAVE_MATERIA);
+			const esManual = criterio === 'manual';
+			const listaOrdenada = ordenarMaterias(criterio);
+
+			listaOrdenada.forEach(function (materia) {
 				const li = document.createElement('li');
+				li.draggable = esManual;
+				li.dataset.nombreOrden = materia.nombre;
 				var orb = document.createElement('span');
 				orb.className = 'orb orbSprite';
 				aplicarOrbSprite(orb, materia.color);
@@ -1537,7 +1734,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
 				list.appendChild(li);
 			});
+
+			if (esManual) {
+				mff7HabilitarDragList(list, function () {
+					return listaOrdenada.map(function (m) { return m.nombre; });
+				}, function (nuevoOrden) {
+					mff7GuardarOrdenManual(ORDEN_CLAVE_MATERIA, nuevoOrden);
+					buildList();
+				});
+			}
 		}
+
+		mff7WireSortMenu(orderToggleEl, ORDEN_CLAVE_MATERIA, function () {
+			buildList();
+		});
 
 		function open() {
 			deseleccionarSlot();
@@ -1546,14 +1756,14 @@ document.addEventListener('DOMContentLoaded', function () {
 			sincronizarHpMpMateria();
 			description.textContent = hintPorDefecto;
 			selected.innerHTML = '&nbsp;';
-			openPanel(panel, [header], [card, description, body]);
+			openPanel(panel, [orderToggleEl, header], [card, description, body]);
 			document.dispatchEvent(new Event('panelListBuilt'));
 		}
 
 		function close() {
 			deseleccionarSlot();
 			highlightSlots(null);
-			closePanel(panel, [header], [card, description, body]);
+			closePanel(panel, [orderToggleEl, header], [card, description, body]);
 		}
 
 		menuItem.addEventListener('click', open);
@@ -1719,6 +1929,23 @@ document.addEventListener('DOMContentLoaded', function () {
 			buildList(categoria, itemEquipado);
 		}
 
+		const orderToggleEl = document.querySelector('#equipoOrderToggle');
+
+		function claveOrdenEquipo(categoria) {
+			return 'mff7EquipoOrden_' + categoria;
+		}
+
+		function ordenarEquipo(categoria, criterio) {
+			const lista = equipoItems[categoria];
+			switch (criterio) {
+				case 'nombre':  return mff7OrdenarPorNombreAlfabetico(lista);
+				case 'ataque':  return mff7OrdenarEquipoPorStat(lista, 'attackP');
+				case 'defensa': return mff7OrdenarEquipoPorStat(lista, 'defenseP');
+				case 'magia':   return mff7OrdenarEquipoPorStat(lista, 'magicAtk');
+				default:        return mff7OrdenarPorNombres(lista, mff7CargarOrdenManual(claveOrdenEquipo(categoria)));
+			}
+		}
+
 		function buildList(categoria, itemEquipado) {
 			list.innerHTML = '';
 			// Ítem actualmente "previsualizado" con el 1º toque en táctil
@@ -1736,9 +1963,16 @@ document.addEventListener('DOMContentLoaded', function () {
 				playSound('materia');
 			}
 
-			equipoItems[categoria].forEach(function (item) {
+			const claveOrden = claveOrdenEquipo(categoria);
+			const criterio = mff7CargarModoOrden(claveOrden);
+			const esManual = criterio === 'manual';
+			const listaOrdenada = ordenarEquipo(categoria, criterio);
+
+			listaOrdenada.forEach(function (item) {
 				const li = document.createElement('li');
 				li.textContent = item.nombre;
+				li.draggable = esManual;
+				li.dataset.nombreOrden = item.nombre;
 				li.classList.toggle('filled', item.nombre === equipoActual[categoria]);
 
 				li.addEventListener('mouseenter', function () {
@@ -1781,10 +2015,48 @@ document.addEventListener('DOMContentLoaded', function () {
 				list.appendChild(li);
 			});
 
+			if (esManual) {
+				mff7HabilitarDragList(list, function () {
+					return listaOrdenada.map(function (it) { return it.nombre; });
+				}, function (nuevoOrden) {
+					mff7GuardarOrdenManual(claveOrden, nuevoOrden);
+					buildList(categoria, itemEquipado);
+				});
+			}
+
+			if (orderToggleEl) {
+				orderToggleEl.querySelectorAll('.sortMenuList li').forEach(function (o) {
+					o.classList.toggle('active', o.dataset.criterio === criterio);
+				});
+			}
+
 			// La lista se reconstruye en cada cambio de categoría o de ítem
 			// equipado (innerHTML = ''), lo que perdía los listeners de
 			// cursor (mano) y sonido. Redisparamos el rebind cada vez.
 			document.dispatchEvent(new Event('panelListBuilt'));
+		}
+
+		if (orderToggleEl) {
+			const botonOrden = orderToggleEl.querySelector('.sortMenuBtn');
+			const opcionesOrden = orderToggleEl.querySelectorAll('.sortMenuList li');
+
+			botonOrden.addEventListener('click', function (e) {
+				e.stopPropagation();
+				orderToggleEl.classList.toggle('open');
+				playSound('slider');
+			});
+			document.addEventListener('click', function () {
+				orderToggleEl.classList.remove('open');
+			});
+			opcionesOrden.forEach(function (opt) {
+				opt.addEventListener('click', function (e) {
+					e.stopPropagation();
+					mff7GuardarModoOrden(claveOrdenEquipo(categoriaActiva), opt.dataset.criterio);
+					orderToggleEl.classList.remove('open');
+					playSound('materia');
+					seleccionarCategoria(categoriaActiva);
+				});
+			});
 		}
 
 		categoriasEls.forEach(function (li) {
@@ -1804,12 +2076,12 @@ document.addEventListener('DOMContentLoaded', function () {
 			const eqHpBarEl = document.querySelector('#equipoHpBar');
 			const eqMpBarEl = document.querySelector('#equipoMpBar');
 			sincronizarHpMp(hpValueEl, mpValueEl, eqHpBarEl, eqMpBarEl);
-			openPanel(panel, [header], [card, description, body]);
+			openPanel(panel, [orderToggleEl, header], [card, description, body]);
 			document.dispatchEvent(new Event('panelListBuilt'));
 		}
 
 		function close() {
-			closePanel(panel, [header], [card, description, body]);
+			closePanel(panel, [orderToggleEl, header], [card, description, body]);
 		}
 
 		menuItem.addEventListener('click', open);

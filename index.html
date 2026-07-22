@@ -192,6 +192,16 @@ Redes / Contacto: Accede a los enlaces de GitHub, LinkedIn y CV.
 			</div>
 		</div>
 		<div class="panelDescription" id="materiaDescription">Pasa el cursor sobre una materia para ver más información.</div>
+		<div class="panelHeaderUse sortMenu" id="materiaOrderToggle">
+			<button type="button" class="sortMenuBtn">Ordenar <span class="sortMenuArrow">▾</span></button>
+			<ul class="sortMenuList">
+				<li data-criterio="manual" class="active">Manual</li>
+				<li data-criterio="nombre">Nombre</li>
+				<li data-criterio="estrellas">Estrellas</li>
+				<li data-criterio="tipo">Tipo</li>
+				<li data-criterio="ap">AP</li>
+			</ul>
+		</div>
 		<div class="panelBody" id="materiaBody">
 			<div class="panelBodyLeft" id="materiaSelected">&nbsp;</div>
 			<ul class="panelList panelBodyRight" id="materiaList"></ul>
@@ -227,6 +237,16 @@ Redes / Contacto: Accede a los enlaces de GitHub, LinkedIn y CV.
 			</ul>
 		</div>
 		<div class="panelDescription" id="equipoDescription">Elige Arma, Armadura o Accesorio para ver el equipo disponible.</div>
+		<div class="panelHeaderUse sortMenu" id="equipoOrderToggle">
+			<button type="button" class="sortMenuBtn">Ordenar <span class="sortMenuArrow">▾</span></button>
+			<ul class="sortMenuList">
+				<li data-criterio="manual" class="active">Manual</li>
+				<li data-criterio="nombre">Nombre</li>
+				<li data-criterio="ataque">Ataque</li>
+				<li data-criterio="defensa">Defensa</li>
+				<li data-criterio="magia">Magia</li>
+			</ul>
+		</div>
 		<div class="panelBody" id="equipoBody">
 			<div class="panelBodyLeft equipStatsPanel" id="equipoStatsPanel">
 				<div class="equipSlotRow">
@@ -345,9 +365,9 @@ Redes / Contacto: Accede a los enlaces de GitHub, LinkedIn y CV.
 
 	<!-- Panel: Config -->
 	<div class="panelOverlay" id="panelConfig">
-		<div class="panelHeaderUse" id="configUse">Config</div>
+		<div class="panelHeaderUse" id="configUse">Ajustes</div>
 		<div class="panelHeader" id="configHeader">
-			<span>Config</span>
+			<span>Ajustes</span>
 			<span class="panelClose" id="configClose">X</span>
 		</div>
 		<div class="panelSingleBody" id="configBody">
