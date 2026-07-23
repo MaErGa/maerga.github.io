@@ -1,0 +1,65 @@
+{
+  "profile": {
+    "name": "Matías Errico",
+    "level": 38,
+    "title": "Programador de Videojuegos",
+    "location": "Argentina",
+    "hp": 2050,
+    "mp": 260,
+    "bio": "Programador de Videojuegos con Unity (Junior) y Técnico en Microinformática. Bienvenido a mi sandbox personal. Mi plan es ir sumando una colección en constante crecimiento de pequeños proyectos técnicos, desarrollados principalmente en Unity.",
+    "image": "./Assets/Imagenes/potrait.png"
+  },
+  "skills": [
+    { "nombre": "Unity", "estrellas": 3, "color": "#00FF00", "ap": 1200 },
+    { "nombre": "C#", "estrellas": 3, "color": "#0099FF", "ap": 1500 },
+    { "nombre": "JavaScript", "estrellas": 2, "color": "#FFFF00", "ap": 800 },
+    { "nombre": "TypeScript", "estrellas": 2, "color": "#0099FF", "ap": 600 },
+    { "nombre": "React", "estrellas": 2, "color": "#00FFFF", "ap": 700 },
+    { "nombre": "Python", "estrellas": 2, "color": "#00FF99", "ap": 500 }
+  ],
+  "projects": [
+    {
+      "id": "proyecto1",
+      "nombre": "Nombre Proyecto 1",
+      "descripcion": "Descripción del proyecto",
+      "imagen": "./Assets/Imagenes/potrait.png",
+      "link": "https://maerga.itch.io",
+      "tags": ["Unity", "C#"]
+    }
+  ],
+  "locations": [
+    "Midgar - Sector 1",
+    "Midgar - Sector 5",
+    "Midgar - Sector 7",
+    "Costa del Sol",
+    "Junon",
+    "Gold Saucer",
+    "Icicle Inn",
+    "Nibelheim",
+    "Rocket Town",
+    "Bugenhagen's Crater",
+    "The Sunken Gelniiks Strata",
+    "Cosmo Canyon"
+  ],
+  "menu": [
+    { "id": "proyectos", "nombre": "Proyectos", "numero": 0, "tipo": "panel" },
+    { "id": "historia", "nombre": "Historia", "numero": 1, "tipo": "panel" },
+    { "id": "materia", "nombre": "Materia", "numero": 2, "tipo": "panel" },
+    { "id": "equipo", "nombre": "Equipo", "numero": 3, "tipo": "panel" },
+    { "id": "estado", "nombre": "Estado", "numero": 9, "tipo": "panel" },
+    { "id": "cv", "nombre": "CV", "numero": 4, "url": "Assets/CV/Matías_Errico_CV.pdf", "tipo": "link" },
+    { "id": "itch", "nombre": "Itch.io", "numero": 5, "url": "https://maerga.itch.io/", "tipo": "link" },
+    { "id": "github", "nombre": "GitHub", "numero": 6, "url": "https://github.com/MaErGa", "tipo": "link" },
+    { "id": "linkedin", "nombre": "LinkedIn", "numero": 7, "url": "https://www.linkedin.com/in/matias-errico-garcia-474387402/", "tipo": "link" },
+    { "id": "ajustes", "nombre": "Ajustes", "numero": 8, "tipo": "panel" },
+    { "id": "vacante1", "nombre": "", "numero": 10, "tipo": "vacio" },
+    { "id": "vacante2", "nombre": "", "numero": 11, "tipo": "vacio" }
+  ],
+  "attributions": {
+    "designer": "Jamie Pates - https://www.jamiepates.com",
+    "designerRepo": "https://github.com/jamiepatesdev/ff7-menu-port",
+    "font": "Reactor7 by Caveras",
+    "fontAuthor": "https://fontstruct.com/fontstructors/caveras",
+    "fontLicense": "Creative Commons Attribution Non-commercial Share Alike 3.0"
+  }
+}
