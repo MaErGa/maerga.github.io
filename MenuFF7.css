@@ -1851,6 +1851,16 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	cursor: pointer;
 	font-size: 35px;
 	flex-shrink: 0;
+	/* Se muestra solo cuando el color ya no es el de por defecto
+	   (nada que resetear todavía = nada que mostrar). */
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.2s ease-in;
+}
+
+.colorPicker .resetBtn.active{
+	opacity: 1;
+	pointer-events: auto;
 }
 
 .colorPicker .resetBtn:hover{

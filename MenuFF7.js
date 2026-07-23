@@ -2621,6 +2621,16 @@ document.addEventListener('DOMContentLoaded', function () {
 			rngR.value = colorActual.r; valR.textContent = pad3(colorActual.r);
 			rngG.value = colorActual.g; valG.textContent = pad3(colorActual.g);
 			rngB.value = colorActual.b; valB.textContent = pad3(colorActual.b);
+			sincronizarResetVisible();
+		}
+
+		// El botón de reset solo tiene sentido (y solo se muestra) cuando el
+		// color actual ya no es el de por defecto.
+		function colorEsPorDefecto() {
+			return colorActual.r === coloresPorDefecto.r && colorActual.g === coloresPorDefecto.g && colorActual.b === coloresPorDefecto.b;
+		}
+		function sincronizarResetVisible() {
+			resetBtn.classList.toggle('active', !colorEsPorDefecto());
 		}
 
 		function guardarColor() {
@@ -2648,6 +2658,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				etiqueta.textContent = pad3(colorActual[canal]);
 				aplicarColorVentana(colorActual.r, colorActual.g, colorActual.b);
 				guardarColor();
+				sincronizarResetVisible();
 				// Sonido también al arrastrar el slider (izquierda o derecha),
 				// con un pequeño throttle para que no se solape el audio.
 				const ahora = Date.now();
@@ -2660,11 +2671,97 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		resetBtn.addEventListener('mouseenter', function () { playSound('slider'); });
 		resetBtn.addEventListener('click', function () {
+			playSound('select');
 			colorActual = Object.assign({}, coloresPorDefecto);
 			actualizarSliders();
 			aplicarColorVentana(colorActual.r, colorActual.g, colorActual.b);
 			guardarColor();
 		});
+
+		// ----------------------------------------------------------
+		// Navegación por teclado del selector de color (equivalente
+		// vanilla del useCursorNav de BGColorPicker.tsx). Reutiliza el
+		// mismo cursor FF7 que ya mueve el menú principal.
+		// ----------------------------------------------------------
+		(function () {
+			const canales = [
+				{ input: rngR, canal: 'r', fila: rngR.closest('label') },
+				{ input: rngG, canal: 'g', fila: rngG.closest('label') },
+				{ input: rngB, canal: 'b', fila: rngB.closest('label') }
+			];
+			let indiceFoco = -1; // -1 = sin foco, 0-2 = canal R/G/B, 3 = reset
+
+			function elementoDe(indice) {
+				return (indice < 3) ? canales[indice].fila : resetBtn;
+			}
+
+			function enfocarIndice(indice) {
+				indiceFoco = indice;
+				if (window.mff7MostrarCursor) window.mff7MostrarCursor(elementoDe(indice));
+				playSound('slider');
+			}
+
+			function salirDelPicker() {
+				indiceFoco = -1;
+				if (window.mff7OcultarCursor) window.mff7OcultarCursor();
+			}
+
+			function ajustarCanal(canal, delta) {
+				const next = Math.max(0, Math.min(255, colorActual[canal] + delta));
+				if (next === colorActual[canal]) return;
+				colorActual[canal] = next;
+				actualizarSliders();
+				aplicarColorVentana(colorActual.r, colorActual.g, colorActual.b);
+				guardarColor();
+				playSound('select');
+			}
+
+			document.addEventListener('keydown', function (e) {
+				if (!colorPicker.classList.contains('show')) return;
+
+				if (e.key === 'Escape') {
+					// Corta acá: cierra solo el selector de color, no todo
+					// el panel de Ajustes (closeOnEscape se registra después).
+					e.stopImmediatePropagation();
+					colorPicker.classList.remove('show');
+					salirDelPicker();
+					playSound('back');
+					return;
+				}
+
+				const teclas = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Enter', ' '];
+				if (teclas.indexOf(e.key) === -1) return;
+				e.preventDefault();
+
+				if (indiceFoco === -1) { enfocarIndice(0); return; }
+
+				if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+					// El reset solo entra en el ciclo cuando está visible
+					// (color distinto al de por defecto), igual que en React.
+					const total = resetBtn.classList.contains('active') ? 4 : 3;
+					const dir = (e.key === 'ArrowDown') ? 1 : -1;
+					enfocarIndice((indiceFoco + dir + total) % total);
+					return;
+				}
+
+				if (indiceFoco < 3) {
+					const canal = canales[indiceFoco].canal;
+					if (e.key === 'ArrowLeft') { ajustarCanal(canal, -1); return; }
+					if (e.key === 'ArrowRight') { ajustarCanal(canal, 1); return; }
+					if (e.key === 'PageUp') { ajustarCanal(canal, 16); return; }
+					if (e.key === 'PageDown') { ajustarCanal(canal, -16); return; }
+				} else if (e.key === 'Enter' || e.key === ' ') {
+					resetBtn.click();
+				}
+			});
+
+			// Al abrir el selector, el foco por teclado arranca siempre en
+			// el canal Rojo; al cerrarlo, se suelta el cursor.
+			swatchBtn.addEventListener('click', function () {
+				if (colorPicker.classList.contains('show')) { enfocarIndice(0); }
+				else { salirDelPicker(); }
+			});
+		})();
 
 		// ---- Sonido ----
 		actualizarToggleVisual(soundToggle, sonidoActivado ? 'on' : 'off');
