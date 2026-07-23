@@ -22,6 +22,60 @@
 	--win-c3: #000223;
 }
 
+/* ============================================================
+   CONTENTBOX — equivalente vanilla del componente <ContentBox> de
+   React: el fondo con gradiente + el borde en relieve que comparten
+   todas las "ventanas" del menú (paneles, tarjetas, listas, botones
+   de Historia), definidos en un único lugar en vez de repetirlos en
+   cada selector. Cualquier caja nueva puede sumarse solo agregando
+   la clase "contentBox" (o "contentBoxWide" para la variante grande).
+   El color sale de --win-c1/--win-c2/--win-c3 (el picker de Ajustes
+   los recalcula).
+   ============================================================ */
+.contentBox,
+#menu,
+#section,
+#biografia,
+.panelHeader, .panelHeaderUse,
+.panelCard,
+.panelDescription,
+.panelBodyLeft, .panelBodyRight,
+.panelSingleBody,
+.estadoWindow,
+.historiaTopBar,
+.historiaChoiceBtn{
+	border: 5px solid;
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	-webkit-border-radius: 15px;
+}
+
+.contentBox,
+#menu,
+.panelHeader, .panelHeaderUse,
+.panelCard,
+.panelDescription,
+.panelBodyLeft, .panelBodyRight,
+.panelSingleBody,
+.estadoWindow,
+.historiaTopBar,
+.historiaChoiceBtn,
+.sortMenuList{
+	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
+}
+
+/* Variante "ancha": el gradiente tarda más en llegar al tercer color.
+   Usada en las dos cajas grandes de la pantalla principal. */
+.contentBoxWide,
+#section,
+#biografia{
+	background: radial-gradient(circle at -180px 0px, var(--win-c1) 300px, var(--win-c2) 500px, var(--win-c3));
+}
+
+.historiaCards{
+	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 500px, var(--win-c3));
+}
+
 *{
 	margin: 0px;
 	padding: 0px;
@@ -229,11 +283,6 @@ cursor:pointer;
 	margin: 35px 0px 0px 100px;
 	width: 925px;
 	height: 650px;
-	background: radial-gradient(circle at -180px 0px, var(--win-c1) 300px, var(--win-c2) 500px, var(--win-c3));
-	border: 5px solid;
-	 -moz-border-radius: 15px;
-	 -webkit-border-radius: 15px;
-	border-radius: 15px;
 	box-sizing: border-box;
 	 -moz-box-sizing: border-box;
 	 -webkit-box-sizing: border-box;
@@ -261,11 +310,6 @@ cursor:pointer;
 	width: 700px;
 	height: 340px;
 	box-sizing: border-box;
-	background: radial-gradient(circle at -180px 0px, var(--win-c1) 300px, var(--win-c2) 500px, var(--win-c3));
-	border: 5px solid;
-	border-radius: 15px;
-	 -moz-border-radius: 15px;
-	 -webkit-border-radius: 15px;
 	padding: 25px 30px;
 	font: 30px 'Reactor7', 'Press Start 2P', monospace;
 	color: white;
@@ -663,11 +707,6 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	width: 250px;
 	height: 470px;
 	list-style: none;
-	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
-	border: 5px solid;
-	border-radius: 15px;
-	 -moz-border-radius: 15px;
-	 -webkit-border-radius: 15px;
 	box-sizing: border-box;     
 	 -moz-box-sizing: border-box;
 	 -webkit-box-sizing: border-box;
@@ -1127,11 +1166,6 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	position: absolute;
 	top: 0px;
 	box-sizing: border-box;
-	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
-	border: 5px solid;
-	border-radius: 15px;
-	 -moz-border-radius: 15px;
-	 -webkit-border-radius: 15px;
 	font: 26px 'Reactor7', 'Press Start 2P', monospace;
 	padding: 12px 18px;
 	opacity: 0;
@@ -1184,11 +1218,6 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	width: 100%;
 	height: 230px;
 	box-sizing: border-box;
-	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
-	border: 5px solid;
-	border-radius: 15px;
-	 -moz-border-radius: 15px;
-	 -webkit-border-radius: 15px;
 	display: flex;
 	gap: 24px;
 	padding: 22px;
@@ -1402,11 +1431,6 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	width: 100%;
 	height: 60px;
 	box-sizing: border-box;
-	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
-	border: 5px solid;
-	border-radius: 15px;
-	 -moz-border-radius: 15px;
-	 -webkit-border-radius: 15px;
 	font: 24px 'Reactor7', 'Press Start 2P', monospace;
 	padding: 10px 22px;
 	opacity: 0;
@@ -1442,11 +1466,6 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 
 .panelBodyLeft, .panelBodyRight{
 	box-sizing: border-box;
-	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
-	border: 5px solid;
-	border-radius: 15px;
-	 -moz-border-radius: 15px;
-	 -webkit-border-radius: 15px;
 	font: 30px 'Reactor7', 'Press Start 2P', monospace;
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
@@ -1664,11 +1683,6 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	width: 100%;
 	bottom: 0px;
 	box-sizing: border-box;
-	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
-	border: 5px solid;
-	border-radius: 15px;
-	 -moz-border-radius: 15px;
-	 -webkit-border-radius: 15px;
 	padding: 30px 40px;
 	opacity: 0;
 	transition: opacity 0.22s ease;
@@ -1718,7 +1732,6 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	padding: 6px 0;
 	border: 3px solid #cfd8ea;
 	border-radius: 8px;
-	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
 	box-shadow: 0 6px 18px rgba(0,0,0,0.5);
 }
 
@@ -2204,10 +2217,6 @@ footer2 {
 	width: 100%;
 	bottom: 0px;
 	box-sizing: border-box;
-	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
-	border-radius: 15px;
-	 -moz-border-radius: 15px;
-	 -webkit-border-radius: 15px;
 	overflow: hidden;
 }
 
@@ -2310,9 +2319,6 @@ footer2 {
 	left: 0px;
 	right: 270px;
 	box-sizing: border-box;
-	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
-	border: 5px solid;
-	border-radius: 15px;
 	font: 26px 'Reactor7', 'Press Start 2P', monospace;
 	padding: 12px 18px;
 	display: flex;
@@ -2339,9 +2345,6 @@ footer2 {
 .historiaChoiceBtn{
 	font: 28px 'Reactor7', 'Press Start 2P', monospace;
 	color: white;
-	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 350px, var(--win-c3));
-	border: 5px solid;
-	border-radius: 15px;
 	padding: 18px 36px;
 	cursor: pointer;
 	transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -2394,7 +2397,6 @@ footer2 {
 	border: 5px solid white;
 	border-radius: 15px;
 	box-sizing: border-box;
-	background: radial-gradient(circle at -180px 0px, var(--win-c1) 100px, var(--win-c2) 500px, var(--win-c3));
 }
 
 .historiaCard{

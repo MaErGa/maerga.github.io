@@ -1166,6 +1166,12 @@ document.addEventListener('DOMContentLoaded', function () {
 	var PANEL_ANIM_MS = 480;
 	var PANEL_WIDTH_PHASE_MS = PANEL_ANIM_MS * 0.2;
 
+	// Barras de scroll estilo FF7 enganchadas a las listas de los paneles.
+	// Se rellena más abajo; declarada acá para que openPanel() pueda
+	// recalcularlas cuando un panel (inicialmente display:none) se hace
+	// visible, momento en el que recién se conoce su tamaño real.
+	var scrollbarsFF7 = [];
+
 	// Abre un panel: la tarjeta de HP y el menú de comandos desaparecen de
 	// golpe (fade rápido en #group) en el mismo instante en que el panel
 	// "toma su lugar" y arranca a crecer; el título aparece apenas termina
@@ -1185,6 +1191,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		window.requestAnimationFrame(function () {
 			panelEl.classList.add('opening'); // el panel crece (ancho, luego alto)
+			// El panel acaba de pasar de display:none a visible: recién ahora
+			// tiene tamaño real, así que recalculamos las barras de scroll.
+			scrollbarsFF7.forEach(function (barra) { barra.actualizar(); });
 		});
 
 		setTimeout(function () {
@@ -1199,6 +1208,11 @@ document.addEventListener('DOMContentLoaded', function () {
 				el.classList.add('show');
 			}, PANEL_ANIM_MS * 0.85 + i * 170);
 		});
+
+		// Recalculo final, cuando el panel ya terminó de crecer del todo.
+		setTimeout(function () {
+			scrollbarsFF7.forEach(function (barra) { barra.actualizar(); });
+		}, PANEL_ANIM_MS + 30);
 	}
 
 	// Cierra un panel: primero se desvanece el contenido, luego el título,
@@ -2905,9 +2919,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 
 		// Aplicar a todos los li interactivos del menú principal, las listas
-		// de paneles, y los slots de materia/equipo (arma, armadura, accesorio).
+		// de paneles, los slots de materia/equipo (arma, armadura, accesorio),
+		// y el avatar/botón de revivir (para que la navegación por teclado
+		// pueda posicionar el mismo cursor sobre ellos).
 		function bindMenuItems() {
-			document.querySelectorAll('#menu li, .panelList li, .slot, #configBody .configRow').forEach(function (li) {
+			document.querySelectorAll('#menu li, .panelList li, .slot, #configBody .configRow, #firstPhotoContainer, #firstReviveBtn').forEach(function (li) {
 				li.addEventListener('mouseenter', function () { mostrarCursor(li); playSound('slider'); });
 				li.addEventListener('mouseleave', ocultarCursor);
 			});
@@ -2920,6 +2936,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		// Ocultar si el mouse sale del área clickeable
 		document.addEventListener('mouseleave', ocultarCursor);
+
+		// Expuestas para que otros módulos (navegación por teclado) puedan
+		// reutilizar el mismo cursor en vez de crear uno nuevo.
+		window.mff7MostrarCursor = mostrarCursor;
+		window.mff7OcultarCursor = ocultarCursor;
 	})();
 
 	// ----------------------------------------------------------
@@ -3023,6 +3044,148 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		// Aleatoria ya desde la carga inicial, sin esperar el primer clic.
 		siguienteUbicacion();
+	})();
+
+	// ----------------------------------------------------------
+	// SCROLLBAR FF7: se engancha a las listas scrolleables de los
+	// paneles (Proyectos, Materia, Equipo). Cada .panelList vive
+	// dentro de un .panelBody, que ya está posicionado (position:
+	// absolute), así que el track queda bien anclado como hermano.
+	// ----------------------------------------------------------
+	(function () {
+		var listasScrolleables = ['#proyectosList', '#materiaList', '#equipoList'];
+
+		listasScrolleables.forEach(function (selector) {
+			var el = document.querySelector(selector);
+			if (!el) return;
+			scrollbarsFF7.push(crearScrollbarFF7(el));
+		});
+
+		// Las listas se regeneran dinámicamente (innerHTML) al reordenar o
+		// reabrir un panel, así que recalculamos todas las barras cuando
+		// eso pasa (el propio evento ya lo dispara el resto del código).
+		document.addEventListener('panelListBuilt', function () {
+			scrollbarsFF7.forEach(function (barra) { barra.actualizar(); });
+		});
+	})();
+
+	// ----------------------------------------------------------
+	// NAVEGACIÓN POR TECLADO DEL MENÚ PRINCIPAL
+	// (equivalente vanilla del useCursorNav de Menu.tsx)
+	// ------------------------------------------------------------
+	// Tres "grupos" navegables con flechas, igual que en la versión React:
+	//   - menu:   los <li> de #menu (arriba/abajo, cicla)
+	//   - avatar: la foto del personaje (izquierda desde el menú)
+	//   - revive: el botón Revive (abajo desde avatar, solo si está en KO)
+	// Enter/Espacio confirma (equivalente a onConfirm), Escape vuelve
+	// al menú (equivalente a onCancel). Solo actúa si no hay ningún
+	// panel abierto (equivalente a "isLanding").
+	// ----------------------------------------------------------
+	(function () {
+		const photoContainer = document.querySelector('#firstPhotoContainer');
+		const reviveBtn = document.querySelector('#firstReviveBtn');
+		if (!photoContainer || !reviveBtn) return;
+
+		// Solo los <li> con contenido real (deja afuera los dos vacíos,
+		// number="10" y number="11", reservados sin usar todavía).
+		function itemsMenu() {
+			return Array.from(document.querySelectorAll('#menu li')).filter(function (li) {
+				return li.textContent.trim().length > 0;
+			});
+		}
+
+		let grupo = null; // null | 'menu' | 'avatar' | 'revive'
+		let indiceMenu = 0; // último índice recordado del menú
+
+		function hayPanelAbierto() {
+			return !!document.querySelector('.panelOverlay.visible');
+		}
+
+		function estaEnKO() {
+			return photoContainer.classList.contains('ko');
+		}
+
+		function enfocar(nuevoGrupo, elemento) {
+			grupo = nuevoGrupo;
+			if (window.mff7MostrarCursor) window.mff7MostrarCursor(elemento);
+			playSound('slider');
+		}
+
+		function volverAlMenu() {
+			const items = itemsMenu();
+			const li = items[indiceMenu] || items[0];
+			if (li) enfocar('menu', li);
+		}
+
+		function moverMenu(direccion) {
+			const items = itemsMenu();
+			if (items.length === 0) return;
+			indiceMenu = (indiceMenu + direccion + items.length) % items.length;
+			enfocar('menu', items[indiceMenu]);
+		}
+
+		function confirmar() {
+			if (grupo === 'menu') {
+				const li = itemsMenu()[indiceMenu];
+				if (!li) return;
+				// Los enlaces externos (CV, Itch.io, GitHub, LinkedIn) tienen el
+				// listener en el <a> interno; los que abren un panel lo tienen
+				// en el propio <li>.
+				const link = li.querySelector('a');
+				if (link) { link.click(); } else { li.click(); }
+			} else if (grupo === 'avatar') {
+				photoContainer.click(); // dispara golpear()
+			} else if (grupo === 'revive') {
+				reviveBtn.click(); // dispara revivir() (si hay MP suficiente)
+			}
+		}
+
+		function cancelar() {
+			if (grupo === 'avatar' || grupo === 'revive') {
+				playSound('back');
+				volverAlMenu();
+			}
+		}
+
+		document.addEventListener('keydown', function (e) {
+			if (hayPanelAbierto()) return; // los paneles ya manejan su propio Escape
+
+			if (e.key === 'Enter' || e.key === ' ') {
+				if (grupo) { e.preventDefault(); confirmar(); }
+				return;
+			}
+			if (e.key === 'Escape') {
+				cancelar();
+				return;
+			}
+
+			const flechas = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+			if (flechas.indexOf(e.key) === -1) return;
+			e.preventDefault();
+
+			if (grupo === null || grupo === 'menu') {
+				if (e.key === 'ArrowUp') { moverMenu(-1); return; }
+				if (e.key === 'ArrowDown') { moverMenu(1); return; }
+				if (e.key === 'ArrowLeft') { enfocar('avatar', photoContainer); return; }
+				return;
+			}
+			if (grupo === 'avatar') {
+				if (e.key === 'ArrowRight') { volverAlMenu(); return; }
+				if (e.key === 'ArrowDown' && estaEnKO()) { enfocar('revive', reviveBtn); return; }
+				return;
+			}
+			if (grupo === 'revive') {
+				if (e.key === 'ArrowUp') { enfocar('avatar', photoContainer); return; }
+				if (e.key === 'ArrowRight') { volverAlMenu(); return; }
+			}
+		});
+
+		// Si el personaje revive mientras el cursor está sobre el botón
+		// Revive (que va a desaparecer), lo mandamos de vuelta al avatar.
+		const reviveObserver = new MutationObserver(function () {
+			if (grupo === 'revive' && !estaEnKO()) { enfocar('avatar', photoContainer); }
+		});
+		reviveObserver.observe(photoContainer, { attributes: true, attributeFilter: ['class'] });
 	})();
 
 });

@@ -1,0 +1,58 @@
+/* ============================================================
+   SCROLLBAR ESTILO FF7 — canal hundido con thumb gris en relieve
+   (bisel claro arriba/izquierda, oscuro abajo/derecha), pegado al
+   borde derecho de su contenedor padre posicionado.
+   ============================================================ */
+
+.ff7ScrollbarTrack {
+	position: absolute;
+	top: 0;
+	/* desplazado 1px más allá del borde derecho para que no se vea
+	   una franja de la caja al lado */
+	right: -1px;
+	bottom: 0;
+	width: 32px;
+	background: rgba(190, 200, 245, 0.20);
+	opacity: 0;
+	transition: opacity 0.12s ease;
+	pointer-events: none;
+	z-index: 3;
+}
+
+.ff7ScrollbarTrack[data-visible="true"] {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.ff7ScrollbarThumb {
+	position: absolute;
+	top: 0;
+	/* ocupa todo el ancho del canal */
+	left: 0;
+	right: 0;
+	background: #a0a0a0;
+	border-top: 3px solid #f0f0f0;
+	border-left: 3px solid #c1c1c1;
+	border-right: 3px solid #727272;
+	border-bottom: 3px solid #414141;
+	cursor: pointer;
+	will-change: transform;
+}
+
+/* Oculta el scrollbar nativo del navegador en el elemento que lo lleve.
+   Se aplica directo a .panelBodyLeft/.panelBodyRight (los contenedores
+   que ya tienen overflow-y: auto en MenuFF7.css) y también queda
+   disponible como clase suelta ".hide-scrollbar" por si la necesitás
+   en otro elemento. */
+.hide-scrollbar,
+.panelBodyLeft,
+.panelBodyRight {
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* IE/Edge legacy */
+}
+
+.hide-scrollbar::-webkit-scrollbar,
+.panelBodyLeft::-webkit-scrollbar,
+.panelBodyRight::-webkit-scrollbar {
+	display: none; /* Chrome/Safari/Edge Chromium */
+}
