@@ -1863,6 +1863,17 @@ margin-left: 0px; /*front  = 0px behind = 62.5*/
 	pointer-events: auto;
 }
 
+.colorPicker .resetBtn .resetBtnIcon{
+	width: 28px;
+	height: 28px;
+	image-rendering: pixelated;
+	image-rendering: crisp-edges;
+	-ms-interpolation-mode: nearest-neighbor;
+	/* A diferencia del ícono de la ubicación, este no gira: acá el ícono
+	   es el botón en sí (siempre visible cuando corresponde), no un
+	   hover-reveal, así que el giro constante sería ruido visual. */
+}
+
 .colorPicker .resetBtn:hover{
 	background: white;
 	color: var(--win-c2);
