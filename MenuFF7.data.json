@@ -9,24 +9,196 @@
     "bio": "Programador de Videojuegos con Unity (Junior) y Técnico en Microinformática. Bienvenido a mi sandbox personal. Mi plan es ir sumando una colección en constante crecimiento de pequeños proyectos técnicos, desarrollados principalmente en Unity.",
     "image": "./Assets/Imagenes/potrait.png"
   },
-  "skills": [
-    { "nombre": "Unity", "estrellas": 3, "color": "#00FF00", "ap": 1200 },
-    { "nombre": "C#", "estrellas": 3, "color": "#0099FF", "ap": 1500 },
-    { "nombre": "JavaScript", "estrellas": 2, "color": "#FFFF00", "ap": 800 },
-    { "nombre": "TypeScript", "estrellas": 2, "color": "#0099FF", "ap": 600 },
-    { "nombre": "React", "estrellas": 2, "color": "#00FFFF", "ap": 700 },
-    { "nombre": "Python", "estrellas": 2, "color": "#00FF99", "ap": 500 }
+  "materias": [
+    { "nombre": "C#", "color": "#E6C846", "estrellas": 5, "descripcion": "Lenguaje principal para toda la lógica de juego en Unity." },
+    { "nombre": "Unity", "color": "#32B464", "estrellas": 4, "descripcion": "Motor usado para desarrollar el RPG 2D y otros proyectos." },
+    { "nombre": "Visual Scripting", "color": "#E6C846", "estrellas": 3, "descripcion": "Sistemas de nodos para prototipar lógica sin escribir código." },
+    { "nombre": "GitHub", "color": "#D23232", "estrellas": 5, "descripcion": "Almacenamiento en la nube y control de versiones de todos mis proyectos." },
+    { "nombre": "Blender", "color": "#B464B4", "estrellas": 2, "descripcion": "Diseño y modelado 3D de entornos y personajes." },
+    { "nombre": "Photoshop", "color": "#B464B4", "estrellas": 3, "descripcion": "Edición de imágenes y assets para la interfaz y los sprites." },
+    { "nombre": "Paquete Office", "color": "#4682B4", "estrellas": 3, "descripcion": "Manejo eficiente de herramientas ofimáticas y gestión de documentos." },
+    { "nombre": "Redes", "color": "#4682B4", "estrellas": 3, "descripcion": "Implantación, configuración y mantenimiento de los elementos de la red local." },
+    { "nombre": "Sistema Microinformático", "color": "#4682B4", "estrellas": 5, "descripcion": "Instalación, configuración y mantenimiento de software, hardware y periféricos." },
+    { "nombre": "Windows", "color": "#4682B4", "estrellas": 5, "descripcion": "Administración de sistemas y creación de particiones en entornos Windows." },
+    { "nombre": "Linux", "color": "#4682B4", "estrellas": 3, "descripcion": "Instalación, configuración y manejo de utilidades básicas en sistemas Linux." }
   ],
-  "projects": [
+  "proyectos": [
     {
-      "id": "proyecto1",
-      "nombre": "Nombre Proyecto 1",
-      "descripcion": "Descripción del proyecto",
-      "imagen": "./Assets/Imagenes/potrait.png",
-      "link": "https://maerga.itch.io",
+      "nombre": "RPG 2D — Estilo Dragon Quest Mistrel Song",
+      "descripcion": "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluación para el curso de programación de videojuegos con Unity.",
+      "link": "https://maerga.itch.io/dragon-quest-mistreal-song",
+      "tags": ["Unity", "C#", "RPG"]
+    },
+    {
+      "nombre": "Pirate Plataformer 2D",
+      "descripcion": "Juego de plataformas para la segunda evaluación del curso Programación de Videojuegos con Unity.",
+      "link": "https://maerga.itch.io/pirate-plataformer-alpha-version",
+      "tags": ["Unity", "C#", "Plataformer"]
+    },
+    {
+      "nombre": "Próximamente",
+      "descripcion": "Nuevos proyectos en desarrollo.",
+      "link": "",
       "tags": ["Unity", "C#"]
     }
   ],
+  "equipo": {
+    "arma": [
+      {
+        "nombre": "Ratón",
+        "descripcion": "Periférico de precisión para trabajo rápido. Favorece el ataque puro.",
+        "stats": { "attack": 24, "attackP": 92, "defense": 32, "defenseP": 8, "magicAtk": 4, "magicDefP": 5 },
+        "slots": 5
+      },
+      {
+        "nombre": "SSD Externo",
+        "descripcion": "Almacenamiento ultrarrápido. Transporta datos a velocidad de vértigo. Aumenta la magia y la velocidad de reacción.",
+        "stats": { "attack": 16, "attackP": 74, "defense": 20, "defenseP": 12, "magicAtk": 22, "magicDefP": 18 },
+        "slots": 4
+      }
+    ],
+    "armadura": [
+      {
+        "nombre": "Teclado",
+        "descripcion": "Herramienta principal para programar. Equilibrado entre ataque y magia.",
+        "stats": { "attack": 18, "attackP": 80, "defense": 28, "defenseP": 10, "magicAtk": 12, "magicDefP": 8 },
+        "slots": 4
+      },
+      {
+        "nombre": "PC Gaming",
+        "descripcion": "El núcleo de toda la operación. Máxima defensa y resistencia.",
+        "stats": { "attack": 14, "attackP": 70, "defense": 48, "defenseP": 20, "magicAtk": 6, "magicDefP": 12 },
+        "slots": 5
+      }
+    ],
+    "accesorio": [
+      {
+        "nombre": "Auriculares JBL 510BT",
+        "descripcion": "Aislamiento sonoro para concentración total. Refuerza la defensa mágica.",
+        "stats": { "attack": 10, "attackP": 60, "defense": 22, "defenseP": 14, "magicAtk": 8, "magicDefP": 22 },
+        "slots": 3
+      },
+      {
+        "nombre": "Nintendo Switch",
+        "descripcion": "Portabilidad ante todo. Aporta equilibrio general con un extra mágico.",
+        "stats": { "attack": 8, "attackP": 50, "defense": 14, "defenseP": 8, "magicAtk": 14, "magicDefP": 10 },
+        "slots": 2
+      },
+      {
+        "nombre": "PlayStation 4",
+        "descripcion": "Potencia de la octava generación. Sube ataque y defensa por igual.",
+        "stats": { "attack": 16, "attackP": 65, "defense": 18, "defenseP": 12, "magicAtk": 6, "magicDefP": 6 },
+        "slots": 2
+      },
+      {
+        "nombre": "PlayStation 2",
+        "descripcion": "La consola más vendida de la historia. Defensa% sólida.",
+        "stats": { "attack": 10, "attackP": 55, "defense": 16, "defenseP": 18, "magicAtk": 8, "magicDefP": 8 },
+        "slots": 2
+      },
+      {
+        "nombre": "SNES Classic Mini",
+        "descripcion": "Nostalgia de 16 bits. Gran impulso a la magia.",
+        "stats": { "attack": 6, "attackP": 45, "defense": 10, "defenseP": 6, "magicAtk": 20, "magicDefP": 14 },
+        "slots": 2
+      },
+      {
+        "nombre": "Mega Drive Classic Mini",
+        "descripcion": "Velocidad y acción de 16 bits. Favorece el ataque directo.",
+        "stats": { "attack": 20, "attackP": 58, "defense": 8, "defenseP": 6, "magicAtk": 4, "magicDefP": 4 },
+        "slots": 2
+      },
+      {
+        "nombre": "PlayStation Classic Mini",
+        "descripcion": "Una colección compacta de clásicos. Defensa equilibrada.",
+        "stats": { "attack": 8, "attackP": 48, "defense": 14, "defenseP": 16, "magicAtk": 8, "magicDefP": 10 },
+        "slots": 2
+      }
+    ]
+  },
+  "equipoActual": {
+    "arma": "Ratón",
+    "armadura": "Teclado",
+    "accesorio": "Nintendo Switch"
+  },
+  "historia": {
+    "trabajo": [
+      {
+        "logo": "Assets/Imagenes/Logos/elcorteingles.png",
+        "logoTexto": "El Corte Ingles",
+        "nivel": 36,
+        "rol": "Logistica",
+        "años": "2024 Noviembre - 2025 Enero",
+        "organizacion": "El Corte Ingles"
+      },
+      {
+        "logo": "Assets/Imagenes/Logos/SantanaJerez.png",
+        "logoTexto": "Santana Jerez S.L",
+        "nivel": 36,
+        "rol": "Prácticas",
+        "años": "2024",
+        "organizacion": "Santana Jerez S.L"
+      },
+      {
+        "logo": "Assets/Imagenes/Logos/TuMovilCanario.png",
+        "logoTexto": "Tu móvil canario",
+        "nivel": 35,
+        "rol": "Prácticas",
+        "años": "2022",
+        "organizacion": "Tu móvil canario"
+      },
+      {
+        "logo": null,
+        "logoTexto": "Mercadillo de Jinámar",
+        "nivel": 30,
+        "rol": "Atención al Público y Ventas",
+        "años": "2008 - 2020",
+        "organizacion": "Mercadillo de Jinámar"
+      },
+      {
+        "logo": null,
+        "logoTexto": "Valsequillo Embellece 2019",
+        "nivel": 32,
+        "rol": "Formación y Empleo (Construcción)",
+        "años": "2019 - 2020",
+        "organizacion": "Proyecto de Formación en Alternancia con el Empleo"
+      }
+    ],
+    "educacion": [
+      {
+        "logo": "Assets/Imagenes/Logos/Etalent.png",
+        "logoTexto": "E-Talent (Telde)",
+        "nivel": 38,
+        "rol": "IFCD57 - Programación para Videojuegos en Unity.",
+        "años": "2026",
+        "organizacion": "Asociación Empleo y Talento (e-talent)"
+      },
+      {
+        "logo": "Assets/Imagenes/Logos/Focan.jpg",
+        "logoTexto": "Instituto Focan",
+        "nivel": 38,
+        "rol": "IFCT45- Competencias digitales básicas",
+        "años": "2026",
+        "organizacion": "Instituto Focan"
+      },
+      {
+        "logo": "Assets/Imagenes/Logos/Escuela.png",
+        "logoTexto": "Escuela de Hostelería Europea",
+        "nivel": 35,
+        "rol": "IFCT0209 - Sistemas microinformáticos.",
+        "años": "2024",
+        "organizacion": "Escuela de Hostelería Europea"
+      },
+      {
+        "logo": "Assets/Imagenes/Logos/Aura.png",
+        "logoTexto": "Centro de Formación Empresarial Aura, SL",
+        "nivel": 34,
+        "rol": "IFCT0108 - Operaciones auxiliares de montaje y mantenimiento de sistemas microinformáticos",
+        "años": "2022",
+        "organizacion": "Centro de Formación Empresarial Aura, SL"
+      }
+    ]
+  },
   "locations": [
     "Midgar - Sector 1",
     "Midgar - Sector 5",
