@@ -14,6 +14,16 @@ window.mff7Scale = 1;
 	var CANVAS_H = 770;
 	var FORCE_KEY = 'ff7ForceLandscape';
 
+	// Tamaño visual objetivo de toda la interfaz, como múltiplo del
+	// tamaño "real" del lienzo (1 = tamaño original, sin cambios).
+	// Subirlo agranda TODO el conjunto por igual (mismas proporciones,
+	// mismo layout) siempre que el viewport tenga sitio de sobra; en
+	// pantallas donde el lienzo ya tiene que achicarse para entrar
+	// (ver "fitScale" en applyScale) no tiene efecto — nunca se
+	// permite que se recorte ni desborde. Para cambiarlo, tocar solo
+	// este número:
+	var UI_SCALE = 1.10;
+
 	var scaler = null;
 	var rotateHint = null;
 	var rotateUndoBtn = null;
@@ -49,11 +59,15 @@ window.mff7Scale = 1;
 
 		// Factor de escala: el mayor posible que permita que el lienzo
 		// completo entre en el viewport, sin recortarlo.
-		var scale = Math.min(vw / w, vh / h);
+		var fitScale = Math.min(vw / w, vh / h);
 
-		// No agrandamos más allá del tamaño original (evita verse borroso
-		// o "gigante" en monitores muy anchos); en PC normal esto da 1.
-		scale = Math.min(scale, 1);
+		// Techo del tamaño visual: antes era fijo en 1 (tamaño original);
+		// ahora es UI_SCALE, para agrandar todo el conjunto sin verse
+		// borroso en monitores muy anchos. Sigue sin poder superar
+		// "fitScale" en ningún caso, así que jamás se recorta ni
+		// desborda el viewport (en pantallas chicas, donde fitScale ya
+		// es menor a UI_SCALE, esto no cambia nada respecto de antes).
+		var scale = Math.min(fitScale, UI_SCALE);
 
 		window.mff7Scale = scale;
 		scaler.style.transform = forced
@@ -3246,6 +3260,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		document.addEventListener('keydown', function (e) {
 			if (hayPanelAbierto()) return; // los paneles ya manejan su propio Escape
+			if (document.querySelector('#nameEntryOverlay.show')) return; // ídem el easter egg del nombre
 
 			if (e.key === 'Enter' || e.key === ' ') {
 				if (grupo) { e.preventDefault(); confirmar(); }
@@ -3283,6 +3298,292 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (grupo === 'revive' && !estaEnKO()) { enfocar('avatar', photoContainer); }
 		});
 		reviveObserver.observe(photoContainer, { attributes: true, attributeFilter: ['class'] });
+	})();
+
+	// ----------------------------------------------------------
+	// NAVEGACIÓN POR TECLADO DENTRO DE LOS PANELES
+	// ------------------------------------------------------------
+	// Mientras haya un panel abierto (Proyectos, Materia, Equipo,
+	// Estado, Historia o Ajustes), ↑/↓/←/→ recorren sus elementos
+	// interactivos —items de lista, slots de equipo, filas de
+	// ajustes, botones de Historia, "Ordenar" y la X de cerrar— y
+	// Enter/Espacio activa el que esté enfocado. Reutiliza el mismo
+	// cursor FF7 de siempre. No interviene si el selector de color
+	// está abierto (ese ya tiene su propia navegación, más arriba).
+	// ----------------------------------------------------------
+	(function () {
+		const SELECTOR_ITEMS = [
+			'.panelOverlay.visible .panelList li',
+			'.panelOverlay.visible .slot',
+			'.panelOverlay.visible .configRow',
+			'.panelOverlay.visible .historiaChoiceBtn',
+			'.panelOverlay.visible .sortMenuBtn',
+			'.panelOverlay.visible .sortMenuList.open li',
+			'.panelOverlay.visible .panelClose'
+		].join(', ');
+
+		let indiceFoco = -1;
+
+		function panelAbiertoActual() {
+			return document.querySelector('.panelOverlay.visible');
+		}
+
+		function colorPickerAbierto() {
+			const cp = document.querySelector('#colorPicker');
+			return !!(cp && cp.classList.contains('show'));
+		}
+
+		function itemsVisibles() {
+			return Array.from(document.querySelectorAll(SELECTOR_ITEMS)).filter(function (el) {
+				return el.offsetParent !== null;
+			});
+		}
+
+		function enfocar(indice, items) {
+			indiceFoco = indice;
+			const el = items[indice];
+			if (!el) return;
+			if (window.mff7MostrarCursor) window.mff7MostrarCursor(el);
+			if (el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });
+			playSound('slider');
+		}
+
+		// Las filas de Ajustes (.configRow) son solo el contenedor visual:
+		// el listener de click real está en el control de adentro (el
+		// swatch de color, o el span "on"/"off" del toggle), así que hay
+		// que resolver a ese elemento antes de simular el click.
+		function elementoAccionable(el) {
+			if (el.classList.contains('configRow')) {
+				const swatch = el.querySelector('#configSwatchBtn');
+				if (swatch) return swatch;
+				const inactivo = el.querySelector('.configToggle span:not(.active)');
+				if (inactivo) return inactivo;
+			}
+			return el;
+		}
+
+		document.addEventListener('keydown', function (e) {
+			if (!panelAbiertoActual() || colorPickerAbierto()) return;
+			if (document.querySelector('#nameEntryOverlay.show')) return; // ídem el easter egg del nombre
+
+			const flechas = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+			if (flechas.indexOf(e.key) !== -1) {
+				e.preventDefault();
+				const items = itemsVisibles();
+				if (items.length === 0) return;
+
+				// Fila de volumen: izquierda/derecha ajustan el valor en vez
+				// de moverse a la fila siguiente (como los canales de color).
+				if (indiceFoco !== -1 && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+					const actual = items[indiceFoco];
+					const rngVolumen = actual && actual.querySelector && actual.querySelector('#rngVolumen');
+					if (rngVolumen) {
+						const delta = (e.key === 'ArrowRight') ? 5 : -5;
+						rngVolumen.value = Math.max(0, Math.min(100, parseInt(rngVolumen.value, 10) + delta));
+						rngVolumen.dispatchEvent(new Event('input', { bubbles: true }));
+						return;
+					}
+				}
+
+				const dir = (e.key === 'ArrowUp' || e.key === 'ArrowLeft') ? -1 : 1;
+				const siguiente = (indiceFoco === -1) ? 0 : (indiceFoco + dir + items.length) % items.length;
+				enfocar(siguiente, items);
+				return;
+			}
+
+			if (e.key === 'Enter' || e.key === ' ') {
+				if (indiceFoco === -1) return;
+				const items = itemsVisibles();
+				const el = elementoAccionable(items[indiceFoco]);
+				if (el) { e.preventDefault(); el.click(); }
+			}
+		});
+
+		// Al cerrarse el panel (o cambiar de contenido), soltar el cursor
+		// y arrancar de nuevo desde el principio la próxima vez.
+		const observador = new MutationObserver(function () {
+			if (!panelAbiertoActual()) {
+				indiceFoco = -1;
+				if (window.mff7OcultarCursor) window.mff7OcultarCursor();
+			}
+		});
+		document.querySelectorAll('.panelOverlay').forEach(function (panel) {
+			observador.observe(panel, { attributes: true, attributeFilter: ['class'] });
+		});
+	})();
+
+	// ----------------------------------------------------------
+	// EASTER EGG: "Please enter a name." (estilo pantalla clásica de
+	// FF7) al hacer click en el nombre de la biografía. El panel NO
+	// tiene transición de apertura/cierre a propósito, a diferencia
+	// del resto — aparece y desaparece de forma instantánea.
+	// ----------------------------------------------------------
+	(function () {
+		const overlay = document.querySelector('#nameEntryOverlay');
+		const nombreTrigger = document.querySelector('#firstName');
+		if (!overlay || !nombreTrigger) return;
+
+		const closeBtn = document.querySelector('#nameEntryClose');
+		const textoActual = document.querySelector('#nameEntryText');
+		const fotoPreview = document.querySelector('#nameEntryPhoto');
+		const fotoReal = document.querySelector('#firstPosition');
+		const grid = document.querySelector('#nameEntryGrid');
+
+		const NOMBRE_POR_DEFECTO = nombreTrigger.textContent.trim();
+		const RETRATO_POR_DEFECTO = './Assets/Imagenes/potrait.png';
+		const LONGITUD_MAX = 16;
+
+		// Cada clave apunta a Assets/Imagenes/portraits/<clave>.png.
+		// Nombres en inglés y en español (son iguales en la mayoría de
+		// los casos, pero se listan explícitamente por claridad).
+		const PERSONAJES = {
+			'cloud': 'cloud', 'cloud strife': 'cloud',
+			'barret': 'barret', 'barret wallace': 'barret',
+			'tifa': 'tifa', 'tifa lockhart': 'tifa',
+			'aerith': 'aerith', 'aeris': 'aerith',
+			'aerith gainsborough': 'aerith', 'aeris gainsborough': 'aerith',
+			'red xiii': 'redxiii', 'nanaki': 'redxiii',
+			'yuffie': 'yuffie', 'yuffie kisaragi': 'yuffie',
+			'cait sith': 'caitsith', 'caith sith': 'caitsith',
+			'vincent': 'vincent', 'vincent valentine': 'vincent',
+			'cid': 'cid', 'cid highwind': 'cid',
+			'sephiroth': 'sephiroth'
+		};
+
+		const filasTeclado = [
+			'ABCDEFGHIJ', 'KLMNOPQRST', 'UVWXYZ,.+-',
+			'abcdefghij', 'klmnopqrst', 'uvwxyz:;',
+			'0123456789'
+		];
+
+		let nombreActual = '';
+
+		// Construir la grilla de letras clickeable una sola vez.
+		filasTeclado.forEach(function (fila) {
+			fila.split('').forEach(function (letra) {
+				const tecla = document.createElement('span');
+				tecla.className = 'nameEntryKey';
+				tecla.textContent = letra;
+				tecla.addEventListener('click', function () { escribir(letra); });
+				tecla.addEventListener('mouseenter', function () { playSound('slider'); });
+				grid.appendChild(tecla);
+			});
+		});
+
+		function normalizar(str) {
+			return str.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+		}
+
+		function rutaRetrato(clave) {
+			return clave ? `./Assets/Imagenes/portraits/${clave}.png` : RETRATO_POR_DEFECTO;
+		}
+
+		function actualizarPreview() {
+			textoActual.textContent = nombreActual;
+			fotoPreview.src = rutaRetrato(PERSONAJES[normalizar(nombreActual)]);
+		}
+
+		function escribir(caracter) {
+			if (nombreActual.length >= LONGITUD_MAX) return;
+			nombreActual += caracter;
+			actualizarPreview();
+			playSound('select');
+		}
+
+		function borrar() {
+			if (nombreActual.length === 0) return;
+			nombreActual = nombreActual.slice(0, -1);
+			actualizarPreview();
+			playSound('back');
+		}
+
+		function restablecer() {
+			nombreActual = NOMBRE_POR_DEFECTO;
+			actualizarPreview();
+			playSound('select');
+		}
+
+		function confirmar() {
+			const nombreFinal = nombreActual.trim() || NOMBRE_POR_DEFECTO;
+			const clave = PERSONAJES[normalizar(nombreFinal)];
+			nombreTrigger.textContent = nombreFinal;
+			fotoReal.src = rutaRetrato(clave);
+			try {
+				localStorage.setItem('mff7_nombre', nombreFinal);
+				localStorage.setItem('mff7_retrato', clave || '');
+			} catch (e) {}
+			playSound('select');
+			cerrar();
+		}
+
+		function posicionar() {
+			const rect = getCanvasRect();
+			overlay.style.left = rect.left + 'px';
+			overlay.style.top = rect.top + 'px';
+			overlay.style.width = rect.width + 'px';
+			overlay.style.height = rect.height + 'px';
+		}
+
+		function abrir() {
+			nombreActual = nombreTrigger.textContent.trim();
+			actualizarPreview();
+			posicionar(); // mismo rect que ocupa cualquier otro panel
+			overlay.classList.add('show'); // sin animación: aparece ya
+		}
+
+		function cerrar() {
+			overlay.classList.remove('show'); // sin animación: desaparece ya
+		}
+
+		nombreTrigger.addEventListener('click', abrir);
+		nombreTrigger.addEventListener('mouseenter', function () { playSound('slider'); });
+
+		closeBtn.addEventListener('click', function () { playSound('back'); cerrar(); });
+
+		// Si la ventana cambia de tamaño (o el celular rota) con el panel
+		// abierto, lo recolocamos igual que a los demás paneles.
+		window.addEventListener('resize', function () {
+			if (overlay.classList.contains('show')) posicionar();
+		});
+		window.addEventListener('orientationchange', function () {
+			if (overlay.classList.contains('show')) posicionar();
+		});
+
+		document.querySelectorAll('.nameEntrySideBtn').forEach(function (btn) {
+			btn.addEventListener('mouseenter', function () { playSound('slider'); });
+			btn.addEventListener('click', function () {
+				const accion = btn.dataset.action;
+				if (accion === 'space') escribir(' ');
+				else if (accion === 'delete') borrar();
+				else if (accion === 'select') confirmar();
+				else if (accion === 'default') restablecer();
+			});
+		});
+
+		// Escribir directo con el teclado físico (más cómodo que clickear
+		// letra por letra): Enter confirma, Escape cierra, Backspace borra.
+		const CARACTERES_VALIDOS = /^[a-zA-Z0-9À-ÿ.,+\-:; ]$/;
+		document.addEventListener('keydown', function (e) {
+			if (!overlay.classList.contains('show')) return;
+
+			if (e.key === 'Escape') { e.preventDefault(); playSound('back'); cerrar(); return; }
+			if (e.key === 'Enter') { e.preventDefault(); confirmar(); return; }
+			if (e.key === 'Backspace') { e.preventDefault(); borrar(); return; }
+			if (CARACTERES_VALIDOS.test(e.key)) { e.preventDefault(); escribir(e.key); }
+		});
+
+		// Al cargar la página: recuperar el nombre y el retrato guardados.
+		(function cargarGuardado() {
+			let nombreGuardado = null, retratoGuardado = null;
+			try {
+				nombreGuardado = localStorage.getItem('mff7_nombre');
+				retratoGuardado = localStorage.getItem('mff7_retrato');
+			} catch (e) {}
+			if (nombreGuardado) {
+				nombreTrigger.textContent = nombreGuardado;
+				fotoReal.src = rutaRetrato(retratoGuardado);
+			}
+		})();
 	})();
 
 });

@@ -49,7 +49,7 @@
 				<button type="button" id="firstReviveBtn" class="reviveButton">Revive</button>
 				<table id = "firstStats" class = "statsTable">
 					<tr>
-						<td COLSPAN="3" id ="firstName">Matías Errico</td>
+						<td COLSPAN="3" id ="firstName" class="nameClickable" title="???">Matías Errico</td>
 					</tr>
 					<tr>
 						<td class="lv">LV</td>
@@ -412,6 +412,36 @@ Redes / Contacto: Accede a los enlaces de GitHub, LinkedIn y CV.
 	</div>
 
 	<footer2>© 2026 Matías Errico | Diseñado y Desarrollado desde cero.</footer2>
+
+	<!-- Easter egg: click en el nombre de la biografía. Ocupa el mismo
+	     lugar que cualquier otro panel (no es un modal flotante), pero
+	     sin la animación de apertura/cierre: aparece/desaparece al
+	     instante. Solo se maneja con teclado (escribiendo el nombre
+	     directo) y mouse (clickeando las teclas) — no participa de la
+	     navegación con flechas del resto de la página. -->
+	<div id="nameEntryOverlay">
+		<div class="nameEntryHeader contentBox">
+			<span>Please enter a name.</span>
+			<span class="panelClose" id="nameEntryClose">X</span>
+		</div>
+		<div class="nameEntryBody contentBox">
+			<div class="nameEntryPreview">
+				<figure class="photoContainer nameEntryPhotoContainer">
+					<img id="nameEntryPhoto" class="photo" src="./Assets/Imagenes/potrait.png" alt="">
+				</figure>
+				<div class="nameEntryNameWrap"><span id="nameEntryText"></span><span class="nameEntryCaret">_</span></div>
+			</div>
+			<div class="nameEntryKeyboard">
+				<div class="nameEntryGrid" id="nameEntryGrid"></div>
+				<div class="nameEntrySide">
+					<div class="nameEntrySideBtn" data-action="space">Space</div>
+					<div class="nameEntrySideBtn" data-action="delete">Delete</div>
+					<div class="nameEntrySideBtn" data-action="select">Select</div>
+					<div class="nameEntrySideBtn" data-action="default">Default</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	</div><!-- /#viewportScaler -->
 
