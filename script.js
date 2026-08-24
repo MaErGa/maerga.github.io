@@ -1842,7 +1842,10 @@ function createPartyMember({ memberId, showProgressBars = false, healthReduction
         onClick: handleHealClick,
         onMouseEnter: () => FF7.landingNav.actions.focusTarget?.("revive"),
     });
-    const portrait = FF7.el("div", { className: "partyMember-portrait" }, [damageP, portraitInner, reviveBtnWrap]);
+    // damageP NO va en esta lista inicial: se conecta/desconecta a mano en
+    // render() (ver más abajo) para que su animación de entrada se dispare
+    // cada vez, en vez de una sola vez al cargar la página.
+    const portrait = FF7.el("div", { className: "partyMember-portrait" }, [portraitInner, reviveBtnWrap]);
     const infoContainer = FF7.el("div", {});
     const row = FF7.el("div", { className: "flex justify-between" }, [portrait, infoContainer]);
     const extrasContainer = FF7.el("div", {});
@@ -1865,10 +1868,23 @@ function createPartyMember({ memberId, showProgressBars = false, healthReduction
         const finalSrc = resolvedSprite ? resolvedSprite.src : partyMemberData.image_path;
         if (portraitImgEl.getAttribute("src") !== finalSrc) portraitImgEl.setAttribute("src", finalSrc);
 
-        // Número de daño: se agrega/quita como hijo suelto de portrait, sin
-        // tocar portraitInner ni su contenido.
+        // Número de daño: la regla CSS de ".partyMember-portrait p" trae su
+        // propia animación (fadeUp) puesta sin condición, así que solo se
+        // dispara la primera vez que el <p> queda conectado al documento —
+        // igual que con el tajo del Cross Slash (ver nota de cachedSlashesEl
+        // más arriba, ya comprobado en Chrome). Como antes damageP se dejaba
+        // montado desde el primer render (con data-interactive=true puesto
+        // ya en la carga de la página, antes de cualquier golpe), la
+        // animación corría una única vez al cargar el sitio y se quedaba fija
+        // en opacity:0 (su fotograma final) para siempre — por eso el número
+        // nunca se veía. Ahora se desconecta y se vuelve a insertar en cada
+        // golpe para que la animación arranque de cero cada vez.
+        if (damageP.parentNode) damageP.parentNode.removeChild(damageP);
         FF7.clear(damageP);
-        if (isAttacking) damageP.appendChild(FF7.textToSprite(damage.toString(), true));
+        if (isAttacking) {
+            damageP.appendChild(FF7.textToSprite(damage.toString(), true));
+            portrait.insertBefore(damageP, portraitInner);
+        }
 
         // Botón de revivir: mismo trato, hijo suelto de portrait.
         FF7.clear(reviveBtnWrap);
