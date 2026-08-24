@@ -4255,7 +4255,7 @@ const PROJECTS = [
     { name: "Lord Magician", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/lord-magician", sub: "Dart, Kotlin", desc: "Juego desarrollado con Dart y Kotlin." },
     { name: "Dualmind2048", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/dualmind2048", sub: "Kotlin, Supabase", desc: "Aplicacion nativa Android desarrollada con Kotlin y Supabase." },
     { name: "Duel Calculator", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://MaErGa.github.io/duelcalculator/", sub: "HTML, CSS y JavaScript", desc: "Calculadora interactiva de puntos de vida (LP) para Yu-Gi-Oh! con diseno responsivo." },
-    { name: "PortFolio", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/", sub: "Html, Css, JavaScript", desc: "Portfolio estilo FFVII desarrollado con HTML, CSS, JS." },
+    { name: "PortFolio", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.github.io/", sub: "Html, Css, JavaScript", desc: "Portfolio estilo FFVII desarrollado con HTML, CSS, JS." },
     { name: "Dragon Quest -Minstrel Song-", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/dragon-quest-mistreal-song", sub: "Unity, C#", desc: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluacion del curso de Unity." },
     { name: "Pirate Plataformer", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/pirate-plataformer-alpha-version", sub: "Unity, C#", desc: "Juego de plataformas para la segunda evaluacion del curso Programacion de Videojuegos con Unity." },
 ];
