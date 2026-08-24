@@ -34,10 +34,11 @@ const skillsJSON = [
 ];
 // Historial educativo real de Matias (antes "historiaEducacion" en MenuFF7.js).
 const educationJSON = [
-    { id: 1, name: "E-Talent (Telde)", link: "", user: "Matias Errico", level: 38, role: "IFCD57", year: "2026", image_path: "assets/imagenes/logos/Etalent.png" },
-    { id: 2, name: "Instituto Focan", link: "", user: "Matias Errico", level: 38, role: "IFCT45", year: "2026", image_path: "assets/imagenes/logos/Focan.jpg" },
-    { id: 3, name: "Escuela de Hosteleria Europea", link: "", user: "Matias Errico", level: 35, role: "IFCT0209", year: "2024", image_path: "assets/imagenes/logos/Escuela.png" },
-    { id: 4, name: "Centro de Formacion Empresarial Aura, SL", link: "", user: "Matias Errico", level: 34, role: "IFCT0108", year: "2022", image_path: "assets/imagenes/logos/Aura.png" }
+    { id: 1, name: "E-Talent (Telde)", link: "", user: "Matias Errico", level: 38, role: "IFCD51", year: "2026", image_path: "assets/imagenes/logos/Etalent.png" },
+    { id: 2, name: "E-Talent (Telde)", link: "", user: "Matias Errico", level: 38, role: "IFCD57", year: "2026", image_path: "assets/imagenes/logos/Etalent.png" },
+    { id: 3, name: "Instituto Focan", link: "", user: "Matias Errico", level: 38, role: "IFCT45", year: "2026", image_path: "assets/imagenes/logos/Focan.jpg" },
+    { id: 4, name: "Escuela de Hosteleria Europea", link: "", user: "Matias Errico", level: 35, role: "IFCT0209", year: "2024", image_path: "assets/imagenes/logos/Escuela.png" },
+    { id: 5, name: "Centro de Formacion Empresarial Aura, SL", link: "", user: "Matias Errico", level: 34, role: "IFCT0108", year: "2022", image_path: "assets/imagenes/logos/Aura.png" }
 ];
 // Equipo real de Matias (antes "equipoItems" en MenuFF7.js).
 // IDs: armas 1-3, armaduras 101-102, accesorios 201-208 (mismo esquema que
