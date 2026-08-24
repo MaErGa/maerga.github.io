@@ -14,11 +14,19 @@ body {
 /* Blur the scaled canvas rather than the body so the CRT softness
    scales with the content and looks the same on every device */
 body.crt-effect #root {
-  filter: blur(0.7px);
+  filter: blur(0.85px);
 }
 
-/* Overlay de CRT: scanlines horizontales + una franja RGB sutil (como el
-   patrón de una máscara de sombra) + viñeta oscurecida en las esquinas.
+/* Overlay de CRT, de arriba abajo (lo primero en background-image es lo que
+   queda más encima):
+   1) un brillo de barrido que recorre la pantalla de arriba a abajo sin
+      parar — sin esto el filtro se lee como una imagen estática con textura,
+      no como un tubo encendido;
+   2) máscara RGB (los "subpíxeles" de una pantalla de tubo);
+   3) scanlines horizontales, ahora con más contraste y más separación entre
+      líneas (antes eran de 1px cada 2px — a esa escala el navegador las
+      difumina casi del todo);
+   4) viñeta oscurecida en las esquinas, más marcada que antes.
    Vive como hijo fijo de #root (que ya tiene su propio transform de
    escalado, así que es el containing block de todo lo position:fixed) para
    que escale en conjunto con el resto del sitio sin desalinearse. */
@@ -30,13 +38,35 @@ body.crt-effect #root {
   opacity: 0;
   transition: opacity 0.3s ease;
   background-image:
-    linear-gradient(rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.4) 50%),
-    linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05)),
-    radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.35) 100%);
-  background-size: 100% 2px, 3px 100%, 100% 100%;
+    linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.07) 48%, rgba(255, 255, 255, 0) 62%, rgba(255, 255, 255, 0) 100%),
+    repeating-linear-gradient(90deg, rgba(255, 40, 60, 0.11) 0px, rgba(255, 40, 60, 0.11) 1px, rgba(40, 255, 90, 0.07) 1px, rgba(40, 255, 90, 0.07) 2px, rgba(40, 90, 255, 0.11) 2px, rgba(40, 90, 255, 0.11) 3px),
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0.5) 2px, rgba(0, 0, 0, 0.5) 3px),
+    radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.55) 100%);
+  background-size: 100% 260px, auto, auto, 100% 100%;
+  background-repeat: repeat-y, repeat, repeat, no-repeat;
+  background-position: 0 0, 0 0, 0 0, 0 0;
 }
 body.crt-effect #crtOverlay {
   opacity: 1;
+  animation: crtScanGlow 7s linear infinite, crtFlicker 4s ease-in-out infinite;
+}
+
+/* El barrido: mueve solo la primera capa (el brillo) una altura de tile
+   completa (260px) hacia abajo — como el tile se repite en Y, el final
+   enlaza sin salto con el principio y el bucle es perfecto. Las otras 3
+   capas se quedan quietas (0 0 en cada keyframe). */
+@keyframes crtScanGlow {
+  0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+  100% { background-position: 0 260px, 0 0, 0 0, 0 0; }
+}
+
+/* Parpadeo sutil e irregular, para que no se sienta como un filtro plano. */
+@keyframes crtFlicker {
+  0%, 92%, 100% { opacity: 1; }
+  93% { opacity: 0.86; }
+  95% { opacity: 1; }
+  96% { opacity: 0.92; }
+  97% { opacity: 1; }
 }
 
 /* Efecto de "encendido" de un televisor CRT, una sola vez al cargar la
