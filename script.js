@@ -4254,7 +4254,7 @@ const CONTACT = [
 ];
 
 const LINKS = [
-    ["Descargar PDF", "assets/cv/Matias_Errico_CV.pdf"],
+    ["Descargar PDF", "assets/cv/Matías_Errico_CV.pdf"],
     ["GitHub", "https://github.com/MaErGa"],
     ["LinkedIn", "https://www.linkedin.com/in/matias-errico-garcia-474387402/"],
 ];
