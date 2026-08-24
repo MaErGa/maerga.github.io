@@ -4268,7 +4268,7 @@ const INTRO = [
 const WORK_DESC = {};
 
 const PROJECTS = [
-    { name: "Lord Magician", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/lord-magician", sub: "Dart, Kotlin", desc: "Juego desarrollado con Dart y Kotlin." },
+    { name: "Lord Magician", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/lord-magician", sub: "Dart, Kotlin", desc: "Juego desarrollado con Dart y Kotlin. Es un proyecto realizado en colaboración con Chipiron Studios" },
     { name: "Dualmind2048", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/dualmind2048", sub: "Kotlin, Supabase", desc: "Aplicacion nativa Android desarrollada con Kotlin y Supabase." },
     { name: "Duel Calculator", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://MaErGa.github.io/duelcalculator/", sub: "HTML, CSS y JavaScript", desc: "Calculadora interactiva de puntos de vida (LP) para Yu-Gi-Oh! con diseno responsivo." },
     { name: "PortFolio", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.github.io/", sub: "Html, Css, JavaScript", desc: "Portfolio estilo FFVII desarrollado con HTML, CSS, JS." },
