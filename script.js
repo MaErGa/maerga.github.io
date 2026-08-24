@@ -4254,7 +4254,7 @@ const CONTACT = [
 ];
 
 const LINKS = [
-    ["Descargar PDF", "assets/cv/Matias_Errico_CV.pdf"],
+    ["Descargar PDF", "Assets/cv/Matias_Errico_CV.pdf"],
     ["GitHub", "https://github.com/MaErGa"],
     ["LinkedIn", "https://www.linkedin.com/in/matias-errico-garcia-474387402/"],
 ];
@@ -4329,8 +4329,9 @@ function createResumePage() {
 
     const separator = () => FF7.el("div", { className: "resume-separator" }, [FF7.textToSprite("_".repeat(40))]);
 
-    const externalLink = (label, href) => FF7.el("a", {
+    const externalLink = (label, href, downloadName) => FF7.el("a", {
         href, target: "_blank", rel: "noreferrer", className: "resume-link", "data-text-color": "yellow",
+        ...(downloadName ? { download: downloadName } : {}),
         onClick: () => FF7.playSound("select", FF7.store.getState().isSoundEnabled),
     }, [FF7.textToSprite(label, false, "yellow"), FF7.el("span", { className: "font-glyph ml-2", "data-sprite": "external-link-icon" })]);
 
@@ -4424,7 +4425,7 @@ function createResumePage() {
 
         doc.appendChild(separator());
         doc.appendChild(FF7.el("div", { className: "resume-footerLinks" }, [
-            externalLink("Descargar PDF", LINKS[0][1]),
+            externalLink("Descargar PDF", LINKS[0][1], "Matias_Errico_CV.pdf"),
             FF7.el("div", { className: "resume-footerRight" }, [
                 externalLink("GitHub", LINKS[1][1]),
                 FF7.el("span", { className: "resume-pipe" }, [FF7.textToSprite("|", false, "grey")]),
