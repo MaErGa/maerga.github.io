@@ -4580,8 +4580,17 @@ function createSkillsPage() {
             span.dataset.focused = nav.isFocused("materia", index) ? "true" : "false";
             const li = FF7.el("li", {
                 className: "flex h-[43px] snap-start items-center",
-                onMouseEnter: () => { if (FF7.isPointerMoving()) nav.focus({ group: "materia", index }); },
-                onClick: () => handleMateriaConfirm(skillItem.id),
+                // En móvil no existe onMouseEnter (no hay "hover" con el
+                // dedo), así que antes el tap llamaba solo a
+                // handleMateriaConfirm sin pasar antes por nav.focus — y es
+                // nav.focus (vía el onFocus de más abajo -> handleMateriaFocus)
+                // quien de verdad actualiza qué descripción se muestra. En
+                // desktop esto no se notaba porque el ratón siempre hace
+                // hover antes del click. Mismo patrón que ya usa la lista de
+                // Equipo (equipItemEls) para el mismo problema: el tap
+                // también mueve el foco explícitamente.
+                onPointerEnter: (event) => { if (event.pointerType === "mouse" && FF7.isPointerMoving()) nav.focus({ group: "materia", index }); },
+                onClick: () => { nav.focus({ group: "materia", index }); handleMateriaConfirm(skillItem.id); },
             }, [span]);
             materiaItemEls[index] = li;
             materiaList.appendChild(li);
