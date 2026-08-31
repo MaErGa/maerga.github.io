@@ -3360,8 +3360,10 @@ function createMemCardSelector() {
 // crean una vez; refreshLocation() solo actualiza el texto del panel
 // superior derecho, no reconstruye la página entera.
 //
-// Panel del reloj (metaInfo) subido de bottom-[110px] a bottom-[120px], a
-// petición — antes quedaba un poco más pegado al borde inferior.
+// Panel del reloj (metaInfo): estuvo en bottom-[110px], se subió a
+// bottom-[120px] a petición (antes quedaba un poco pegado al borde
+// inferior), y ha vuelto a bajarse a bottom-[110px] a petición — a 120px
+// se solapaba con el panel de la ubicación (p.ej. "Secret Cow Level").
 //
 // Texto de la biografía apareciendo letra a letra (de izquierda a derecha,
 // línea a línea) en vez de todo de golpe — a petición, no existe en el
@@ -3413,7 +3415,7 @@ function createLandingPage() {
 
     const timeSpan = FF7.createTime();
     const metaBox = FF7.createContentBox({
-        className: "w-[280px] h-[110px] m-auto absolute right-0 bottom-[120px]",
+        className: "w-[280px] h-[110px] m-auto absolute right-0 bottom-[110px]",
         dataset: { label: "metaInfo" },
         children: [
             FF7.el("ul", { className: "flex justify-between flex-col h-full" }, [
