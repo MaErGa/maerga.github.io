@@ -197,6 +197,21 @@ body.crt-effect * {
     color: #ea0016;
 }
 
+/* Letra a letra para la biografía de la Landing (ver textToSprite/reveal en
+   script.js). No es un fundido: cada glifo salta de invisible a visible en
+   un instante, como el texto de diálogo de un JRPG — un fundido gradual por
+   letra, superpuesto entre glifos consecutivos, se lee borroso en vez de
+   nítido. El "cuándo" de cada glifo lo decide un setTimeout en JS (no
+   animation-delay de CSS: con delays largos Chromium dejaba de disparar la
+   animación para los glifos más tardíos, ver comentario en textToSprite);
+   aquí solo hacen falta los dos estados, invisible y visible. */
+.font-glyph-reveal {
+    opacity: 0;
+}
+.font-glyph-reveal.font-glyph-revealed {
+    opacity: 1;
+}
+
 .font-glyph[data-sprite=" "] {
     background-position: 12px 0;
     width: 6.5px;
@@ -1072,6 +1087,29 @@ body.crt-effect * {
     opacity: 1;
   }
 }
+
+/* ===== index.css: .panel-group =====
+   Funde en conjunto los paneles de una página en vez de cada uno por su
+   cuenta. Contact solapa formPanel y channelsPanel 11px para que sus bordes
+   se lean como una sola costura — si cada .contentBox se funde por su
+   cuenta, los dos quedan translúcidos un instante y el borde de detrás se
+   transparenta, doblando la costura durante ese instante. Componer el grupo
+   primero y aplicar la opacidad al resultado mantiene el solape oculto todo
+   el rato. Mismo tiempo que el fadeIn de .contentBox, para que no se note
+   el cambio de qué se anima. */
+.panel-group {
+  opacity: 0;
+  animation: panelGroupIn 0.25s ease-in 0.2s forwards;
+}
+.panel-group [data-label] {
+  opacity: 1;
+  animation: none;
+}
+@keyframes panelGroupIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* ===== BGColorPicker.module.scss ===== */
 .bgColorPicker-colorPicker button[data-focused=true]:before {
   content: "";
@@ -2549,4 +2587,287 @@ button.nameEntry-key {
   background-repeat: no-repeat;
   pointer-events: none;
   z-index: 3;
+}
+
+/* ===== SpriteInput.module.scss — el campo de texto con fuente de sprites
+   (ver FF7.createSpriteInput en script.js) ===== */
+.spriteInput {
+    /* Un glifo mide 39px de alto: una fila más baja recorta las patas de la
+       g/y/p. */
+    --sprite-line: 42px;
+    position: relative;
+    /* El mismo hundido que usa la barra de progreso, para que un campo se
+       lea como algo en lo que se escribe y no como otro panel más. */
+    background: rgba(0, 0, 0, 0.35);
+    box-shadow: inset 0 2px 3px 2px rgba(0, 0, 0, 0.45);
+    /* El mismo marco que usan las cajas de contenido, al mismo ancho — así
+       un campo y un panel se leen como la misma pieza de mobiliario. */
+    border: 2px solid #78797a;
+    border-image: url("assets/imagenes/border.png") 9 / 24px / 5px;
+    padding: 0.55rem 1.1rem;
+    min-height: var(--sprite-line);
+    /* Sin contorno de foco/selección/invalidez: el marco ya es del mismo
+       peso que los paneles, y una línea brillante justo dentro se leía
+       como parpadeo al bajar el cursor por el formulario. El cursor
+       parpadeando ya dice dónde está el teclado, y un envío fallido lo
+       dice con palabras junto a Enviar. */
+}
+
+/* Ventana fija sobre el texto pintado: los glifos son spans en nowrap, así
+   que sin recorte un valor largo se saldría del campo por encima del
+   vecino. */
+.spriteInput-text {
+    position: relative;
+    overflow: hidden;
+    pointer-events: none;
+    height: var(--sprite-line);
+}
+
+/* Un campo multilínea hace scroll de verdad (createScrollbar mide scrollTop/
+   scrollHeight sobre su objetivo), no por transform. Su barra nativa la
+   esconde .hide-scrollbar. El hueco de 34px se reserva siempre, se vea o no
+   la barra — si apareciera solo cuando hace falta, cambiaría el ancho de
+   ajuste, lo que puede añadir una línea, lo que mantiene la barra: un bucle
+   que no se estabiliza solo. */
+.spriteInput[data-multiline=true] .spriteInput-text {
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 34px;
+}
+
+.spriteInput-track {
+    position: relative;
+}
+
+.spriteInput-line {
+    display: flex;
+    align-items: center;
+    min-height: var(--sprite-line);
+    white-space: nowrap;
+}
+
+/* Mantiene a altura completa una línea vacía (tras un salto de línea), para
+   que la caja no dé un salto de tamaño según se escribe el mensaje. */
+.spriteInput-blank {
+    display: block;
+    height: var(--sprite-line);
+}
+
+/* La selección, pintada detrás de los glifos. ::selection no sirve: resalta
+   el texto del control real, que es transparente, de otra anchura y en otro
+   sitio — el resalte nativo caería sobre nada visible. Esto imita cómo FF7
+   marca una selección: invirtiendo el panel de detrás. */
+.spriteInput-selected {
+    display: inline-flex;
+    background: rgba(150, 190, 255, 0.32);
+    border-radius: 2px;
+}
+
+.font-glyph.spriteInput-caret {
+    position: relative;
+    top: 2.75px;
+    /* El cursor no debe ocupar espacio: su glifo (I) tiene 7px propios de
+       ancho que, si no se compensan, empujan cada carácter siguiente —
+       escribir en medio de una palabra desplazaba el resto de la línea, y un
+       clic a la derecha del cursor caía un carácter más allá porque el texto
+       pintado ya no coincidía con las anchuras usadas para calcular dónde
+       cayó. -7px es el ancho propio de ese glifo (font.css, [data-sprite=I]);
+       la contribución neta queda en cero. */
+    margin-right: -7px;
+    /* Un pelín más alto que las mayúsculas de al lado, que es lo que hace
+       que un cursor se lea como cursor y no como una letra más. */
+    transform: scaleY(1.15);
+    transform-origin: 50% 34.33px;
+    /* El mismo parpadeo que el resto de indicaciones del menú. */
+    animation: spriteCaret 1s steps(1, end) infinite;
+}
+
+@keyframes spriteCaret {
+    0%, 50% { opacity: 1; }
+    50.01%, 100% { opacity: 0; }
+}
+
+/* El control real: transparente, no oculto. display:none o visibility:hidden
+   no se pueden enfocar ni escribir, y sacarlo de pantalla hace que el
+   teclado del móvil desplace la página persiguiéndolo. */
+.spriteInput-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: inherit;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    color: transparent;
+    /* Más fuerte que color, y lo que Webkit de verdad respeta al pintar una
+       selección — sin esto el texto reaparece en cuanto se selecciona. */
+    -webkit-text-fill-color: transparent;
+    caret-color: transparent;
+    resize: none;
+    outline: none;
+    /* Por debajo de 16px, iOS hace zoom sobre la página al enfocar, lo que
+       pelea con el escalado propio de la app. */
+    font-size: 16px;
+    font-family: inherit;
+}
+.spriteInput-input::selection {
+    background: transparent;
+    color: transparent;
+}
+
+/* ===== Contact.module.scss ===== */
+.contact-formPanel {
+  width: 841px;
+}
+
+.contact-descriptionPanel {
+  width: 100%;
+}
+
+.contact-channelsPanel {
+  width: 270px;
+}
+
+.contact-formColumn {
+  display: flex;
+  flex-direction: column;
+  padding-right: 16px;
+}
+
+.contact-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+/* El div hijo directo de la fila es la raíz de spriteInput; la etiqueta de
+   al lado es un span y no le afecta. */
+.contact-field > div {
+  margin-inline: 6px;
+}
+
+.contact-field {
+  position: relative;
+}
+
+.contact-field[data-focused=true]:before {
+  content: "";
+  position: absolute;
+  left: -76px;
+  top: 87px;
+  transform: translateY(calc(-50% + 11px));
+  background-image: url("assets/imagenes/cursor.png");
+  width: 76px;
+  height: 46px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.contact-fieldLabel {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.contact-sendRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 1.6rem;
+  padding-right: 6px;
+}
+
+/* Se lee como un enlace, no como un control — un botón relleno se probó y se
+   descartó, nada más en el menú lleva uno. */
+.contact-send {
+  position: relative;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+.contact-send[data-focused=true]:before {
+  content: "";
+  position: absolute;
+  left: -76px;
+  top: 50%;
+  transform: translateY(calc(-50% + 11px));
+  background-image: url("assets/imagenes/cursor.png");
+  width: 76px;
+  height: 46px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.contact-send[data-disabled=true] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.contact-status {
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* ---- panel de canales (derecha) ---- */
+.contact-linkColumn {
+  display: flex;
+  flex-direction: column;
+  /* deja sitio a la manito del cursor sin que se salga del panel */
+  padding-left: 1rem;
+}
+
+.contact-linkHeading {
+  margin-bottom: 0.9rem;
+}
+
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.contact-linkRow {
+  position: relative;
+}
+
+.contact-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.contact-link[data-focused=true]:before {
+  content: "";
+  position: absolute;
+  left: -76px;
+  top: 50%;
+  transform: translateY(calc(-50% + 11px));
+  background-image: url("assets/imagenes/cursor.png");
+  width: 76px;
+  height: 46px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* El honeypot: presente y rellenable, pero nunca visible. Ni display:none ni
+   hidden — algún bot se salta los campos obviamente inalcanzables, y la
+   gracia es justo que alguno lo rellene. aria-hidden y tabindex lo apartan
+   de lectores de pantalla y del orden de tabulación. */
+.contact-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }

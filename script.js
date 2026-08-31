@@ -28,9 +28,10 @@ const skillsJSON = [
     { id: 7, name: "Claude", color: "blue", description: "Usa una IA avanzada para optimizar código y depurar errores.", score: 2, ap: 2400, toNextLevel: 2900, abilities: ["Optimización de Código (AI-Assisted)", "Depuración de Errores (Debugging Fast)"] },
     { id: 16, name: "Firebase", color: "yellow", description: "Gestiona usuarios y datos en tiempo real.", score: 2, ap: 1800, toNextLevel: 3300, abilities: ["Autenticación de Usuarios (Auth)", "Base de Datos en Tiempo Real (Firestore)"] },
     { id: 11, name: "Redes Locales", color: "green", description: "Configura la red que intercomunica los sistemas.", score: 3, ap: 5400, toNextLevel: 2600, abilities: ["Instalación de Elementos de Red Local (LAN)", "Configuración de Protocolos y Direccionamiento IP"] },
+    { id: 24, name: "Css", color: "blue", description: "Estilizado, layouts flex/grid y maquetación adaptativa.", score: 2, ap: 2600, toNextLevel: 2800, abilities: ["Diseño Responsive (Flexbox/Grid)", "Estilos e Interfaces Custom"] },
     { id: 13, name: "Android Studio", color: "green", description: "Compila, emula y depura apps móviles nativas.", score: 2, ap: 1700, toNextLevel: 3500, abilities: ["Configuración de Entorno Gradle", "Uso de Emuladores y Debugging"] },
-     { id: 23, name: "Css", color: "blue", description: "Estilizado, layouts flex/grid y maquetación adaptativa.", score: 2, ap: 2600, toNextLevel: 2800, abilities: ["Diseño Responsive (Flexbox/Grid)", "Estilos e Interfaces Custom"] },
     { id: 23, name: "JavaScript", color: "blue", description: "Lógica client-side para la interactividad y componentes dinámicos.", score: 2, ap: 2600, toNextLevel: 2800, abilities: ["Manipulación del DOM", "Lógica e Interacción Vanilla"] },
+    { id: 25, name: "PostgreSQL", color: "yellow", description: "Motor de base de datos relacional robusto y de código abierto.", score: 3, ap: 5900, toNextLevel: 2400, abilities: ["Diseño de Esquemas Relacionales", "Consultas SQL Avanzadas"] },
 ];
 // Historial educativo real de Matias (antes "historiaEducacion" en MenuFF7.js).
 const educationJSON = [
@@ -118,7 +119,7 @@ const menuJSON = [
     { id: "skills", name: "Habilidades", position: 2 },
     { id: "equip", name: "Equipo", position: 3 },
     { id: "resume", name: "Resumen", position: 4 },
-    { id: "", name: "", title: "", path: "", position: 5 },
+    { id: "contact", name: "Contacto", position: 5 },
     { id: "itch", name: "Itch.io", title: "Mi Itch.io", path: "https://maerga.itch.io/", position: 6 },
     { id: "github", name: "GitHub", title: "Mi GitHub", path: "https://github.com/MaErGa", position: 7 },
     { id: "linkedin", name: "LinkedIn", title: "Mi LinkedIn", path: "https://www.linkedin.com/in/matias-errico-garcia-474387402/", position: 8 },
@@ -266,7 +267,30 @@ const playSound = (soundName, isSoundEnabled, isloop = false) => {
 // sprite que habría por defecto en la esquina (0,0) de la imagen.
 const FALLBACK_GLYPHS = new Set(["È", "è", "Ò", "ò", "Ù", "ù", "ª"]);
 
-function textToSprite(text, isResourceValue = false, textColor = "white") {
+// Parámetro "reveal" (4º, opcional): no existe en el original de Jamie —
+// es un añadido propio para la biografía de la Landing, que pide que sus
+// letras vayan apareciendo de izquierda a derecha (y de arriba abajo, entre
+// líneas) en vez de aparecer todas de golpe con el resto de la caja.
+//
+// Se pasa como { count, baseMs, stepMs, timers }: cada glifo se retrasa
+// baseMs + count*stepMs y luego el contador se incrementa, así que un mismo
+// objeto "reveal" reutilizado entre varias llamadas a textToSprite (una por
+// párrafo) seguido produce un único barrido continuo a lo largo de todo el
+// texto, no un reinicio por línea. Ningún otro sitio del código pasa este
+// parámetro, así que el resto de textos (menús, stats, etc.) sigue
+// apareciendo exactamente igual que antes.
+//
+// El retraso se controla con setTimeout, no con animation-delay de CSS.
+// Probado y confirmado: Chromium dejaba de disparar la animación CSS para
+// cualquier glifo cuyo animation-delay superara ~2000ms (se quedaba en
+// opacity:0 para siempre, reproducible incluso en una página aislada sin
+// nada más del proyecto) — por eso "Bienvenido a mi portafolio..." y las
+// dos líneas siguientes de la bio nunca llegaban a aparecer. setTimeout no
+// tiene ese límite (probado hasta 300 elementos / ~5.7s sin fallos), así
+// que cada glifo simplemente añade su propia clase "revealed" cuando toca.
+// reveal.timers guarda los IDs para poder cancelarlos con clearTimeout si
+// la página se destruye (se navega a otra) antes de que terminen.
+function textToSprite(text, isResourceValue = false, textColor = "white", reveal = null) {
     if (!text) return null;
 
     const span = document.createElement("span");
@@ -279,6 +303,13 @@ function textToSprite(text, isResourceValue = false, textColor = "white") {
         glyphSpan.className = FALLBACK_GLYPHS.has(glyph) ? "font-glyph font-glyph-fallback" : "font-glyph";
         glyphSpan.dataset.sprite = glyph;
         glyphSpan.textContent = glyph;
+        if (reveal) {
+            glyphSpan.classList.add("font-glyph-reveal");
+            const delay = reveal.baseMs + reveal.count * reveal.stepMs;
+            const timerId = setTimeout(() => glyphSpan.classList.add("font-glyph-revealed"), delay);
+            reveal.timers?.push(timerId);
+            reveal.count++;
+        }
         span.appendChild(glyphSpan);
     }
 
@@ -286,6 +317,130 @@ function textToSprite(text, isResourceValue = false, textColor = "white") {
 }
 
     FF7.textToSprite = textToSprite;
+})(window.FF7 = window.FF7 || {});
+(function (FF7) {
+    "use strict";
+
+// Puerto de components/SpriteInput/spriteText.ts — utilidades de texto para
+// createSpriteInput. Se quedan en su propio módulo (como en el original)
+// porque no tienen nada que ver con textToSprite salvo compartir la hoja de
+// sprites.
+//
+// ALLOWED difiere del original: además de las letras/números/puntuación de
+// la hoja en inglés, la hoja de este proyecto tiene una fila extra con los
+// acentos y la Ñ del castellano (ver FALLBACK_GLYPHS más arriba y los
+// data-sprite="Á"/"á"/etc. en style.css), así que se añaden aquí también.
+// Sigue sin haber comilla doble en la hoja.
+const ALLOWED = /[^A-Za-z0-9 £_\-,;:!?.()[\]{}@*/\\'&#%`^+<=>|~$¡¿ÁÉÍÑÓÚÜáéíñóúüÈèÒòÙùª\n]/g;
+
+function stripUnsupported(text) {
+    return text.replace(ALLOWED, "");
+}
+
+// Igual que el original: se deriva de ALLOWED en vez de escribirse aparte,
+// para que las dos listas no puedan desincronizarse.
+const SUPPORTED = Array.from({ length: 0x7f - 0x20 }, (_, i) => String.fromCharCode(0x20 + i))
+    .concat(["\u00a3", "¡", "¿", "Á", "É", "Í", "Ñ", "Ó", "Ú", "Ü", "á", "é", "í", "ñ", "ó", "ú", "ü", "È", "è", "Ò", "ò", "Ù", "ù", "ª"])
+    .filter((ch) => stripUnsupported(ch) === ch);
+
+let widthCache = null;
+
+// Mide cada glifo en el DOM (una vez, cacheado) en vez de copiar la tabla de
+// anchuras de font.css a mano — así los dos no pueden discrepar, y un cambio
+// en la hoja de estilos se recoge gratis.
+function measureGlyphs() {
+    const map = new Map();
+    if (typeof document === "undefined") return map;
+
+    const probe = document.createElement("span");
+    probe.className = "font";
+    probe.style.cssText = "position:absolute;left:-9999px;top:0;visibility:hidden;";
+    for (const ch of SUPPORTED) {
+        const glyph = document.createElement("span");
+        glyph.className = "font-glyph";
+        glyph.dataset.sprite = ch;
+        glyph.textContent = ch;
+        probe.appendChild(glyph);
+    }
+    document.body.appendChild(probe);
+    // getBoundingClientRect, no offsetWidth: varios glifos miden un valor
+    // fraccionario (el espacio son 6.5px) y offsetWidth redondea, lo que se
+    // va acumulando línea adentro.
+    SUPPORTED.forEach((ch, i) => map.set(ch, probe.children[i].getBoundingClientRect().width));
+    probe.remove();
+    return map;
+}
+
+const DEFAULT_GLYPH_WIDTH = 20;
+
+function glyphWidth(ch) {
+    if (!widthCache || widthCache.size === 0) widthCache = measureGlyphs();
+    return widthCache.get(ch) ?? DEFAULT_GLYPH_WIDTH;
+}
+
+function textWidth(text) {
+    let total = 0;
+    for (const ch of text) total += glyphWidth(ch);
+    return total;
+}
+
+// Corta el texto a un presupuesto en PÍXELES (no en caracteres), guardando
+// el offset de cada línea dentro del string original para poder colocar el
+// cursor en la línea correcta. La fuente de sprites no hace saltos de línea
+// solos (cada glifo es nowrap), así que el ajuste tiene que calcularse aquí.
+function wrapWithOffsets(text, maxPx) {
+    const lines = [];
+
+    for (const paragraph of text.split("\n")) {
+        const base = lines.length
+            ? text.indexOf(paragraph, lines[lines.length - 1].start + lines[lines.length - 1].text.length)
+            : 0;
+
+        let line = "";
+        let start = base;
+
+        for (const word of paragraph.split(" ")) {
+            const candidate = line ? `${line} ${word}` : word;
+
+            if (textWidth(candidate) <= maxPx) {
+                line = candidate;
+                continue;
+            }
+
+            if (line) {
+                lines.push({ text: line, start });
+                start += line.length + 1;
+            }
+
+            // Una palabra más ancha que el presupuesto se corta igualmente,
+            // por el último glifo que quepa, no por una cuenta fija de letras.
+            let rest = word;
+            for (;;) {
+                if (textWidth(rest) <= maxPx) break;
+                let take = 0;
+                let used = 0;
+                while (take < rest.length && used + glyphWidth(rest[take]) <= maxPx) {
+                    used += glyphWidth(rest[take]);
+                    take += 1;
+                }
+                if (take === 0) take = 1;
+                lines.push({ text: rest.slice(0, take), start });
+                start += take;
+                rest = rest.slice(take);
+            }
+            line = rest;
+        }
+
+        lines.push({ text: line, start });
+    }
+
+    return lines;
+}
+
+    FF7.stripUnsupported = stripUnsupported;
+    FF7.glyphWidth = glyphWidth;
+    FF7.textWidth = textWidth;
+    FF7.wrapWithOffsets = wrapWithOffsets;
 })(window.FF7 = window.FF7 || {});
 (function (FF7) {
     "use strict";
@@ -661,7 +816,7 @@ initFromLocalStorage();
 // hash sí funciona siempre, sea file:// o http://. Mismas rutas exactas que
 // el original; cualquier cosa que no sea una ruta conocida cae en "/".
 
-const ROUTES = ["/", "/skills", "/equip", "/projects", "/history", "/config", "/resume", "/name"];
+const ROUTES = ["/", "/skills", "/equip", "/projects", "/history", "/config", "/resume", "/contact", "/name"];
 
 const listeners = new Set();
 
@@ -841,6 +996,15 @@ function createKonamiCode(onUnlock) {
 //
 // El resto de la lógica (KEY_MAP, memoria de cursor, intención de teclado,
 // clamp de grupos que se encogen, sonidos) es una traducción 1:1 del original.
+//
+// options.navigateWhileEditing (opcional, false por defecto): deja pasar las
+// flechas incluso con el foco real del navegador en un <input>/<textarea> —
+// lo usa Contact, cuyas filas SON los campos. onFocus(pos, source) recibe
+// además un segundo argumento ("pointer" | "key" | "initial") para que una
+// página distinga un roce del ratón de un movimiento de verdad por teclado
+// (p. ej. no había por qué robarle el foco al campo si solo pasó el ratón
+// por encima). Ambos son puramente aditivos: ninguna página existente los
+// usa, así que su comportamiento no cambia.
 
 const KEY_MAP = {
     ArrowUp: "up", Numpad8: "up",
@@ -902,7 +1066,7 @@ function createCursorNav(initialConfig) {
         if (options.memoryKey) cursorMemory.set(options.memoryKey, next);
     };
 
-    const moveTo = (next, silent) => {
+    const moveTo = (next, silent, source = "pointer") => {
         const group = options.groups.find((g) => g.id === next.group);
         if (!group || next.index < 0 || next.index >= group.size) return;
         if (group.isDisabled?.(next.index)) return;
@@ -911,11 +1075,11 @@ function createCursorNav(initialConfig) {
         pos = next;
         remember(next);
         if (!silent) FF7.playSound("select", FF7.store.getState().isSoundEnabled);
-        options.onFocus(next);
+        options.onFocus(next, source);
         notifyPos();
     };
 
-    const focus = (next) => moveTo(next, false);
+    const focus = (next, source = "pointer") => moveTo(next, false, source);
 
     const setPosSilently = (next) => {
         pos = next;
@@ -940,9 +1104,22 @@ function createCursorNav(initialConfig) {
             ctrlComboUsed = false;
             return;
         }
-        if (isEditableTarget(e.target)) return;
 
         const action = KEY_MAP[e.code];
+
+        // Por defecto, cualquier tecla con el foco real del navegador en un
+        // campo editable se ignora aquí (typing normal). Contact.tsx es la
+        // excepción: sus filas SON los campos, así que arriba/abajo tienen
+        // que llegar como navegación de verdad incluso con un <input>/
+        // <textarea> enfocado — de eso trata `navigateWhileEditing`. El
+        // propio SpriteInput decide, tecla a tecla, si una flecha se queda
+        // moviendo el cursor de texto (stopPropagation) o si puede llegar
+        // hasta aquí (el cursor de texto ya está en el borde del campo).
+        if (isEditableTarget(e.target)) {
+            const isDirection = action === "up" || action === "down" || action === "left" || action === "right";
+            if (!options.navigateWhileEditing || !isDirection) return;
+        }
+
         if (!action) return;
         if (e.metaKey || e.altKey || e.ctrlKey) return;
 
@@ -951,7 +1128,7 @@ function createCursorNav(initialConfig) {
 
         if (action === "confirm") {
             if (pos) options.onConfirm(pos);
-            else if (options.fallback) moveTo(options.fallback, false);
+            else if (options.fallback) moveTo(options.fallback, false, "key");
             return;
         }
 
@@ -964,7 +1141,7 @@ function createCursorNav(initialConfig) {
         }
 
         if (!pos) {
-            if (options.fallback) moveTo(options.fallback, false);
+            if (options.fallback) moveTo(options.fallback, false, "key");
             return;
         }
 
@@ -972,7 +1149,7 @@ function createCursorNav(initialConfig) {
             ? options.resolvePageJump?.(pos, action) ?? null
             : options.resolveMove(pos, action, { wrap });
 
-        if (next) moveTo(next, false);
+        if (next) moveTo(next, false, "key");
     };
 
     const handleKeyUp = (e) => {
@@ -1018,7 +1195,22 @@ function createCursorNav(initialConfig) {
     };
 
     // Foco inicial (una sola vez), como el efecto de montaje original.
-    if (pos) options.onFocus(pos);
+    // Se difiere a un microtask: si se llega por teclado, pos ya sale
+    // truthy aquí mismo (fallback), así que onFocus se dispara EN MITAD de
+    // esta misma llamada — es decir, mientras el factory de la página que
+    // está creando este nav (p.ej. "const nav = createCursorNav(...)")
+    // todavía no ha terminado de asignarlo, y ni hablar de consts que
+    // declare después (un headerBox, etc.). Si onFocus toca cualquiera de
+    // esas closures, salta "Cannot access '...' before initialization".
+    // Reproducido de verdad entrando a /config con teclado (Enter en el
+    // menú) en vez de con el ratón. Un microtask espera a que el factory
+    // termine de ejecutarse síncronamente antes de disparar onFocus, sin
+    // cambiar nada para el resto de casos (focus() por teclado/ratón ya
+    // corría siempre después de que la página existiera).
+    if (pos) {
+        const initialPos = pos;
+        Promise.resolve().then(() => { if (pos === initialPos) options.onFocus(initialPos, "initial"); });
+    }
 
     if (options.enabled) bindListeners();
 
@@ -1291,6 +1483,359 @@ function createScrollbar({ targetEl, onVisibleChange } = {}) {
 }
 
     FF7.createScrollbar = createScrollbar;
+})(window.FF7 = window.FF7 || {});
+(function (FF7) {
+    "use strict";
+
+// Puerto de components/SpriteInput/SpriteInput.tsx.
+//
+// Un <input>/<textarea> real, transparente y estirado sobre todo el campo, y
+// el texto visible son spans pintados a partir de él. Todo lo que hace
+// funcionar un campo de texto de verdad —selección, pegar, autocompletar,
+// teclado móvil, lectores de pantalla— lo sigue haciendo el navegador; solo
+// se pinta encima con la fuente de sprites. Dibujar los glifos y reimplementar
+// la edición de texto a mano habría sido la alternativa obvia, y es una
+// trampa: pierde el pegado en móvil por completo.
+//
+// Diferencia con el original: no hay estado de React (value/onChange) — el
+// valor real vive en el propio <input>/<textarea>, y onChange es solo un
+// aviso hacia fuera (igual que ya hacía este proyecto al leer
+// `campo.input.value` directamente al enviar el formulario).
+const CARET_GLYPH = "I";
+
+function createSpriteInput({ value = "", onChange, maxLength, multiline = false, rows = 4, label, name, invalid = false, selected = false } = {}) {
+    let sel = { start: 0, end: 0, caret: 0 };
+    let wrapWidth = 0;
+    let scroll = { x: 0, y: 0 };
+    let dragFrom = null;
+    let focused = false;
+    let previousValue = value;
+
+    const view = FF7.el("div", { className: `spriteInput-text${multiline ? " hide-scrollbar" : ""}`, "aria-hidden": true });
+    view.style.height = multiline ? `calc(${rows} * var(--sprite-line))` : "var(--sprite-line)";
+    const track = FF7.el("div", { className: "spriteInput-track" });
+    view.appendChild(track);
+
+    const field = FF7.el(multiline ? "textarea" : "input", {
+        className: "spriteInput-input",
+        type: multiline ? null : "text",
+        name,
+        "aria-label": label,
+        maxLength,
+        autocomplete: "off",
+        autocorrect: "off",
+        "data-1p-ignore": true,
+        "data-lpignore": true,
+    });
+    // spellcheck:false vía el() no funciona — el()  omite cualquier atributo
+    // con valor false (para que "required:false" no ponga el atributo), y
+    // eso es justo lo que hace falta desactivar aquí.
+    field.spellcheck = false;
+    field.value = value;
+
+    const root = FF7.el("div", {
+        className: "spriteInput",
+        "data-invalid": invalid,
+        "data-selected": selected,
+        "data-multiline": multiline,
+    }, [view, ...(multiline ? [FF7.createScrollbar({ targetEl: view })] : []), field]);
+
+    // --- Medición y ajuste de línea (ver FF7.glyphWidth/wrapWithOffsets) ---
+
+    function currentLines() {
+        const raw = field.value;
+        return (multiline && wrapWidth > 0) ? FF7.wrapWithOffsets(raw, wrapWidth) : [{ text: raw, start: 0 }];
+    }
+
+    function lineIndexOf(pos, lines) {
+        for (let i = lines.length - 1; i > 0; i--) {
+            if (pos >= lines[i].start) return i;
+        }
+        return 0;
+    }
+
+    // El caracter de una línea más cercano a un desplazamiento horizontal,
+    // en píxeles de diseño.
+    function indexAtX(line, x) {
+        let used = 0;
+        for (let i = 0; i < line.text.length; i++) {
+            const w = FF7.glyphWidth(line.text[i]);
+            if (x < used + w / 2) return line.start + i;
+            used += w;
+        }
+        return line.start + line.text.length;
+    }
+
+    // Dónde cayó un puntero, como índice dentro del valor. El control real no
+    // puede contestar esto (su texto es invisible), así que se pasa por las
+    // mismas anchuras de glifo con las que se pintó el texto.
+    function indexFromPoint(clientX, clientY) {
+        const lines = currentLines();
+        if (lines.length === 0) return 0;
+        const rect = view.getBoundingClientRect();
+        // #root está escalado con transform, así que los píxeles de cliente
+        // no son píxeles de diseño; offsetWidth no está escalado y da la
+        // proporción entre los dos.
+        const scale = view.offsetWidth ? rect.width / view.offsetWidth : 1;
+        const cs = getComputedStyle(view);
+        const lineHeight = parseFloat(cs.getPropertyValue("--sprite-line")) || 42;
+        const x = (clientX - rect.left) / scale + (multiline ? 0 : scroll.x);
+        const y = (clientY - rect.top) / scale + (multiline ? view.scrollTop : 0);
+        const rawRow = Math.floor(y / lineHeight);
+        // Un evento real siempre trae coordenadas finitas; el clamp de más
+        // solo evita romper ante uno sintético que no las traiga.
+        const row = Number.isFinite(rawRow) ? Math.max(0, Math.min(lines.length - 1, rawRow)) : 0;
+        return indexAtX(lines[row], Number.isFinite(x) ? x : 0);
+    }
+
+    function select(start, end = start, backward = false) {
+        try { field.setSelectionRange(start, end, backward ? "backward" : "forward"); } catch { /* algunos tipos de input no soportan selección */ }
+        syncCaret();
+    }
+
+    // El cursor sigue la selección del control real, para que caiga donde de
+    // verdad se va a editar en vez de siempre al final.
+    function syncCaret() {
+        const start = field.selectionStart ?? field.value.length;
+        const end = field.selectionEnd ?? start;
+        const caretAt = field.selectionDirection === "backward" ? start : end;
+        sel = { start, end, caret: caretAt };
+        render();
+    }
+
+    // Dibuja una línea: los glifos, la selección detrás y el cursor.
+    // La selección se pinta aquí a mano en vez de dejársela al navegador:
+    // ::selection resalta el texto del control REAL, que es transparente y de
+    // otra anchura, así que el resalte nativo cae en el sitio equivocado.
+    function renderLine(line, index, lines) {
+        const isLast = index === lines.length - 1;
+        const lineEnd = line.start + line.text.length;
+        const caret = sel.caret;
+        const showCaret = focused && caret >= line.start && (caret <= lineEnd || (isLast && caret >= lineEnd));
+        const caretAt = Math.max(0, Math.min(line.text.length, caret - line.start));
+
+        const lineEl = FF7.el("span", { className: "spriteInput-line" });
+        let caretNode = null;
+        let run = "";
+        let runSelected = false;
+
+        const flush = () => {
+            if (!run) return;
+            const painted = FF7.textToSprite(run);
+            lineEl.appendChild(runSelected ? FF7.el("span", { className: "spriteInput-selected" }, [painted]) : painted);
+            run = "";
+        };
+
+        for (let i = 0; i <= line.text.length; i++) {
+            if (showCaret && i === caretAt) {
+                flush();
+                caretNode = FF7.el("span", { className: "font-glyph spriteInput-caret", "data-sprite": CARET_GLYPH, "aria-hidden": true });
+                lineEl.appendChild(caretNode);
+            }
+            if (i === line.text.length) break;
+
+            const isSel = (line.start + i >= sel.start) && (line.start + i < sel.end);
+            if (isSel !== runSelected) { flush(); runSelected = isSel; }
+            run += line.text[i];
+        }
+        flush();
+
+        if (!lineEl.childNodes.length) lineEl.appendChild(FF7.el("span", { className: "spriteInput-blank" }));
+        return { el: lineEl, caretNode };
+    }
+
+    // Mantiene el cursor a la vista. La fuente de sprites pone cada glifo en
+    // nowrap y el texto pintado son spans sueltos, así que el propio campo
+    // tiene que hacer su scroll — el del control real es invisible.
+    function updateScroll(caretNode) {
+        if (!caretNode) { scroll = { x: 0, y: 0 }; return; }
+
+        const margin = 28;
+        const row = caretNode.parentElement;
+        const left = caretNode.offsetLeft;
+        let { x, y } = scroll;
+
+        // Solo un campo de una línea hace scroll lateral. Uno multilínea ya
+        // ajusta el texto, así que cada línea ya cabe y no hay nada que
+        // desplazar en horizontal.
+        if (multiline) {
+            x = 0;
+        } else {
+            if (left - x > view.clientWidth - margin) x = left - view.clientWidth + margin;
+            if (left - x < 0) x = left;
+        }
+
+        // En vertical, un campo multilínea hace scroll NATIVO en vez de por
+        // transform (la barra de scroll mide scrollTop/scrollHeight sobre un
+        // scroller real). Siempre por filas completas, para que nunca se vea
+        // una línea cortada a la mitad arriba o abajo.
+        const top = row?.offsetTop ?? 0;
+        const height = row?.offsetHeight ?? view.clientHeight;
+        if (multiline) {
+            y = 0;
+            if (top < view.scrollTop) view.scrollTop = top;
+            else if (top + height > view.scrollTop + view.clientHeight) view.scrollTop = top + height - view.clientHeight;
+        } else {
+            if (top - y > view.clientHeight - height) y = top - view.clientHeight + height;
+            if (top - y < 0) y = top;
+        }
+
+        scroll = { x: Math.max(0, x), y: Math.max(0, y) };
+    }
+
+    function render() {
+        const lines = currentLines();
+        FF7.clear(track);
+        let activeCaretNode = null;
+        lines.forEach((line, index) => {
+            const { el: lineEl, caretNode } = renderLine(line, index, lines);
+            track.appendChild(lineEl);
+            if (caretNode) activeCaretNode = caretNode;
+        });
+        updateScroll(activeCaretNode);
+        track.style.transform = `translate(${-scroll.x}px, ${-scroll.y}px)`;
+    }
+
+    // --- Entrada de texto ---
+
+    field.addEventListener("input", () => {
+        const raw = field.value;
+        const cleaned = FF7.stripUnsupported(multiline ? raw : raw.replace(/\n/g, "")).slice(0, maxLength);
+        if (cleaned !== raw) {
+            const caretBefore = field.selectionStart ?? cleaned.length;
+            field.value = cleaned;
+            const caretAfter = Math.min(caretBefore, cleaned.length);
+            try { field.setSelectionRange(caretAfter, caretAfter); } catch { /* ignorar */ }
+        }
+        if (cleaned.length > previousValue.length) FF7.playSound("select", FF7.store.getState().isSoundEnabled);
+        previousValue = cleaned;
+        syncCaret();
+        onChange?.(cleaned);
+    });
+
+    field.addEventListener("select", syncCaret);
+    field.addEventListener("keyup", syncCaret);
+    field.addEventListener("focus", () => { focused = true; FF7.setDataset(root, "focused", true); syncCaret(); });
+    field.addEventListener("blur", () => { focused = false; FF7.setDataset(root, "focused", false); render(); });
+
+    // Suprime los eventos de ratón de compatibilidad que dispara iOS tras un
+    // toque: sin esto, el teclado en pantalla abriéndose desplaza la página y
+    // el mousedown sintetizado ~150ms después cae sobre lo que sea que ahora
+    // ocupe ese punto, robándole el foco al campo que de verdad se tocó.
+    field.addEventListener("touchend", (event) => event.preventDefault(), { passive: false });
+
+    // Coloca el cursor justo donde está el puntero. preventDefault evita que
+    // el navegador lo coloque primero por su cuenta (lo haría mal: su texto
+    // es invisible y de otra anchura), así que el foco hay que pedirlo a mano.
+    field.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0) return;
+        event.preventDefault();
+        field.focus();
+        const index = indexFromPoint(event.clientX, event.clientY);
+        dragFrom = index;
+        select(index);
+        field.setPointerCapture?.(event.pointerId);
+    });
+
+    field.addEventListener("pointermove", (event) => {
+        if (dragFrom === null) return;
+        const to = indexFromPoint(event.clientX, event.clientY);
+        select(Math.min(dragFrom, to), Math.max(dragFrom, to), to < dragFrom);
+    });
+
+    const endDrag = (event) => {
+        if (dragFrom === null) return;
+        dragFrom = null;
+        field.releasePointerCapture?.(event.pointerId);
+    };
+    field.addEventListener("pointerup", endDrag);
+    field.addEventListener("pointercancel", endDrag);
+
+    // Doble clic selecciona la palabra bajo el puntero, como cualquier campo.
+    field.addEventListener("dblclick", (event) => {
+        const index = indexFromPoint(event.clientX, event.clientY);
+        const isWordChar = (ch) => /[A-Za-z0-9@._-]/.test(ch);
+        const raw = field.value;
+        if (!raw[index] || !isWordChar(raw[index])) return;
+        let from = index;
+        let to = index;
+        while (from > 0 && isWordChar(raw[from - 1])) from -= 1;
+        while (to < raw.length && isWordChar(raw[to])) to += 1;
+        select(from, to);
+    });
+
+    // Las flechas mueven el cursor de texto; solo llegan al menú cuando el
+    // cursor ya no puede avanzar más en esa dirección en el propio campo.
+    // stopPropagation es el mecanismo: createCursorNav escucha en window, así
+    // que un evento detenido aquí nunca llega hasta allí, y uno que se deja
+    // pasar sí.
+    field.addEventListener("keydown", (event) => {
+        const { key, shiftKey } = event;
+        if (key !== "ArrowLeft" && key !== "ArrowRight" && key !== "ArrowUp" && key !== "ArrowDown") return;
+
+        const start = field.selectionStart ?? 0;
+        const end = field.selectionEnd ?? start;
+        const collapsed = start === end;
+        const raw = field.value;
+
+        if (key === "ArrowLeft" || key === "ArrowRight") {
+            // Una selección siempre se colapsa primero, así que nunca escapa antes de tiempo.
+            const atEdge = collapsed && (key === "ArrowLeft" ? start === 0 : end === raw.length);
+            if (atEdge && !shiftKey) return;
+            event.stopPropagation();
+            return;
+        }
+
+        // Arriba/abajo se mueven entre las líneas PINTADAS. Un campo de una
+        // sola línea no tiene, así que siempre significan "salir".
+        if (!multiline) return;
+
+        const lines = currentLines();
+        const here = field.selectionDirection === "backward" ? start : end;
+        const row = lineIndexOf(here, lines);
+        if (key === "ArrowUp" ? row === 0 : row === lines.length - 1) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const column = FF7.textWidth(lines[row].text.slice(0, here - lines[row].start));
+        const targetLine = lines[row + (key === "ArrowUp" ? -1 : 1)];
+        const next = indexAtX(targetLine, column);
+
+        if (shiftKey) {
+            const anchor = here === start ? end : start;
+            select(Math.min(anchor, next), Math.max(anchor, next), next < anchor);
+        } else {
+            select(next);
+        }
+    });
+
+    // La anchura a la que el texto pintado tiene que ajustarse, medida en vez
+    // de asumida. El control real de debajo ajusta por anchura, así que
+    // cualquier otra cosa aquí lo desincroniza del texto pintado.
+    function measureWrapWidth() {
+        const cs = getComputedStyle(view);
+        const inset = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+        const next = Math.max(0, view.clientWidth - inset);
+        if (next !== wrapWidth) { wrapWidth = next; render(); }
+    }
+    measureWrapWidth();
+    let resizeObserver = null;
+    if (typeof ResizeObserver !== "undefined") {
+        resizeObserver = new ResizeObserver(measureWrapWidth);
+        resizeObserver.observe(view);
+    }
+
+    render();
+
+    root.input = field;
+    root.setInvalid = (v) => FF7.setDataset(root, "invalid", v);
+    root.setSelected = (v) => FF7.setDataset(root, "selected", v);
+    root.destroy = () => { resizeObserver?.disconnect(); };
+    return root;
+}
+
+    FF7.createSpriteInput = createSpriteInput;
 })(window.FF7 = window.FF7 || {});
 (function (FF7) {
     "use strict";
@@ -2330,8 +2875,14 @@ function createMenu() {
 
     function handleClose() { FF7.playSound("back", FF7.store.getState().isSoundEnabled); }
 
-    function handleMouseEnter(menuItem) {
-        if (!isLanding()) return;
+    // Foco al pasar por encima, solo con ratón real. Un toque en pantalla
+    // táctil sintetiza un mouseenter además del propio click, así que sonaban
+    // dos copias del mismo clip (el del hover y el del click) a milisegundos
+    // de distancia por un solo toque. pointerType distingue ambos casos; el
+    // mismo guard ya estaba en las listas de Projects y Equip, pero faltaba
+    // aquí, en el menú principal.
+    function handlePointerEnter(event, menuItem) {
+        if (!isLanding() || event.pointerType !== "mouse") return;
         nav.focus({ group: "menu", index: navItems.indexOf(menuItem) });
     }
 
@@ -2361,7 +2912,7 @@ function createMenu() {
                 href: menuItem.path,
                 target: "_blank",
                 onClick: () => FF7.playSound("select", FF7.store.getState().isSoundEnabled),
-                onMouseEnter: () => handleMouseEnter(menuItem),
+                onPointerEnter: (event) => handlePointerEnter(event, menuItem),
             }, [
                 FF7.textToSprite(menuItem.name),
                 FF7.el("span", { className: "font-glyph ml-2", "data-sprite": "external-link-icon" }),
@@ -2375,7 +2926,7 @@ function createMenu() {
             href: `#/${menuItem.id}`,
             className: "w-100",
             onClick: (e) => { e.preventDefault(); handleOnClick(); FF7.router.navigate(`/${menuItem.id}`); },
-            onMouseEnter: () => handleMouseEnter(menuItem),
+            onPointerEnter: (event) => handlePointerEnter(event, menuItem),
         }, [FF7.textToSprite(menuItem.name)]);
         focusRefs[navIndex] = link;
         fragment.appendChild(link);
@@ -2386,7 +2937,7 @@ function createMenu() {
         const closeLink = FF7.el("a", {
             href: "#/",
             onClick: (e) => { e.preventDefault(); handleClose(); FF7.router.navigate("/"); },
-            onMouseEnter: () => FF7.playSound("select", FF7.store.getState().isSoundEnabled),
+            onPointerEnter: (event) => { if (event.pointerType === "mouse") FF7.playSound("select", FF7.store.getState().isSoundEnabled); },
         }, [
             FF7.createContentBox({ className: "absolute", dataset: { label: "close" }, children: [FF7.textToSprite("X")] }),
         ]);
@@ -2811,18 +3362,45 @@ function createMemCardSelector() {
 //
 // Panel del reloj (metaInfo) subido de bottom-[110px] a bottom-[120px], a
 // petición — antes quedaba un poco más pegado al borde inferior.
+//
+// Texto de la biografía apareciendo letra a letra (de izquierda a derecha,
+// línea a línea) en vez de todo de golpe — a petición, no existe en el
+// original. BIO_GROW_DONE_MS es cuándo termina de crecer la propia caja: el
+// delay (0.65s) más la duración (0.3s) de su transición en
+// .contentBox[data-label=bio] (style.css); el barrido de letras arranca justo
+// ahí para que no se pisen las dos animaciones.
+const BIO_GROW_DONE_MS = 950;
+const BIO_LETTER_MS = 16;
+
+// A petición: el barrido letra a letra solo debe verse la primera vez que
+// se llega a Landing tras una recarga real del navegador, no cada vez que
+// se vuelve a "/" navegando por el menú (createLandingPage se llama de
+// nuevo en cada visita, ver PAGE_FACTORIES/renderPage en mountApp). Esta
+// bandera vive en el ámbito del módulo (fuera de createLandingPage), así
+// que sobrevive a esas visitas repetidas dentro de la misma carga de
+// página — y una recarga real reinicia script.js entero, incluida ella.
+let bioIntroPlayed = false;
+
 function createLandingPage() {
     const root = FF7.el("div", {});
     let location = locations[Math.floor(Math.random() * locations.length)];
 
     const partyMemberInstance = FF7.createPartyMember({ memberId: 1, showProgressBars: true, healthReduction: true });
 
+    // Un único "reveal" compartido entre las cinco líneas: el contador de
+    // letra sigue subiendo de una llamada a la siguiente, así el barrido
+    // recorre todo el párrafo seguido en vez de reiniciarse en cada línea.
+    // null en visitas repetidas (bioIntroPlayed ya a true): textToSprite
+    // sin "reveal" pinta el texto directamente a opacidad completa, sin
+    // barrido ni timers que cancelar.
+    const bioReveal = bioIntroPlayed ? null : { count: 0, baseMs: BIO_GROW_DONE_MS, stepMs: BIO_LETTER_MS, timers: [] };
+    bioIntroPlayed = true;
     const bio = FF7.createContentBox({ dataset: { label: "bio" }, children: [
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("Programador de Videojuegos Unity")]),
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("(Junior) y Técnico Microinformático.")]),
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("Bienvenido a mi portafolio interactivo.")]),
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("Aquí encontrarás mis proyectos.")]),
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("integrados en este menú estilo FF7 (PS1).")]),
+    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("Programador de Videojuegos Unity", false, "white", bioReveal)]),
+    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("(Junior) y Técnico Microinformático.", false, "white", bioReveal)]),
+    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("Bienvenido a mi portafolio interactivo.", false, "white", bioReveal)]),
+    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("Aquí encontrarás mis proyectos.", false, "white", bioReveal)]),
+    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("integrados en este menú estilo FF7 (PS1).", false, "white", bioReveal)]),
     FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("")]),
 ] });
     const bioWrap = FF7.el("div", { className: "flex items-center justify-center h-[340px] w-[720px] left-[53px] right-[220px] top-[294px] absolute" }, [bio]);
@@ -2875,7 +3453,11 @@ function createLandingPage() {
     root.appendChild(metaBox);
     root.appendChild(pageInfoBox);
 
-    root.destroy = () => { partyMemberInstance.destroy?.(); timeSpan.destroy?.(); };
+    root.destroy = () => {
+        partyMemberInstance.destroy?.();
+        timeSpan.destroy?.();
+        bioReveal?.timers.forEach(clearTimeout);
+    };
     return root;
 }
 
@@ -4141,8 +4723,6 @@ function createConfigPage() {
         },
     });
 
-    const nav = FF7.createCursorNav(buildNavConfig());
-
     // ---- esqueleto persistente ----
     const headerBox = FF7.createContentBox({ dataset: { label: "configHeader" }, className: "h-full absolute top-0 left-0 right-0" });
     const headerWrap = FF7.el("div", { className: "relative h-[84px] mb-[10px]" }, [headerBox]);
@@ -4172,6 +4752,16 @@ function createConfigPage() {
     const cornersLi = FF7.el("li", { className: "ml-24 mb-8 flex", onMouseEnter: () => { windowDescription = ROW_DESCRIPTIONS.corners; headerBox.setChildren([FF7.textToSprite(windowDescription)]); } }, [
         FF7.el("div", { className: "w-[24rem] flex items-end pb-1" }, [FF7.textToSprite("Color de ventana", false, "blue")]),
     ]);
+
+    // nav se crea aquí (no más arriba, junto a buildNavConfig) porque su
+    // primer onFocus puede saltar de inmediato si se llega por teclado
+    // (fallback.group === "corners" con keyboardNavIntent activo), y ese
+    // onFocus usa headerBox — tiene que existir ya. Bug real que se
+    // reproducía al entrar a /config con flechas/Enter desde el menú en
+    // vez de con el ratón: "Cannot access 'headerBox' before
+    // initialization", porque antes nav se creaba antes de declarar
+    // headerBox más abajo.
+    const nav = FF7.createCursorNav(buildNavConfig());
 
     bodyBox.setChildren([FF7.el("ul", {}, [cornersLi, soundRow.li, crtRow.li])]);
 
@@ -4455,6 +5045,482 @@ function createResumePage() {
 (function (FF7) {
     "use strict";
 
+// Puerto de pages/Contact/Contact.tsx.
+//
+// El original manda el mensaje a un backend en PHP (contact.php) con firma
+// de token, límite de envíos y honeypot anti-spam. maerga.github.io se sirve
+// como sitio estático en GitHub Pages, que no ejecuta PHP ni ningún backend
+// propio — subir el .php no serviría de nada, GitHub Pages lo serviría como
+// texto plano en vez de ejecutarlo.
+//
+// En vez de eso, el formulario manda el mensaje a FormSubmit
+// (https://formsubmit.co), un servicio gratuito pensado justo para esto:
+// sitios estáticos sin servidor propio. El navegador hace un POST directo a
+// su endpoint de AJAX (JSON) y ellos reenvían el mensaje al email indicado
+// en la propia URL del endpoint — no hace falta ninguna key ni registro
+// previo. Nada pasa por un servidor de Matias. El resto — los tres campos
+// con fuente de sprites, la navegación por cursor entre ellos, Enviar y los
+// enlaces, el borrador que sobrevive a salir y volver a la página — es fiel
+// al original.
+//
+// DOS COSAS A SABER sobre FormSubmit, no son bugs de este código:
+//   1. El PRIMER mensaje real que llegue no se entrega al momento: FormSubmit
+//      manda un correo de confirmación a CONTACT_EMAIL con un enlace
+//      "Activate Form" que hay que pulsar una única vez. A partir de ahí
+//      entrega todos los mensajes siguientes con normalidad. Sin pulsar ese
+//      enlace, ese primer mensaje se pierde (no da error, pero no llega).
+//   2. _captcha:"false" en el body: FormSubmit trae reCAPTCHA activado por
+//      defecto, pensado para pintar su propio widget dentro de un <form>
+//      HTML normal. Este formulario no es un <form> nativo (son inputs con
+//      sprites propios, sin ningún hueco donde ellos puedan insertar nada),
+//      así que hay que desactivarlo explícitamente o los envíos se
+//      bloquean/limitan por no encontrar el captcha que esperan.
+
+const CONTACT_EMAIL = "matiaserrigar87@gmail.com";
+const FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
+
+const HEADING = "PHS";
+const DESCRIPTION = "Envíame un mensaje por el sistema PHS.";
+
+// Solo perfiles externos aquí — el email se manda por el formulario, no
+// hace falta un link "Email" aparte (igual que en el original: el panel de
+// canales de la derecha son Github/LinkedIn/Reddit/Ko-fi, nunca un mailto).
+const CONTACT_LINKS = [
+    { label: "GitHub", href: "https://github.com/MaErGa" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/matias-errico-garcia-474387402/" },
+];
+
+const LABELS = ["Nombre", "Email", "Mensaje"];
+const FIELD_IDS = ["name", "email", "message"];
+const LIMITS = { name: 60, email: 254, message: 2000 };
+
+// Subconjunto de public/contact-messages.json que de verdad puede darse con
+// FormSubmit de backend — el original tiene, además, mensajes específicos del
+// handler en PHP (sesión caducada, límite de envíos, reenvío) que aquí no
+// tienen forma de ocurrir.
+const MESSAGES = {
+    sending: "Enviando...",
+    sent: "¡Mensaje enviado! Gracias.",
+    emptyFields: "Completa todos los campos.",
+    sendFailed: "No se pudo enviar el mensaje.",
+    unreachable: "No se pudo contactar con el servidor.",
+};
+
+// Vive fuera de createContactPage (no en memoria del navegador, ver
+// draft.ts en el original): así sobrevive a salir de la página y volver,
+// pero se pierde al recargar — no hace falta preguntar "¿borrar el
+// mensaje a medio escribir?" si de todas formas nunca se guardó de verdad.
+const contactDraft = (() => {
+    let draft = { name: "", email: "", message: "" };
+    return {
+        get: () => draft,
+        set: (next) => { draft = next; },
+        clear: () => { draft = { name: "", email: "", message: "" }; },
+    };
+})();
+
+function createContactPage() {
+    const root = FF7.el("div", { className: "panel-group" });
+
+    const links = CONTACT_LINKS;
+    const values = { ...contactDraft.get() };
+    let status = "idle"; // idle | sending | sent | error
+    let error = "";
+    let invalid = [];
+
+    /**
+     * Si el cursor lo está moviendo el teclado.
+     *
+     * Los campos no muestran manita bajo el ratón — ya se ve perfectamente
+     * en qué caja se hizo clic, y una manita encima de cada fila que se
+     * cruza es ruido. La navegación por flechas sí la necesita, porque
+     * entonces no hay ningún otro indicio de dónde está el cursor.
+     *
+     * Empieza en false para que llegar a la página ni dibuje un cursor ni
+     * robe el teclado — en el móvil, autoenfocar al llegar levantaría el
+     * teclado en pantalla tapando el formulario.
+     */
+    let keyboardMode = false;
+
+    // Bug real encontrado al probar el envío (ya estaba antes de este
+    // cambio, no lo introduce formsubmit.co): tras un envío correcto se
+    // vacían los 3 campos disparando un evento "input" sintético por cada
+    // uno (ver más abajo, para que se sincronice también su representación
+    // visual en sprites). Cada uno de esos "input" pasa por el mismo
+    // onChange que un campo real, que llama a clearStatus() — así que el
+    // mensaje "¡Mensaje enviado!" se pisaba a sí mismo al instante y nunca
+    // llegaba a verse. Esta bandera deja correr el resto del onChange
+    // (guarda el valor, sincroniza el borrador) pero salta solo el
+    // clearStatus() mientras dura ese borrado programático.
+    let suppressClearStatus = false;
+
+    const fieldRows = [];
+    const fieldInputs = []; // los createSpriteInput, en orden
+    const fieldOrder = []; // sus .input reales, en el mismo orden
+
+    function focusField(index) {
+        const el = fieldOrder[index];
+        if (!el) return;
+        el.focus();
+        try { el.setSelectionRange(el.value.length, el.value.length); } catch { /* type="email" y similares: con enfocar sobra */ }
+    }
+
+    function clearStatus() {
+        if (status === "idle") return;
+        status = "idle";
+        error = "";
+        renderStatus();
+    }
+
+    function renderFieldVisuals() {
+        fieldRows.forEach((row, index) => {
+            // Gated en keyboardMode: la manita solo aparece cuando la ponen ahí
+            // las flechas, nunca con el ratón.
+            row.dataset.focused = (keyboardMode && nav.isFocused("fields", index)) ? "true" : "false";
+        });
+        fieldInputs.forEach((spriteInput, index) => spriteInput.setSelected(nav.isFocused("fields", index)));
+    }
+
+    function renderSendVisuals() {
+        sendBtn.dataset.focused = nav.isFocused("send", 0) ? "true" : "false";
+        sendBtn.dataset.disabled = status === "sending" ? "true" : "false";
+    }
+
+    function renderLinkVisuals() {
+        linkRefs.forEach((a, index) => { a.dataset.focused = nav.isFocused("links", index) ? "true" : "false"; });
+    }
+
+    function renderStatus() {
+        FF7.clear(statusEl);
+        let sprite = null;
+        if (status === "sending") sprite = FF7.textToSprite(MESSAGES.sending, false, "grey");
+        else if (status === "sent") sprite = FF7.textToSprite(MESSAGES.sent, false, "blue");
+        else if (status === "error" && error) sprite = FF7.textToSprite(error, false, "red");
+        if (sprite) statusEl.appendChild(sprite);
+    }
+
+    function renderFieldsValidity() {
+        fieldInputs.forEach((spriteInput, index) => spriteInput.setInvalid(invalid.includes(FIELD_IDS[index])));
+    }
+
+    const nav = FF7.createCursorNav({
+        groups: [
+            { id: "fields", size: 3 },
+            { id: "send", size: 1 },
+            { id: "links", size: links.length },
+            { id: "close", size: 1 },
+        ],
+        initial: { group: "fields", index: 0 },
+        fallback: { group: "fields", index: 0 },
+        enabled: true,
+        navigateWhileEditing: true,
+        resolveMove: (current, dir) => {
+            /**
+             * El primer toque de flecha solo revela el cursor donde ya está.
+             * Si además moviera, se saltaría la fila de Nombre — el cursor
+             * empieza ahí de forma invisible, así que el primer "abajo"
+             * caería en Email y Nombre nunca se podría alcanzar bajando.
+             */
+            if (!keyboardMode) {
+                keyboardMode = true;
+                renderFieldVisuals();
+                if (current.group === "fields") focusField(current.index);
+                return null;
+            }
+
+            const lastLink = links.length - 1;
+
+            if (current.group === "fields") {
+                if (dir === "up") return current.index === 0 ? { group: "close", index: 0 } : { group: "fields", index: current.index - 1 };
+                if (dir === "down") return current.index === 2 ? { group: "send", index: 0 } : { group: "fields", index: current.index + 1 };
+                if (dir === "right" && links.length) return { group: "links", index: 0 };
+                return null;
+            }
+            if (current.group === "send") {
+                if (dir === "up") return { group: "fields", index: 2 };
+                if (dir === "down") return links.length ? { group: "links", index: 0 } : { group: "close", index: 0 };
+                if (dir === "right" && links.length) return { group: "links", index: 0 };
+                return null;
+            }
+            if (current.group === "links") {
+                if (dir === "up") return current.index === 0 ? { group: "send", index: 0 } : { group: "links", index: current.index - 1 };
+                if (dir === "down") return current.index === lastLink ? { group: "close", index: 0 } : { group: "links", index: current.index + 1 };
+                if (dir === "left") return { group: "fields", index: 0 };
+                return null;
+            }
+            // close
+            if (dir === "down") return { group: "fields", index: 0 };
+            if (dir === "up") return links.length ? { group: "links", index: lastLink } : { group: "send", index: 0 };
+            return null;
+        },
+        onFocus: (current, source) => {
+            FF7.closeNav.setFocus(current.group === "close");
+            renderFieldVisuals();
+            renderSendVisuals();
+            renderLinkVisuals();
+
+            if (source === "pointer") {
+                keyboardMode = false;
+                renderFieldVisuals();
+                return;
+            }
+            if (source !== "key") return; // "initial": llegar a la página no roba el foco
+
+            keyboardMode = true;
+            renderFieldVisuals();
+
+            if (current.group === "fields") { focusField(current.index); return; }
+            const active = document.activeElement;
+            if (fieldOrder.includes(active)) active.blur();
+        },
+        onConfirm: (current) => {
+            if (current.group === "close") {
+                FF7.playSound("back", FF7.store.getState().isSoundEnabled);
+                FF7.closeNav.setFocus(false);
+                nav.setPosSilently(null);
+                FF7.markKeyboardNavigation();
+                FF7.router.navigate("/");
+                return;
+            }
+            if (current.group === "fields") {
+                FF7.playSound("select", FF7.store.getState().isSoundEnabled);
+                focusField(current.index);
+                return;
+            }
+            if (current.group === "send") { send(); return; }
+
+            FF7.playSound("select", FF7.store.getState().isSoundEnabled);
+            window.open(links[current.index].href, "_blank", "noreferrer");
+        },
+    });
+
+    async function send() {
+        if (status === "sending") return;
+        // Relleno solo por un bot: fingir que todo fue bien sin mandar nada.
+        if (honeypot.checked) { status = "sent"; renderStatus(); return; }
+
+        const missing = FIELD_IDS.filter((id) => !values[id].trim());
+        // Comprobado aquí igual que en el original (allá, además, en el
+        // handler): así un formulario vacío no cuesta un viaje de ida y
+        // vuelta a FormSubmit para nada.
+        if (missing.length) {
+            invalid = missing;
+            status = "error";
+            error = MESSAGES.emptyFields;
+            FF7.playSound("error", FF7.store.getState().isSoundEnabled);
+            renderFieldsValidity();
+            renderStatus();
+            return;
+        }
+
+        invalid = [];
+        status = "sending";
+        error = "";
+        renderFieldsValidity();
+        renderStatus();
+        renderSendVisuals();
+
+        try {
+            const res = await window.fetch(FORMSUBMIT_ENDPOINT, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                body: JSON.stringify({
+                    name: values.name,
+                    email: values.email,
+                    message: values.message,
+                    _subject: "Nuevo mensaje desde el portfolio",
+                    _template: "table",
+                    _captcha: "false",
+                    // Recomendado por la propia documentación de FormSubmit: con la
+                    // política de referrer estricta que traen por defecto los
+                    // navegadores modernos (strict-origin-when-cross-origin), a veces
+                    // no les llega el header Referer y el email sale en blanco. _url
+                    // se lo da explícito. En local abriendo index.html con doble clic
+                    // (file://) esto NO evita el aviso rojo — FormSubmit exige un
+                    // origen http/https real para eso; en la web publicada sí.
+                    _url: "https://maerga.github.io/",
+                }),
+            });
+            const data = await res.json().catch(() => null);
+            const ok = res.ok && (data?.success === true || data?.success === "true");
+
+            if (!ok) {
+                status = "error";
+                error = (data && data.message) || MESSAGES.sendFailed;
+                FF7.playSound("error", FF7.store.getState().isSoundEnabled);
+                renderStatus();
+                renderSendVisuals();
+                return;
+            }
+
+            status = "sent";
+            values.name = ""; values.email = ""; values.message = "";
+            suppressClearStatus = true;
+            fieldOrder.forEach((el) => {
+                el.value = "";
+                el.dispatchEvent(new Event("input"));
+            });
+            suppressClearStatus = false;
+            contactDraft.clear();
+            FF7.playSound("save", FF7.store.getState().isSoundEnabled);
+            renderStatus();
+            renderSendVisuals();
+        } catch {
+            status = "error";
+            error = MESSAGES.unreachable;
+            FF7.playSound("error", FF7.store.getState().isSoundEnabled);
+            renderStatus();
+            renderSendVisuals();
+        }
+    }
+
+    // Reutiliza el "header" compartido en vez de uno propio de Contacto, así
+    // sale a ancho completo por la misma razón que en el resto de páginas.
+    const headerBox = FF7.createContentBox({ dataset: { label: "header" }, className: "h-[84px] absolute", children: [FF7.textToSprite(HEADING)] });
+    // Alturas y offsets calcados de Projects: cabecera 0-84, esta franja
+    // 93-180, los paneles desde 190.
+    const descriptionBox = FF7.createContentBox({ className: "contact-descriptionPanel h-[87px] absolute top-[93px]", children: [FF7.textToSprite(DESCRIPTION)] });
+
+    // ---- panel del formulario (841px, izquierda) ----
+    const formPanel = FF7.createContentBox({ dataset: { label: "contactForm" }, className: "contact-formPanel absolute top-[190px] bottom-0" });
+
+    /**
+     * El honeypot. Un campo real, presente y vacío, oculto a la vista y a
+     * los lectores de pantalla. Su valor se lee directo del DOM en vez de
+     * guardarlo aparte: una persona nunca lo toca, así que cualquier cosa
+     * que aparezca ahí la puso un bot rellenando todo lo que encontró.
+     */
+    const honeypot = FF7.el("input", {
+        type: "checkbox", name: "botcheck", className: "contact-honeypot", tabIndex: -1,
+        autocomplete: "off", "aria-hidden": "true",
+    });
+
+    function buildFieldRow(index) {
+        const id = FIELD_IDS[index];
+        const label = LABELS[index];
+        const multiline = id === "message";
+
+        const spriteInput = FF7.createSpriteInput({
+            value: values[id],
+            onChange: (next) => { if (!suppressClearStatus) clearStatus(); values[id] = next; contactDraft.set({ ...values }); },
+            maxLength: LIMITS[id],
+            multiline,
+            rows: 4,
+            name: id,
+            label,
+            selected: nav.isFocused("fields", index),
+            invalid: invalid.includes(id),
+        });
+
+        const row = FF7.el("li", { className: "contact-field" }, [
+            FF7.el("span", { className: "contact-fieldLabel" }, [FF7.textToSprite(label, false, "grey")]),
+            spriteInput,
+        ]);
+
+        row.addEventListener("pointerenter", (event) => {
+            if (event.pointerType !== "mouse") return;
+            // Explícito además de por onFocus: moveTo no hace nada si el
+            // cursor ya estaba en esta fila, así que pasar el ratón por la
+            // fila donde lo dejaron las flechas conservaría la manita.
+            keyboardMode = false;
+            renderFieldVisuals();
+            nav.focus({ group: "fields", index });
+        });
+
+        /**
+         * Escape sale del campo, no de la página. El nav nunca ve la tecla
+         * mientras el foco real está en un elemento editable, así que el
+         * propio campo tiene que devolver el control — sin esto, alguien
+         * navegando por teclado se queda atrapado dentro del input.
+         */
+        row.addEventListener("keydown", (event) => {
+            if (event.key !== "Escape") return;
+            event.stopPropagation();
+            event.target.blur();
+            FF7.playSound("back", FF7.store.getState().isSoundEnabled);
+        });
+
+        fieldRows[index] = row;
+        fieldInputs[index] = spriteInput;
+        fieldOrder[index] = spriteInput.input;
+        return row;
+    }
+
+    const fieldsList = FF7.el("ul", { className: "contact-fields" }, [0, 1, 2].map(buildFieldRow));
+
+    const statusEl = FF7.el("span", { className: "contact-status" });
+    const sendBtn = FF7.el("button", {
+        type: "button",
+        className: "contact-send",
+        onClick: send,
+        onPointerEnter: (event) => { if (event.pointerType === "mouse") nav.focus({ group: "send", index: 0 }); },
+    }, [FF7.textToSprite("Enviar", false, "white")]);
+
+    // Estado primero, Enviar al final: la fila está alineada a la derecha,
+    // así que lo último en el DOM es lo que queda a ras del borde — con
+    // Enviar primero, el span vacío del estado y el hueco entre ambos lo
+    // separaban 24px del borde de los campos de arriba.
+    const formColumn = FF7.el("div", { className: "contact-formColumn" }, [
+        honeypot,
+        fieldsList,
+        FF7.el("div", { className: "contact-sendRow" }, [statusEl, sendBtn]),
+    ]);
+    formPanel.setChildren([formColumn]);
+
+    // ---- panel de canales (270px, pegado a la derecha, solapando el
+    // formulario 11px igual que skillsContentLeft/Right en este mismo
+    // sitio) ----
+    const channelsPanel = FF7.createContentBox({ dataset: { label: "contactChannels" }, className: "contact-channelsPanel absolute top-[190px] right-0 bottom-0" });
+
+    const linkRefs = [];
+    const linkList = FF7.el("ul", { className: "contact-links" }, links.map((link, index) => {
+        const a = FF7.el("a", {
+            className: "contact-link",
+            href: link.href,
+            target: "_blank",
+            rel: "noreferrer",
+            "data-text-color": "yellow",
+            onClick: () => FF7.playSound("select", FF7.store.getState().isSoundEnabled),
+            onPointerEnter: (event) => { if (event.pointerType === "mouse") nav.focus({ group: "links", index }); },
+        }, [
+            FF7.textToSprite(link.label, false, "yellow"),
+            FF7.el("span", { className: "font-glyph ml-2", "data-sprite": "external-link-icon" }),
+        ]);
+        linkRefs[index] = a;
+        return FF7.el("li", { className: "contact-linkRow" }, [a]);
+    }));
+
+    channelsPanel.setChildren([
+        FF7.el("div", { className: "contact-linkColumn" }, [
+            FF7.el("p", { className: "contact-linkHeading" }, [FF7.textToSprite("Canales", false, "grey")]),
+            linkList,
+        ]),
+    ]);
+
+    renderFieldVisuals();
+    renderSendVisuals();
+    renderLinkVisuals();
+    renderStatus();
+
+    root.appendChild(headerBox);
+    root.appendChild(descriptionBox);
+    root.appendChild(formPanel);
+    root.appendChild(channelsPanel);
+
+    root.destroy = () => {
+        nav.destroy();
+        FF7.closeNav.setFocus(false);
+        fieldInputs.forEach((spriteInput) => spriteInput.destroy?.());
+    };
+
+    return root;
+}
+
+    FF7.createContactPage = createContactPage;
+})(window.FF7 = window.FF7 || {});
+(function (FF7) {
+    "use strict";
+
 // Puerto de pages/NameEntry/NameEntry.tsx — el teclado en pantalla para
 // poner nombre, con el mismo patrón anti-parpadeo del resto: las cajas
 // (header, preview, controlsBox, keyboard) se crean una vez; el teclado y
@@ -4707,6 +5773,7 @@ const PAGE_FACTORIES = {
     "/history": FF7.createMemCardSelector,
     "/config": FF7.createConfigPage,
     "/resume": FF7.createResumePage,
+    "/contact": FF7.createContactPage,
     "/name": FF7.createNameEntryPage,
 };
 
