@@ -115,8 +115,8 @@ const locations = [
 // Menu real de Matias (antes <ul id="menu"> en index.html).
 const menuJSON = [
     { id: "projects", name: "Proyectos", position: 0 },
-    { id: "history", name: "Historial", position: 1 },
-    { id: "skills", name: "Habilidades", position: 2 },
+    { id: "history", name: "Historial", position: 2 },
+    { id: "skills", name: "Habilidades", position: 1 },
     { id: "equip", name: "Equipo", position: 3 },
     { id: "resume", name: "Resumen", position: 4 },
     { id: "contact", name: "Contacto", position: 5 },
