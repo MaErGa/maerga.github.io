@@ -12,7 +12,7 @@ const skillsJSON = [
     { id: 19, name: "Dreamflow", color: "yellow", description: "Prototipos rápidos y estéticos asistidos por IA.", score: 2, ap: 1400, toNextLevel: 3700, abilities: ["Prototipado Rápido con IA", "Exportación de Estilos a Flutter"] },
     { id: 1, name: "GitHub", color: "red", description: "Invoca su nube para desplegar todos sus proyectos y código.", score: 2, ap: 2200, toNextLevel: 3200, abilities: ["Despliegue de Código Fuente", "Acceso a Repositorios Activos"] },
     { id: 8, name: "Windows", color: "green", description: "Domina el sistema operativo al máximo, sin límites.", score: 5, ap: 0, toNextLevel: 0, abilities: ["Administración del Sistema", "Soporte y Hardware"] },
-    { id: 15, name: "Lenguaje SQL", color: "yellow", description: "Organiza y consulta información estructurada.", score: 2, ap: 1900, toNextLevel: 3400, abilities: ["Estructura de Tablas", "Consultas y Filtros"] },
+    { id: 15, name: "Flutter", color: "blue", description: "Desarrollo de aplicaciones multiplataforma.", score: 2, ap: 1900, toNextLevel: 3400, abilities: ["Desarrollo de Widgets", "Gestión de Estado y Ciclo de Vida"] },
     { id: 21, name: "LibreSprite", color: "pink", description: "Da vida a personajes y escenarios en pixel art.", score: 2, ap: 1300, toNextLevel: 3800, abilities: ["Animación de Sprites", "Creación de Pixel Art"] },
     { id: 6, name: "Visual Scripting", color: "blue", description: "Conecta nodos visuales para agilizar el desarrollo.", score: 2, ap: 2100, toNextLevel: 3100, abilities: ["Bloques Lógicos", "Flujo de Eventos"] },
     { id: 17, name: "Supabase", color: "yellow", description: "Bases de datos relacionales en la nube, seguras.", score: 2, ap: 1500, toNextLevel: 3600, abilities: ["Bases de Datos Relacionales", "Tablas SQL"] },
@@ -115,15 +115,15 @@ const locations = [
 // Menu real de Matias (antes <ul id="menu"> en index.html).
 const menuJSON = [
     { id: "projects", name: "Proyectos", position: 0 },
-    { id: "history", name: "Historia", position: 1 },
+    { id: "history", name: "Historial", position: 1 },
     { id: "skills", name: "Habilidades", position: 2 },
     { id: "equip", name: "Equipo", position: 3 },
     { id: "resume", name: "Resumen", position: 4 },
     { id: "contact", name: "Contacto", position: 5 },
     { id: "itch", name: "Itch.io", title: "Mi Itch.io", path: "https://maerga.itch.io/", position: 6 },
     { id: "github", name: "GitHub", title: "Mi GitHub", path: "https://github.com/MaErGa", position: 7 },
-    { id: "linkedin", name: "LinkedIn", title: "Mi LinkedIn", path: "https://www.linkedin.com/in/matias-errico-garcia-474387402/", position: 8 },
-    { id: "config", name: "Ajustes", position: 9 }
+    { id: "linkedin", name: "", title: "", path: "", position: 9 },
+    { id: "config", name: "Ajustes", position: 8 }
 ];
 // Datos de Matias (antes "firstName"/"potrait.png"/actualizarNivelPorEdad en
 // MenuFF7.js). age_epoch = 30 agosto 1987 (misma formula de nivel-por-edad
