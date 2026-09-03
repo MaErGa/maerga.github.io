@@ -7,32 +7,42 @@
 // despues si Matias quiere numeros distintos. score 5 = materia al maximo
 // (AP/to-next-level en 0, la pantalla ya muestra "MASTER" en ese caso).
 const skillsJSON = [
-    { id: 12, name: "Unity", color: "green", description: "Integra arte, mecánicas y escenarios interactivos.", score: 3, ap: 6300, toNextLevel: 2200, abilities: ["Desarrollo y Mecánicas 2D", "Físicas y Control de Personajes", "Sistemas de Animación y UI"] },
-    { id: 4, name: "Html", color: "blue", description: "Estructurado de páginas y marcado semántico funcional.", score: 2, ap: 2600, toNextLevel: 2800, abilities: ["Maquetación Semántica", "Estructuración Web Base"] },
-    { id: 19, name: "Dreamflow", color: "yellow", description: "Prototipos rápidos y estéticos asistidos por IA.", score: 2, ap: 1400, toNextLevel: 3700, abilities: ["Prototipado Rápido con IA", "Exportación de Estilos a Flutter"] },
-    { id: 1, name: "GitHub", color: "red", description: "Invoca su nube para desplegar todos sus proyectos y código.", score: 2, ap: 2200, toNextLevel: 3200, abilities: ["Despliegue de Código Fuente", "Acceso a Repositorios Activos"] },
-    { id: 8, name: "Windows", color: "green", description: "Domina el sistema operativo al máximo, sin límites.", score: 5, ap: 0, toNextLevel: 0, abilities: ["Administración del Sistema", "Soporte y Hardware"] },
-    { id: 15, name: "Flutter", color: "blue", description: "Desarrollo de aplicaciones multiplataforma.", score: 2, ap: 1900, toNextLevel: 3400, abilities: ["Desarrollo de Widgets", "Gestión de Estado y Ciclo de Vida"] },
-    { id: 21, name: "LibreSprite", color: "pink", description: "Da vida a personajes y escenarios en pixel art.", score: 2, ap: 1300, toNextLevel: 3800, abilities: ["Animación de Sprites", "Creación de Pixel Art"] },
-    { id: 6, name: "Visual Scripting", color: "blue", description: "Conecta nodos visuales para agilizar el desarrollo.", score: 2, ap: 2100, toNextLevel: 3100, abilities: ["Bloques Lógicos", "Flujo de Eventos"] },
-    { id: 17, name: "Supabase", color: "yellow", description: "Bases de datos relacionales en la nube, seguras.", score: 2, ap: 1500, toNextLevel: 3600, abilities: ["Bases de Datos Relacionales", "Tablas SQL"] },
-    { id: 2, name: "Kotlin", color: "blue", description: "Enlaza la lógica móvil nativa y eficiente en Android.", score: 3, ap: 6800, toNextLevel: 2400, abilities: ["Sintaxis y Corrutinas", "Android Nativo (Compose/XML)", "APIs REST y BDD (Room)"] },
-    { id: 9, name: "Ofimática", color: "green", description: "Organiza datos y redacta documentos técnicos esenciales.", score: 5, ap: 0, toNextLevel: 0, abilities: ["Redacción de Documentos Técnicos", "Gestión y Organización de Archivos"] },
-    { id: 22, name: "Blender", color: "pink", description: "Primeros pasos en la manipulación 3D.", score: 1, ap: 700, toNextLevel: 4300, abilities: ["Modelado"] },
-    { id: 14, name: "FlutterFlow", color: "yellow", description: "Diseña interfaces móviles a gran velocidad.", score: 3, ap: 6100, toNextLevel: 2300, abilities: ["Diseño UI Multiplataforma", "Integración de Lógica", "Flujos y Navegación"] },
-    { id: 3, name: "C#", color: "blue", description: "Da vida a mecánicas y físicas complejas con código puro.", score: 3, ap: 6500, toNextLevel: 2200, abilities: ["Programación POO", "Máquinas de Estado", "Lógica y Patrones"] },
-    { id: 18, name: "Xano", color: "yellow", description: "Conexiones de servidor sin código, vía API.", score: 2, ap: 1200, toNextLevel: 3900, abilities: ["Creación de API Endpoints No-Code", "Gestión de Lógica en Servidor"] },
-    { id: 10, name: "Linux", color: "green", description: "Administra sistemas abiertos desde la terminal.", score: 3, ap: 7200, toNextLevel: 2100, abilities: ["Comandos de Terminal y Bash", "Gestión de Permisos y Usuarios", "Administración de Sistemas (Microinformática)"] },
-    { id: 5, name: "Dart", color: "blue", description: "Lenguaje orientado a objetos para desarrollo multiplataforma y lógica de apps.", score: 2, ap: 1600, toNextLevel: 3600, abilities: ["Sintaxis y Programación OO", "Lógica y Colecciones Base"] },
-    { id: 20, name: "Photoshop", color: "pink", description: "Crea interfaces limpias y sprites optimizados.", score: 3, ap: 5800, toNextLevel: 2500, abilities: ["Edición", "Diseño", "Composición"] },
-    { id: 7, name: "Claude", color: "blue", description: "Usa una IA avanzada para optimizar código y depurar errores.", score: 2, ap: 2400, toNextLevel: 2900, abilities: ["Optimización de Código (AI-Assisted)", "Depuración de Errores (Debugging Fast)"] },
-    { id: 16, name: "Firebase", color: "yellow", description: "Gestiona usuarios y datos en tiempo real.", score: 2, ap: 1800, toNextLevel: 3300, abilities: ["Autenticación de Usuarios (Auth)", "Base de Datos en Tiempo Real (Firestore)"] },
-    { id: 11, name: "Redes Locales", color: "green", description: "Configura la red que intercomunica los sistemas.", score: 3, ap: 5400, toNextLevel: 2600, abilities: ["Instalación de Elementos de Red Local (LAN)", "Configuración de Protocolos y Direccionamiento IP"] },
-    { id: 24, name: "Css", color: "blue", description: "Estilizado, layouts flex/grid y maquetación adaptativa.", score: 2, ap: 2600, toNextLevel: 2800, abilities: ["Diseño Responsive (Flexbox/Grid)", "Estilos e Interfaces Custom"] },
-    { id: 13, name: "Android Studio", color: "green", description: "Compila, emula y depura apps móviles nativas.", score: 2, ap: 1700, toNextLevel: 3500, abilities: ["Configuración de Entorno Gradle", "Uso de Emuladores y Debugging"] },
-    { id: 23, name: "JavaScript", color: "blue", description: "Lógica client-side para la interactividad y componentes dinámicos.", score: 2, ap: 2600, toNextLevel: 2800, abilities: ["Manipulación del DOM", "Lógica e Interacción Vanilla"] },
-    { id: 25, name: "PostgreSQL", color: "yellow", description: "Motor de base de datos relacional robusto y de código abierto.", score: 3, ap: 5900, toNextLevel: 2400, abilities: ["Diseño de Esquemas Relacionales", "Consultas SQL Avanzadas"] },
+    { id: 12, name: "Unity", color: "green", description: { es: "Integra arte, mecánicas y escenarios interactivos.", en: "Combines art, mechanics and interactive scenes." }, score: 3, ap: 6300, toNextLevel: 2200, abilities: { es: ["Desarrollo y Mecánicas 2D", "Físicas y Control de Personajes", "Sistemas de Animación y UI"], en: ["2D Development & Mechanics", "Physics & Character Control", "Animation & UI Systems"] } },
+    { id: 4, name: "Html", color: "blue", description: { es: "Estructurado de páginas y marcado semántico funcional.", en: "Page structuring and functional semantic markup." }, score: 2, ap: 2600, toNextLevel: 2800, abilities: { es: ["Maquetación Semántica", "Estructuración Web Base"], en: ["Semantic Markup", "Base Web Structuring"] } },
+    { id: 19, name: "Dreamflow", color: "yellow", description: { es: "Prototipos rápidos y estéticos asistidos por IA.", en: "Fast, polished AI-assisted prototyping." }, score: 2, ap: 1400, toNextLevel: 3700, abilities: { es: ["Prototipado Rápido con IA", "Exportación de Estilos a Flutter"], en: ["Rapid AI Prototyping", "Style Export to Flutter"] } },
+    { id: 1, name: "GitHub", color: "red", description: { es: "Invoca su nube para desplegar todos sus proyectos y código.", en: "Summons the cloud to deploy all his projects and code." }, score: 2, ap: 2200, toNextLevel: 3200, abilities: { es: ["Despliegue de Código Fuente", "Acceso a Repositorios Activos"], en: ["Source Code Deployment", "Active Repository Access"] } },
+    { id: 8, name: "Windows", color: "green", description: { es: "Domina el sistema operativo al máximo, sin límites.", en: "Masters the operating system to its full extent." }, score: 5, ap: 0, toNextLevel: 0, abilities: { es: ["Administración del Sistema", "Soporte y Hardware"], en: ["System Administration", "Support & Hardware"] } },
+    { id: 15, name: "Flutter", color: "blue", description: { es: "Desarrollo de aplicaciones multiplataforma.", en: "Cross-platform app development." }, score: 2, ap: 1900, toNextLevel: 3400, abilities: { es: ["Desarrollo de Widgets", "Gestión de Estado y Ciclo de Vida"], en: ["Widget Development", "State & Lifecycle Management"] } },
+    { id: 21, name: "LibreSprite", color: "pink", description: { es: "Da vida a personajes y escenarios en pixel art.", en: "Brings characters and scenes to life in pixel art." }, score: 2, ap: 1300, toNextLevel: 3800, abilities: { es: ["Animación de Sprites", "Creación de Pixel Art"], en: ["Sprite Animation", "Pixel Art Creation"] } },
+    { id: 6, name: "Visual Scripting", color: "blue", description: { es: "Conecta nodos visuales para agilizar el desarrollo.", en: "Connects visual nodes to speed up development." }, score: 2, ap: 2100, toNextLevel: 3100, abilities: { es: ["Bloques Lógicos", "Flujo de Eventos"], en: ["Logic Blocks", "Event Flow"] } },
+    { id: 17, name: "Supabase", color: "yellow", description: { es: "Bases de datos relacionales en la nube, seguras.", en: "Secure relational databases in the cloud." }, score: 2, ap: 1500, toNextLevel: 3600, abilities: { es: ["Bases de Datos Relacionales", "Tablas SQL"], en: ["Relational Databases", "SQL Tables"] } },
+    { id: 2, name: "Kotlin", color: "blue", description: { es: "Enlaza la lógica móvil nativa y eficiente en Android.", en: "Powers efficient, native mobile logic on Android." }, score: 3, ap: 6800, toNextLevel: 2400, abilities: { es: ["Sintaxis y Corrutinas", "Android Nativo (Compose/XML)", "APIs REST y BDD (Room)"], en: ["Syntax & Coroutines", "Native Android (Compose/XML)", "REST APIs & Databases (Room)"] } },
+    { id: 9, name: "Ofimática", displayName: { en: "Office Tools" }, color: "green", description: { es: "Organiza datos y redacta documentos técnicos esenciales.", en: "Organizes data and drafts key technical documents." }, score: 5, ap: 0, toNextLevel: 0, abilities: { es: ["Redacción de Documentos Técnicos", "Gestión y Organización de Archivos"], en: ["Technical Document Drafting", "File Management & Organization"] } },
+    { id: 22, name: "Blender", color: "pink", description: { es: "Primeros pasos en la manipulación 3D.", en: "First steps into 3D manipulation." }, score: 1, ap: 700, toNextLevel: 4300, abilities: { es: ["Modelado"], en: ["Modeling"] } },
+    { id: 14, name: "FlutterFlow", color: "yellow", description: { es: "Diseña interfaces móviles a gran velocidad.", en: "Designs mobile interfaces at high speed." }, score: 3, ap: 6100, toNextLevel: 2300, abilities: { es: ["Diseño UI Multiplataforma", "Integración de Lógica", "Flujos y Navegación"], en: ["Cross-platform UI Design", "Logic Integration", "Flows & Navigation"] } },
+    { id: 3, name: "C#", color: "blue", description: { es: "Da vida a mecánicas y físicas complejas con código puro.", en: "Brings complex mechanics and physics to life through code." }, score: 3, ap: 6500, toNextLevel: 2200, abilities: { es: ["Programación POO", "Máquinas de Estado", "Lógica y Patrones"], en: ["OOP Programming", "State Machines", "Logic & Patterns"] } },
+    { id: 18, name: "Xano", color: "yellow", description: { es: "Conexiones de servidor sin código, vía API.", en: "No-code server connections through APIs." }, score: 2, ap: 1200, toNextLevel: 3900, abilities: { es: ["Creación de API Endpoints No-Code", "Gestión de Lógica en Servidor"], en: ["No-Code API Endpoint Creation", "Server-Side Logic Management"] } },
+    { id: 10, name: "Linux", color: "green", description: { es: "Administra sistemas abiertos desde la terminal.", en: "Manages open systems from the terminal." }, score: 3, ap: 7200, toNextLevel: 2100, abilities: { es: ["Comandos de Terminal y Bash", "Gestión de Permisos y Usuarios", "Administración de Sistemas (Microinformática)"], en: ["Terminal & Bash Commands", "Permissions & User Management", "System Administration (IT Support)"] } },
+    { id: 5, name: "Dart", color: "blue", description: { es: "Lenguaje orientado a objetos para desarrollo multiplataforma y lógica de apps.", en: "Object-oriented language for cross-platform apps and logic." }, score: 2, ap: 1600, toNextLevel: 3600, abilities: { es: ["Sintaxis y Programación OO", "Lógica y Colecciones Base"], en: ["Syntax & OO Programming", "Logic & Base Collections"] } },
+    { id: 20, name: "Photoshop", color: "pink", description: { es: "Crea interfaces limpias y sprites optimizados.", en: "Creates clean interfaces and optimized sprites." }, score: 3, ap: 5800, toNextLevel: 2500, abilities: { es: ["Edición", "Diseño", "Composición"], en: ["Editing", "Design", "Composition"] } },
+    { id: 7, name: "Claude", color: "blue", description: { es: "Usa una IA avanzada para optimizar código y depurar errores.", en: "Uses an advanced AI to optimize code and debug errors." }, score: 2, ap: 2400, toNextLevel: 2900, abilities: { es: ["Optimización de Código (AI-Assisted)", "Depuración de Errores (Debugging Fast)"], en: ["Code Optimization (AI-Assisted)", "Fast Error Debugging"] } },
+    { id: 16, name: "Firebase", color: "yellow", description: { es: "Gestiona usuarios y datos en tiempo real.", en: "Manages users and real-time data." }, score: 2, ap: 1800, toNextLevel: 3300, abilities: { es: ["Autenticación de Usuarios (Auth)", "Base de Datos en Tiempo Real (Firestore)"], en: ["User Authentication (Auth)", "Real-Time Database (Firestore)"] } },
+    { id: 11, name: "Redes Locales", displayName: { en: "Local Networking" }, color: "green", description: { es: "Configura la red que intercomunica los sistemas.", en: "Sets up the network linking the systems together." }, score: 3, ap: 5400, toNextLevel: 2600, abilities: { es: ["Instalación de Elementos de Red Local (LAN)", "Configuración de Protocolos y Direccionamiento IP"], en: ["Local Network (LAN) Setup", "Protocol & IP Addressing Configuration"] } },
+    { id: 24, name: "Css", color: "blue", description: { es: "Estilizado, layouts flex/grid y maquetación adaptativa.", en: "Styling, flex/grid layouts and responsive design." }, score: 2, ap: 2600, toNextLevel: 2800, abilities: { es: ["Diseño Responsive (Flexbox/Grid)", "Estilos e Interfaces Custom"], en: ["Responsive Design (Flexbox/Grid)", "Custom Styles & Interfaces"] } },
+    { id: 13, name: "Android Studio", color: "green", description: { es: "Compila, emula y depura apps móviles nativas.", en: "Builds, emulates and debugs native mobile apps." }, score: 2, ap: 1700, toNextLevel: 3500, abilities: { es: ["Configuración de Entorno Gradle", "Uso de Emuladores y Debugging"], en: ["Gradle Environment Setup", "Emulator Use & Debugging"] } },
+    { id: 23, name: "JavaScript", color: "blue", description: { es: "Lógica client-side para la interactividad y componentes dinámicos.", en: "Client-side logic for interactivity and dynamic components." }, score: 2, ap: 2600, toNextLevel: 2800, abilities: { es: ["Manipulación del DOM", "Lógica e Interacción Vanilla"], en: ["DOM Manipulation", "Vanilla Logic & Interaction"] } },
+    { id: 25, name: "PostgreSQL", color: "yellow", description: { es: "Motor de base de datos relacional robusto y de código abierto.", en: "Robust, open-source relational database engine." }, score: 3, ap: 5900, toNextLevel: 2400, abilities: { es: ["Diseño de Esquemas Relacionales", "Consultas SQL Avanzadas"], en: ["Relational Schema Design", "Advanced SQL Queries"] } },
 ];
+// `description` guarda {es, en}; se resuelve con skillText() según el
+// idioma activo (la página de Habilidades se reconstruye entera en cada
+// cambio de idioma, ver mountApp).
+const skillText = (skill) => skill?.description?.[FF7.store.getState().language] ?? skill?.description?.es ?? "";
+const skillAbilities = (skill) => skill?.abilities?.[FF7.store.getState().language] ?? skill?.abilities?.es ?? [];
+// skill.name sigue siendo la clave interna estable (id, filtros, lookup de
+// color en Proyectos) — solo el par de nombres que estaban en español
+// (Ofimática/Redes Locales) tienen displayName.en para mostrarse en inglés.
+const skillName = (skill) => (FF7.store.getState().language === "en" ? skill?.displayName?.en : null) ?? skill?.name ?? "";
+
 // Historial educativo real de Matias (antes "historiaEducacion" en MenuFF7.js).
 const educationJSON = [
     { id: 1, name: "E-Talent (Telde)", link: "", user: "Matias Errico", level: 38, role: "IFCD51", year: "2026", image_path: "assets/imagenes/logos/Etalent.png" },
@@ -46,28 +56,37 @@ const educationJSON = [
 // usaba Jamie Pates). stats: attackP->attackPct, defenseP->defensePct,
 // magicDefP->magicDefPct (mismos campos, solo cambia el nombre).
 const equipmentJSON = [
-    { id: 1, name: "Raton", type: "weapon", description: "Periférico de precision para trabajo rapido. Favorece el ataque puro.", stats: { attack: 24, attackPct: 92, defense: 32, defensePct: 8, magicAtk: 4, magicDefPct: 5 }, slots: { multiSlots: 3, singleSlots: 2 } },
-    { id: 2, name: "SSD Externo", type: "weapon", description: "Almacenamiento ultrarrapido. Transporta datos a velocidad de vértigo. Aumenta la magia y la velocidad de reaccion.", stats: { attack: 16, attackPct: 74, defense: 20, defensePct: 12, magicAtk: 22, magicDefPct: 18 }, slots: { multiSlots: 1, singleSlots: 3 } },
-    { id: 3, name: "Pendrive", type: "weapon", description: "Almacenamiento de bolsillo, siempre a mano para mover archivos rapido. También hace de USB booteable para instalar y reparar sistemas operativos sobre la marcha.", stats: { attack: 12, attackPct: 64, defense: 16, defensePct: 14, magicAtk: 10, magicDefPct: 12 }, slots: { multiSlots: 0, singleSlots: 2 } },
-    { id: 101, name: "Teclado", type: "armor", description: "Herramienta principal para programar. Equilibrado entre ataque y magia.", stats: { attack: 18, attackPct: 80, defense: 28, defensePct: 10, magicAtk: 12, magicDefPct: 8 }, slots: { multiSlots: 2, singleSlots: 2 } },
-    { id: 102, name: "PC Gaming", type: "armor", description: "El nucleo de toda la operacion. Maxima defensa y resistencia.", stats: { attack: 14, attackPct: 70, defense: 48, defensePct: 20, magicAtk: 6, magicDefPct: 12 }, slots: { multiSlots: 2, singleSlots: 4 } },
-    { id: 201, name: "Smartphone", type: "accessory", description: "Siempre a mano: comunicacion, testeo responsive y consulta rapida de documentacion. Prioriza magia y rapidez sobre fuerza bruta.", stats: { attack: 6, attackPct: 42, defense: 10, defensePct: 6, magicAtk: 16, magicDefPct: 12 }, slots: { multiSlots: 0, singleSlots: 2 } },
-    { id: 202, name: "Auriculares JBL 510BT", type: "accessory", description: "Aislamiento sonoro para concentracion total. Refuerza la defensa magica.", stats: { attack: 10, attackPct: 60, defense: 22, defensePct: 14, magicAtk: 8, magicDefPct: 22 }, slots: { multiSlots: 1, singleSlots: 2 } },
-    { id: 203, name: "Nintendo Switch", type: "accessory", description: "Portabilidad ante todo. Aporta equilibrio general con un extra magico.", stats: { attack: 8, attackPct: 50, defense: 14, defensePct: 8, magicAtk: 14, magicDefPct: 10 }, slots: { multiSlots: 1, singleSlots: 1 } },
-    { id: 204, name: "PlayStation 4", type: "accessory", description: "Potencia de la octava generacion con el mando DualShock 4 en la mano. Sube ataque y defensa por igual.", stats: { attack: 16, attackPct: 65, defense: 18, defensePct: 12, magicAtk: 6, magicDefPct: 6 }, slots: { multiSlots: 1, singleSlots: 1 } },
-    { id: 205, name: "PlayStation 2", type: "accessory", description: "La consola mas vendida de la historia, con su mando DualShock 2 incluido. Defensa% solida.", stats: { attack: 10, attackPct: 55, defense: 16, defensePct: 18, magicAtk: 8, magicDefPct: 8 }, slots: { multiSlots: 1, singleSlots: 1 } },
-    { id: 206, name: "SNES Classic Mini", type: "accessory", description: "Nostalgia de 16 bits con el mando original de SNES en la mano. Gran impulso a la magia.", stats: { attack: 6, attackPct: 45, defense: 10, defensePct: 6, magicAtk: 20, magicDefPct: 14 }, slots: { multiSlots: 0, singleSlots: 2 } },
-    { id: 207, name: "Mega Drive Classic Mini", type: "accessory", description: "Velocidad y accion de 16 bits con el mando de 3 botones en la mano. Favorece el ataque directo.", stats: { attack: 20, attackPct: 58, defense: 8, defensePct: 6, magicAtk: 4, magicDefPct: 4 }, slots: { multiSlots: 0, singleSlots: 2 } },
-    { id: 208, name: "PlayStation Classic Mini", type: "accessory", description: "Una coleccion compacta de clasicos, con el mando original de PS1. Defensa equilibrada.", stats: { attack: 8, attackPct: 48, defense: 14, defensePct: 16, magicAtk: 8, magicDefPct: 10 }, slots: { multiSlots: 0, singleSlots: 2 } }
+    { id: 1, name: "Raton", displayName: { en: "Mouse" }, type: "weapon", description: { es: "Periférico de precision para trabajo rapido. Favorece el ataque puro.", en: "Precision peripheral for fast work. Favors pure attack." }, stats: { attack: 24, attackPct: 92, defense: 32, defensePct: 8, magicAtk: 4, magicDefPct: 5 }, slots: { multiSlots: 3, singleSlots: 2 } },
+    { id: 2, name: "SSD Externo", type: "weapon", description: { es: "Almacenamiento ultrarrapido. Transporta datos a velocidad de vértigo. Aumenta la magia y la velocidad de reaccion.", en: "Ultra-fast storage. Moves data at breakneck speed. Boosts magic and reaction speed." }, stats: { attack: 16, attackPct: 74, defense: 20, defensePct: 12, magicAtk: 22, magicDefPct: 18 }, slots: { multiSlots: 1, singleSlots: 3 } },
+    { id: 3, name: "Pendrive", type: "weapon", description: { es: "Almacenamiento de bolsillo, siempre a mano para mover archivos rapido. También hace de USB booteable para instalar y reparar sistemas operativos sobre la marcha.", en: "Pocket storage, always on hand for moving files fast. Also doubles as a bootable USB to install and repair operating systems on the go." }, stats: { attack: 12, attackPct: 64, defense: 16, defensePct: 14, magicAtk: 10, magicDefPct: 12 }, slots: { multiSlots: 0, singleSlots: 2 } },
+    { id: 101, name: "Teclado", displayName: { en: "Keyboard" }, type: "armor", description: { es: "Herramienta principal para programar. Equilibrado entre ataque y magia.", en: "Main tool for programming. Balanced between attack and magic." }, stats: { attack: 18, attackPct: 80, defense: 28, defensePct: 10, magicAtk: 12, magicDefPct: 8 }, slots: { multiSlots: 2, singleSlots: 2 } },
+    { id: 102, name: "PC Gaming", type: "armor", description: { es: "El nucleo de toda la operacion. Maxima defensa y resistencia.", en: "The core of the whole operation. Maximum defense and resilience." }, stats: { attack: 14, attackPct: 70, defense: 48, defensePct: 20, magicAtk: 6, magicDefPct: 12 }, slots: { multiSlots: 2, singleSlots: 4 } },
+    { id: 201, name: "Smartphone", type: "accessory", description: { es: "Siempre a mano: comunicacion, testeo responsive y consulta rapida de documentacion. Prioriza magia y rapidez sobre fuerza bruta.", en: "Always on hand: communication, responsive testing and quick doc lookups. Prioritizes magic and speed over brute force." }, stats: { attack: 6, attackPct: 42, defense: 10, defensePct: 6, magicAtk: 16, magicDefPct: 12 }, slots: { multiSlots: 0, singleSlots: 2 } },
+    { id: 202, name: "Auriculares JBL 510BT", displayName: { en: "JBL 510BT Headphones" }, type: "accessory", description: { es: "Aislamiento sonoro para concentracion total. Refuerza la defensa magica.", en: "Sound isolation for total focus. Boosts magic defense." }, stats: { attack: 10, attackPct: 60, defense: 22, defensePct: 14, magicAtk: 8, magicDefPct: 22 }, slots: { multiSlots: 1, singleSlots: 2 } },
+    { id: 203, name: "Nintendo Switch", type: "accessory", description: { es: "Portabilidad ante todo. Aporta equilibrio general con un extra magico.", en: "Portability above all. Brings general balance with a bit of extra magic." }, stats: { attack: 8, attackPct: 50, defense: 14, defensePct: 8, magicAtk: 14, magicDefPct: 10 }, slots: { multiSlots: 1, singleSlots: 1 } },
+    { id: 204, name: "PlayStation 4", type: "accessory", description: { es: "Potencia de la octava generacion con el mando DualShock 4 en la mano. Sube ataque y defensa por igual.", en: "Eighth-generation power with a DualShock 4 controller in hand. Raises attack and defense equally." }, stats: { attack: 16, attackPct: 65, defense: 18, defensePct: 12, magicAtk: 6, magicDefPct: 6 }, slots: { multiSlots: 1, singleSlots: 1 } },
+    { id: 205, name: "PlayStation 2", type: "accessory", description: { es: "La consola mas vendida de la historia, con su mando DualShock 2 incluido. Defensa% solida.", en: "The best-selling console of all time, DualShock 2 controller included. Solid Defense%." }, stats: { attack: 10, attackPct: 55, defense: 16, defensePct: 18, magicAtk: 8, magicDefPct: 8 }, slots: { multiSlots: 1, singleSlots: 1 } },
+    { id: 206, name: "SNES Classic Mini", type: "accessory", description: { es: "Nostalgia de 16 bits con el mando original de SNES en la mano. Gran impulso a la magia.", en: "16-bit nostalgia with the original SNES controller in hand. A big boost to magic." }, stats: { attack: 6, attackPct: 45, defense: 10, defensePct: 6, magicAtk: 20, magicDefPct: 14 }, slots: { multiSlots: 0, singleSlots: 2 } },
+    { id: 207, name: "Mega Drive Classic Mini", type: "accessory", description: { es: "Velocidad y accion de 16 bits con el mando de 3 botones en la mano. Favorece el ataque directo.", en: "16-bit speed and action with the 3-button controller in hand. Favors direct attack." }, stats: { attack: 20, attackPct: 58, defense: 8, defensePct: 6, magicAtk: 4, magicDefPct: 4 }, slots: { multiSlots: 0, singleSlots: 2 } },
+    { id: 208, name: "PlayStation Classic Mini", type: "accessory", description: { es: "Una coleccion compacta de clasicos, con el mando original de PS1. Defensa equilibrada.", en: "A compact collection of classics, with the original PS1 controller. Balanced defense." }, stats: { attack: 8, attackPct: 48, defense: 14, defensePct: 16, magicAtk: 8, magicDefPct: 10 }, slots: { multiSlots: 0, singleSlots: 2 } }
 ];
 // Historial laboral real de Matias (antes "historiaTrabajo" en MenuFF7.js).
+// role: {es, en} — a diferencia de educationJSON, donde "role" es un código
+// oficial de curso (IFCD51...) y no se traduce.
 const historyJSON = [
-    { id: 1, name: "El Corte Inglés", link: "", user: "Matias Errico", level: 36, role: "Logistica", year: "3 meses", image_path: "assets/imagenes/logos/Elcorteingles.png" },
-    { id: 2, name: "Santana Jerez S.L", link: "", user: "Matias Errico", level: 36, role: "Practicas de Empresa", year: "2024", image_path: "assets/imagenes/logos/SantanaJerez.png" },
-    { id: 3, name: "Tu movil canario", link: "", user: "Matias Errico", level: 35, role: "Practicas de Empresa", year: "2022", image_path: "assets/imagenes/logos/TumovilCanario.png" },
-    { id: 4, name: "Mercadillo de Jinamar", link: "", user: "Matias Errico", level: 30, role: "Atencion al Publico", year: "2008 - 2020", image_path: "assets/imagenes/logos/Telde.jpg" },
-    { id: 5, name: "Valsequillo Embellece 2019", link: "", user: "Matias Errico", level: 32, role: "Formacion y Empleo", year: "2019 - 2020", image_path: "assets/imagenes/logos/Valsequillo.jpg" }
+    { id: 1, name: "El Corte Inglés", link: "", user: "Matias Errico", level: 36, role: { es: "Logistica", en: "Logistics" }, year: "3 meses", image_path: "assets/imagenes/logos/Elcorteingles.png" },
+    { id: 2, name: "Santana Jerez S.L", link: "", user: "Matias Errico", level: 36, role: { es: "Practicas de Empresa", en: "Company Internship" }, year: "2024", image_path: "assets/imagenes/logos/SantanaJerez.png" },
+    { id: 3, name: "Tu movil canario", link: "", user: "Matias Errico", level: 35, role: { es: "Practicas de Empresa", en: "Company Internship" }, year: "2022", image_path: "assets/imagenes/logos/TumovilCanario.png" },
+    { id: 4, name: "Mercadillo de Jinamar", link: "", user: "Matias Errico", level: 30, role: { es: "Atencion al Publico", en: "Customer Service" }, year: "2008 - 2020", image_path: "assets/imagenes/logos/Telde.jpg" },
+    { id: 5, name: "Valsequillo Embellece 2019", link: "", user: "Matias Errico", level: 32, role: { es: "Formacion y Empleo", en: "Training and Employment" }, year: "2019 - 2020", image_path: "assets/imagenes/logos/Valsequillo.jpg" }
 ];
+// Resuelve item.role sea string plano (educationJSON: códigos de curso, no
+// se traducen) u objeto {es,en} (historyJSON: puestos de trabajo reales).
+const roleText = (item) => {
+    const role = item?.role;
+    if (role && typeof role === "object") return role[FF7.store.getState().language] ?? role.es ?? "";
+    return role ?? "";
+};
 // Ubicaciones reales de Matias (antes "ubicaciones" en MenuFF7.js).
 const locations = [
     "Midgar",
@@ -113,17 +132,20 @@ const locations = [
     "???"
 ];
 // Menu real de Matias (antes <ul id="menu"> en index.html).
+// `name`/`title` guardan claves de FF7.STRINGS (ver módulo de i18n), no
+// texto literal — así el menú puede reconstruirse en el idioma activo cada
+// vez que createMenu() se vuelve a llamar (ver remountMenu() en mountApp).
 const menuJSON = [
-    { id: "projects", name: "Proyectos", position: 0 },
-    { id: "history", name: "Historial", position: 2 },
-    { id: "skills", name: "Habilidades", position: 1 },
-    { id: "equip", name: "Equipo", position: 3 },
-    { id: "resume", name: "Resumen", position: 4 },
-    { id: "contact", name: "Contacto", position: 5 },
-    { id: "itch", name: "Itch.io", title: "Mi Itch.io", path: "https://maerga.itch.io/", position: 6 },
-    { id: "github", name: "GitHub", title: "Mi GitHub", path: "https://github.com/MaErGa", position: 7 },
+    { id: "projects", name: "menu.projects", position: 0 },
+    { id: "history", name: "menu.history", position: 2 },
+    { id: "skills", name: "menu.skills", position: 1 },
+    { id: "equip", name: "menu.equip", position: 3 },
+    { id: "resume", name: "menu.resume", position: 4 },
+    { id: "contact", name: "menu.contact", position: 5 },
+    { id: "itch", name: "Itch.io", title: "menu.myItch", path: "https://maerga.itch.io/", position: 6 },
+    { id: "github", name: "GitHub", title: "menu.myGithub", path: "https://github.com/MaErGa", position: 7 },
     { id: "linkedin", name: "", title: "", path: "", position: 9 },
-    { id: "config", name: "Ajustes", position: 8 }
+    { id: "config", name: "menu.config", position: 8 }
 ];
 // Datos de Matias (antes "firstName"/"potrait.png"/actualizarNivelPorEdad en
 // MenuFF7.js). age_epoch = 30 agosto 1987 (misma formula de nivel-por-edad
@@ -601,6 +623,7 @@ const initialState = {
     seconds: 0,
     isSoundEnabled: false,
     isCRTEnabled: true,
+    language: "es",
     currentHealth: null,
     currentMana: null,
     currentMateria: structuredClone(FF7.defaultMateriaLoadout),
@@ -618,6 +641,8 @@ function reducer(state, action) {
             return { ...state, isSoundEnabled: action.payload };
         case "SET_IS_CRT_ENABLED":
             return { ...state, isCRTEnabled: action.payload };
+        case "SET_LANGUAGE":
+            return { ...state, language: action.payload };
         case "SET_USER_NAME":
             return { ...state, userName: action.payload };
         case "SET_CURRENT_HEALTH":
@@ -763,6 +788,18 @@ function initFromLocalStorage() {
         }
     }
 
+    // Idioma: si el visitante ya eligió uno a mano, se respeta (queda en
+    // localStorage). Si no, se detecta una sola vez a partir del idioma del
+    // navegador — limitado a "es"/"en", cualquier otro cae en español.
+    const storedLanguage = localStorage.getItem("language");
+    if (storedLanguage === "es" || storedLanguage === "en") {
+        store.dispatch({ type: "SET_LANGUAGE", payload: storedLanguage });
+    } else {
+        const browserLanguage = (navigator.language || navigator.userLanguage || "es").toLowerCase();
+        const detectedLanguage = browserLanguage.startsWith("en") ? "en" : "es";
+        store.dispatch({ type: "SET_LANGUAGE", payload: detectedLanguage });
+    }
+
     initialized = true;
     startSecondsTimer();
 
@@ -793,6 +830,11 @@ function setCRTEnabled(value) {
     localStorage.setItem("isCRTEnabled", JSON.stringify(value));
 }
 
+function setLanguage(value) {
+    store.dispatch({ type: "SET_LANGUAGE", payload: value });
+    localStorage.setItem("language", value);
+}
+
 function setUserName(value) {
     store.dispatch({ type: "SET_USER_NAME", payload: value });
     localStorage.setItem("userName", value);
@@ -804,7 +846,229 @@ initFromLocalStorage();
     FF7.setWindowColor = setWindowColor;
     FF7.setSoundEnabled = setSoundEnabled;
     FF7.setCRTEnabled = setCRTEnabled;
+    FF7.setLanguage = setLanguage;
     FF7.setUserName = setUserName;
+})(window.FF7 = window.FF7 || {});
+(function (FF7) {
+    "use strict";
+
+// Módulo de idioma (i18n). Diccionario plano ES/EN + FF7.t(key) para
+// consultarlo según FF7.store.getState().language. No hay build tools ni
+// framework de traducción: es el mismo patrón manual que usa el resto del
+// proyecto (texto literal pasado a FF7.textToSprite), solo que ahora ese
+// texto literal se pide aquí en vez de escribirse suelto en cada módulo.
+//
+// Claves organizadas por sección para que sea fácil encontrar dónde vive
+// cada string al migrar un módulo nuevo. Si una clave falta en el idioma
+// activo, se cae a español; si falta en los dos, se devuelve la propia
+// clave (para que un olvido se note en pantalla en vez de romper el render).
+const STRINGS = {
+    es: {
+        // Menú principal
+        "menu.projects": "Proyectos",
+        "menu.history": "Historial",
+        "menu.skills": "Habilidades",
+        "menu.equip": "Equipo",
+        "menu.resume": "Resumen",
+        "menu.contact": "Contacto",
+        "menu.config": "Ajustes",
+        "menu.close": "X",
+        "menu.myItch": "Mi Itch.io",
+        "menu.myGithub": "Mi GitHub",
+
+        // Landing / bio
+        "landing.title1": "Programador de Videojuegos Unity",
+        "landing.title2": "(Junior) y Técnico Microinformático.",
+        "landing.bio1": "Bienvenido a mi portafolio interactivo.",
+        "landing.bio2": "Aquí encontrarás mis proyectos.",
+        "landing.bio3": "integrados en este menú estilo FF7 (PS1).",
+        "landing.time": "Time",
+        "landing.gil": "Gil",
+        "landing.revive": "Revivir",
+        "landing.nextLevel": "sig. nivel",
+        "landing.role": "Rol",
+        "landing.years": "Años",
+        "landing.limitLevel": "Nivel límite {n}",
+        "skills.toNextLevel": "Para subir de nivel",
+        "skills.max": "MÁXIMO",
+        "skills.abilityList": "Lista de habilidades",
+
+        // Ajustes / Config
+        "config.windowColor": "Color de ventana",
+        "config.sound": "Sonido",
+        "config.crt": "Efecto CRT",
+        "config.language": "Idioma",
+        "config.desc.corners": "Elige los colores de la ventana",
+        "config.desc.sound": "Activa o desactiva el sonido",
+        "config.desc.crt": "Activa o desactiva el efecto CRT",
+        "config.desc.language": "Elige el idioma de la página",
+        "common.yes": "Sí",
+        "common.no": "No",
+        "lang.es": "Español",
+        "lang.en": "English",
+
+        // Resumen (resume)
+        "resume.location": "Location",
+        "resume.email": "Email",
+        "resume.experience": "Experience",
+        "resume.experienceValue": "Junior",
+        "resume.downloadPdf": "Descargar PDF",
+        "resume.intro1": "Programador de Videojuegos Unity (Junior) y Técnico Microinformático.",
+        "resume.intro2": "Bienvenido a mi portafolio interactivo. Aquí encontrarás mis proyectos y prototipos,",
+        "resume.intro3": "desarrollados principalmente en Unity e integrados en este menú estilo FF7 (PS1).",
+        "resume.optionWork": "Trabajo",
+        "resume.optionEducation": "Educación",
+        "resume.title1": "Programador de Videojuegos con Unity",
+        "resume.title2": "(Junior) y Técnico en Microinformática",
+        "resume.skills": "Habilidades",
+        "resume.workHistory": "Historial Laboral",
+        "resume.education": "Educación",
+        "resume.personalProjects": "Proyectos Personales",
+        "resume.country": "España",
+
+        // Contacto
+        "contact.name": "Nombre",
+        "contact.email": "Email",
+        "contact.message": "Mensaje",
+        "contact.description": "Envíame un mensaje por el sistema PHS.",
+        "contact.sending": "Enviando...",
+        "contact.sent": "¡Mensaje enviado! Gracias.",
+        "contact.emptyFields": "Completa todos los campos.",
+        "contact.sendFailed": "No se pudo enviar el mensaje.",
+        "contact.unreachable": "No se pudo contactar con el servidor.",
+
+        // Historial (selector de archivo)
+        "history.chooseFile": "Elige un archivo.",
+        "history.chooseSaveFile": "Elige un archivo de guardado.",
+        "history.checkingSave": "Comprobando archivo de guardado.",
+        "history.empty": "VACÍO",
+        "history.file": "FILE",
+
+        // Proyectos
+        "projects.view": "Ver",
+        "projects.screenshots": "Capturas",
+        "projects.noScreenshots": "Todavía no hay capturas",
+        "projects.tabProjects": "Proyectos",
+        "projects.tabApps": "Aplicaciones",
+
+        // Equipo
+        "equip.weapon": "Arma.",
+        "equip.armor": "Armad.",
+        "equip.accessory": "Acc.",
+        "stat.attack": "Ataque",
+        "stat.attackPct": "Ataque%",
+        "stat.defense": "Defensa",
+        "stat.defensePct": "Defensa%",
+        "stat.magicAtk": "Atq. mág.",
+        "stat.magicDefPct": "Def. mág.%",
+
+        // Introducir nombre (pantalla /name)
+        "nameEntry.header": "Introduce un nombre.",
+    },
+    en: {
+        "menu.projects": "Projects",
+        "menu.history": "History",
+        "menu.skills": "Skills",
+        "menu.equip": "Equip",
+        "menu.resume": "Resume",
+        "menu.contact": "Contact",
+        "menu.config": "Config",
+        "menu.close": "X",
+        "menu.myItch": "My Itch.io",
+        "menu.myGithub": "My GitHub",
+
+        "landing.title1": "Unity Video Game Programmer",
+        "landing.title2": "(Junior) and IT Support Technician.",
+        "landing.bio1": "Welcome to my interactive portfolio.",
+        "landing.bio2": "Here you'll find my projects,",
+        "landing.bio3": "built into this FF7-style (PS1) menu.",
+        "landing.time": "Time",
+        "landing.gil": "Gil",
+        "landing.revive": "Revive",
+        "landing.nextLevel": "next level",
+        "landing.role": "Role",
+        "landing.years": "Years",
+        "landing.limitLevel": "Limit level {n}",
+        "skills.toNextLevel": "To level up",
+        "skills.max": "MAX",
+        "skills.abilityList": "Ability list",
+
+        "config.windowColor": "Window color",
+        "config.sound": "Sound",
+        "config.crt": "CRT effect",
+        "config.language": "Language",
+        "config.desc.corners": "Choose the window colors",
+        "config.desc.sound": "Turn sound on or off",
+        "config.desc.crt": "Turn the CRT effect on or off",
+        "config.desc.language": "Choose the page language",
+        "common.yes": "Yes",
+        "common.no": "No",
+        "lang.es": "Español",
+        "lang.en": "English",
+
+        "resume.location": "Location",
+        "resume.email": "Email",
+        "resume.experience": "Experience",
+        "resume.experienceValue": "Junior",
+        "resume.downloadPdf": "Download PDF",
+        "resume.intro1": "Unity Video Game Programmer (Junior) and IT Support Technician.",
+        "resume.intro2": "Welcome to my interactive portfolio. Here you'll find my projects and prototypes,",
+        "resume.intro3": "developed mainly in Unity and built into this FF7-style (PS1) menu.",
+        "resume.optionWork": "Work",
+        "resume.optionEducation": "Education",
+        "resume.title1": "Unity Video Game Programmer",
+        "resume.title2": "(Junior) and IT Support Technician",
+        "resume.skills": "Skills",
+        "resume.workHistory": "Work History",
+        "resume.education": "Education",
+        "resume.personalProjects": "Personal Projects",
+        "resume.country": "Spain",
+
+        "contact.name": "Name",
+        "contact.email": "Email",
+        "contact.message": "Message",
+        "contact.description": "Send me a message through the PHS system.",
+        "contact.sending": "Sending...",
+        "contact.sent": "Message sent! Thank you.",
+        "contact.emptyFields": "Fill in all the fields.",
+        "contact.sendFailed": "Couldn't send the message.",
+        "contact.unreachable": "Couldn't reach the server.",
+
+        "history.chooseFile": "Choose a file.",
+        "history.chooseSaveFile": "Choose a save file.",
+        "history.checkingSave": "Checking save file.",
+        "history.empty": "EMPTY",
+        "history.file": "FILE",
+
+        "projects.view": "View",
+        "projects.screenshots": "Screenshots",
+        "projects.noScreenshots": "No screenshots yet",
+        "projects.tabProjects": "Projects",
+        "projects.tabApps": "Apps",
+
+        // Equipment
+        "equip.weapon": "Weapon",
+        "equip.armor": "Armor",
+        "equip.accessory": "Access.",
+        "stat.attack": "Attack",
+        "stat.attackPct": "Attack%",
+        "stat.defense": "Defense",
+        "stat.defensePct": "Defense%",
+        "stat.magicAtk": "Magic Atk.",
+        "stat.magicDefPct": "Magic Def.%",
+
+        "nameEntry.header": "Enter a name.",
+    },
+};
+
+function t(key) {
+    const language = FF7.store?.getState().language ?? "es";
+    const dict = STRINGS[language] ?? STRINGS.es;
+    return dict[key] ?? STRINGS.es[key] ?? key;
+}
+
+    FF7.STRINGS = STRINGS;
+    FF7.t = t;
 })(window.FF7 = window.FF7 || {});
 (function (FF7) {
     "use strict";
@@ -1908,11 +2172,11 @@ function createHistorySave({ historyItem, historyType, focused = false, onEnter 
     ]);
 
     const roleLine = FF7.el("li", { className: "flex justify-between mb-3" }, [
-        historyType !== "education" ? FF7.el("span", {}, [FF7.textToSprite("Rol")]) : null,
-        FF7.el("span", {}, [FF7.textToSprite(historyItem.role)]),
+        historyType !== "education" ? FF7.el("span", {}, [FF7.textToSprite(FF7.t("landing.role"))]) : null,
+        FF7.el("span", {}, [FF7.textToSprite(roleText(historyItem))]),
     ]);
     const yearsLine = FF7.el("li", { className: "flex justify-between" }, [
-        FF7.el("span", {}, [FF7.textToSprite("Años")]),
+        FF7.el("span", {}, [FF7.textToSprite(FF7.t("landing.years"))]),
         FF7.el("span", {}, [FF7.textToSprite(historyItem.year)]),
     ]);
 
@@ -1961,7 +2225,7 @@ function createMemCardLoadingBar({ progress = 0, onProgressChange } = {}) {
     bar.dataset.progress = String(progress);
 
     const headerWrap = FF7.el("div", { className: "relative h-[84px] mb-[10px]" }, [
-        FF7.createContentBox({ dataset: { label: "MemCardHeader" }, className: "h-full absolute top-0 left-0 right-0", children: [FF7.textToSprite("Comprobando archivo de guardado.")] }),
+        FF7.createContentBox({ dataset: { label: "MemCardHeader" }, className: "h-full absolute top-0 left-0 right-0", children: [FF7.textToSprite(FF7.t("history.checkingSave"))] }),
     ]);
 
     const barBox = FF7.createContentBox({
@@ -2436,7 +2700,7 @@ function createPartyMember({ memberId, showProgressBars = false, healthReduction
         if (healthReduction && currentHealth === 0) {
             reviveBtnWrap.appendChild(FF7.createContentBox({
                 dataset: { label: "healButton", focused: landingFocus === "revive" },
-                children: [FF7.textToSprite("Revivir", false, (!currentMana || currentMana < 34) ? "grey" : "")],
+                children: [FF7.textToSprite(FF7.t("landing.revive"), false, (!currentMana || currentMana < 34) ? "grey" : "")],
             }));
         }
 
@@ -2522,9 +2786,9 @@ function createPartyMember({ memberId, showProgressBars = false, healthReduction
             limitBarWrap.dataset.ready = (healthReduction && limitCharge >= 100) ? "true" : "false";
 
             extrasContainer.appendChild(FF7.el("div", { className: "mt-12" }, [
-                FF7.el("p", {}, [FF7.textToSprite("sig. nivel")]),
+                FF7.el("p", {}, [FF7.textToSprite(FF7.t("landing.nextLevel"))]),
                 FF7.el("div", { className: "ml-7" }, [FF7.createProgressBar({ percentage: 100 - (getDaysUntilLevel(age_epoch) / 365) * 100 })]),
-                FF7.el("p", {}, [FF7.textToSprite(`Nivel límite ${limit_level.toString()}`)]),
+                FF7.el("p", {}, [FF7.textToSprite(FF7.t("landing.limitLevel").replace("{n}", limit_level.toString()))]),
                 limitBarWrap,
             ]));
         }
@@ -2906,15 +3170,18 @@ function createMenu() {
         const navIndex = navItems.indexOf(menuItem);
 
         if (menuItem.path) {
+            // FF7.t() sobre un texto que no está en el diccionario (p.ej.
+            // "GitHub") simplemente devuelve ese mismo texto — no hace falta
+            // distinguir aquí entre clave real y nombre propio.
             const a = FF7.el("a", {
                 className: "flex w-100",
-                title: menuItem.title || menuItem.name,
+                title: FF7.t(menuItem.title || menuItem.name),
                 href: menuItem.path,
                 target: "_blank",
                 onClick: () => FF7.playSound("select", FF7.store.getState().isSoundEnabled),
                 onPointerEnter: (event) => handlePointerEnter(event, menuItem),
             }, [
-                FF7.textToSprite(menuItem.name),
+                FF7.textToSprite(FF7.t(menuItem.name)),
                 FF7.el("span", { className: "font-glyph ml-2", "data-sprite": "external-link-icon" }),
             ]);
             focusRefs[navIndex] = a;
@@ -2927,7 +3194,7 @@ function createMenu() {
             className: "w-100",
             onClick: (e) => { e.preventDefault(); handleOnClick(); FF7.router.navigate(`/${menuItem.id}`); },
             onPointerEnter: (event) => handlePointerEnter(event, menuItem),
-        }, [FF7.textToSprite(menuItem.name)]);
+        }, [FF7.textToSprite(FF7.t(menuItem.name))]);
         focusRefs[navIndex] = link;
         fragment.appendChild(link);
 
@@ -2939,7 +3206,7 @@ function createMenu() {
             onClick: (e) => { e.preventDefault(); handleClose(); FF7.router.navigate("/"); },
             onPointerEnter: (event) => { if (event.pointerType === "mouse") FF7.playSound("select", FF7.store.getState().isSoundEnabled); },
         }, [
-            FF7.createContentBox({ className: "absolute", dataset: { label: "close" }, children: [FF7.textToSprite("X")] }),
+            FF7.createContentBox({ className: "absolute", dataset: { label: "close" }, children: [FF7.textToSprite(FF7.t("menu.close"))] }),
         ]);
         closeLink.dataset.label = "close";
         closeLink.style.display = "none";
@@ -3080,8 +3347,8 @@ function createHistoryList({ historyType, onItemEnter, onEmptyClick } = {}) {
     const container = FF7.el("div", {});
     const itemRefs = [];
 
-    const headerBox = FF7.createContentBox({ dataset: { label: "historyHeader" }, className: "h-full absolute top-0 left-0 right-0", children: [FF7.textToSprite("Elige un archivo.")] });
-    const fileLabelBox = FF7.createContentBox({ dataset: { label: "historyFileLabel" }, className: "h-full w-[225px] absolute top-0 right-[280px] flex", children: [FF7.textToSprite("FILE", false, "yellow"), FF7.textToSprite(historyType !== "education" ? " 01" : " 02")] });
+    const headerBox = FF7.createContentBox({ dataset: { label: "historyHeader" }, className: "h-full absolute top-0 left-0 right-0", children: [FF7.textToSprite(FF7.t("history.chooseFile"))] });
+    const fileLabelBox = FF7.createContentBox({ dataset: { label: "historyFileLabel" }, className: "h-full w-[225px] absolute top-0 right-[280px] flex", children: [FF7.textToSprite(FF7.t("history.file"), false, "yellow"), FF7.textToSprite(historyType !== "education" ? " 01" : " 02")] });
     container.appendChild(FF7.el("div", { className: "relative h-[84px] mb-[10px]" }, [headerBox, fileLabelBox]));
 
     // Antes las tarjetas se apilaban sueltas debajo del header: con 4-5
@@ -3114,7 +3381,7 @@ function createHistoryList({ historyType, onItemEnter, onEmptyClick } = {}) {
             onMouseEnter: () => onItemEnter?.(slotIndex),
             onClick: () => onEmptyClick?.(),
         }, [
-            FF7.createContentBox({ dataset: { label: "historySave" }, className: "h-[235px] relative flex items-center", children: [FF7.el("span", { className: "pl-32" }, [FF7.textToSprite("VACÍO", false, "yellow")])] }),
+            FF7.createContentBox({ dataset: { label: "historySave" }, className: "h-[235px] relative flex items-center", children: [FF7.el("span", { className: "pl-32" }, [FF7.textToSprite(FF7.t("history.empty"), false, "yellow")])] }),
         ]);
         placeholder.dataset.focused = "false";
         itemRefs[slotIndex] = placeholder;
@@ -3149,7 +3416,7 @@ function createHistoryList({ historyType, onItemEnter, onEmptyClick } = {}) {
 // FF7.createHistoryList (ver History.js), que hace lo mismo.
 const MIN_SAVE_SLOTS = 3;
 const OPTIONS = ["work", "education"];
-const OPTION_LABELS = { work: "Trabajo", education: "Educación" };
+const getOptionLabels = () => ({ work: FF7.t("resume.optionWork"), education: FF7.t("resume.optionEducation") });
 
 function createMemCardSelector() {
     const root = FF7.el("div", {});
@@ -3168,7 +3435,7 @@ function createMemCardSelector() {
     const saveSlotCount = () => Math.max(MIN_SAVE_SLOTS, historyItems().length);
 
     // ---- fase "opciones" (persistente) ----
-    const optionsHeaderBox = FF7.createContentBox({ dataset: { label: "MemCardHeader" }, className: "h-full absolute top-0 left-0 right-0", children: [FF7.textToSprite("Elige un archivo de guardado.")] });
+    const optionsHeaderBox = FF7.createContentBox({ dataset: { label: "MemCardHeader" }, className: "h-full absolute top-0 left-0 right-0", children: [FF7.textToSprite(FF7.t("history.chooseSaveFile"))] });
     const optionsListBox = FF7.createContentBox({ dataset: { label: "memCardSelector" }, className: "absolute z-1 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" });
     const optionsPhaseNode = FF7.el("div", {}, [
         FF7.el("div", { className: "relative h-[84px] mb-[10px]" }, [optionsHeaderBox]),
@@ -3176,7 +3443,7 @@ function createMemCardSelector() {
     ]);
 
     const optionRefs = OPTIONS.map((option, index) => {
-        const btn = FF7.el("button", {}, [FF7.textToSprite(OPTION_LABELS[option] ?? option)]);
+        const btn = FF7.el("button", {}, [FF7.textToSprite(getOptionLabels()[option] ?? option)]);
         const li = FF7.el("li", {
             className: "w-full flex justify-center mr-1",
             onMouseEnter: () => nav.focus({ group: "options", index }),
@@ -3192,7 +3459,7 @@ function createMemCardSelector() {
         optionRefs.forEach(({ li, btn, option }, index) => {
             li.dataset.focused = (nav.isFocused("options", index) && memoryCardLoaded) ? "true" : "false";
             FF7.clear(btn);
-            const sprite = FF7.textToSprite(OPTION_LABELS[option] ?? option, undefined, memoryCardLoaded ? "white" : "grey");
+            const sprite = FF7.textToSprite(getOptionLabels()[option] ?? option, undefined, memoryCardLoaded ? "white" : "grey");
             if (sprite) btn.appendChild(sprite);
         });
     }
@@ -3398,11 +3665,11 @@ function createLandingPage() {
     const bioReveal = bioIntroPlayed ? null : { count: 0, baseMs: BIO_GROW_DONE_MS, stepMs: BIO_LETTER_MS, timers: [] };
     bioIntroPlayed = true;
     const bio = FF7.createContentBox({ dataset: { label: "bio" }, children: [
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("Programador de Videojuegos Unity", false, "white", bioReveal)]),
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("(Junior) y Técnico Microinformático.", false, "white", bioReveal)]),
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("Bienvenido a mi portafolio interactivo.", false, "white", bioReveal)]),
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("Aquí encontrarás mis proyectos.", false, "white", bioReveal)]),
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("integrados en este menú estilo FF7 (PS1).", false, "white", bioReveal)]),
+    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite(FF7.t("landing.title1"), false, "white", bioReveal)]),
+    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite(FF7.t("landing.title2"), false, "white", bioReveal)]),
+    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite(FF7.t("landing.bio1"), false, "white", bioReveal)]),
+    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite(FF7.t("landing.bio2"), false, "white", bioReveal)]),
+    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite(FF7.t("landing.bio3"), false, "white", bioReveal)]),
     FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("")]),
 ] });
     const bioWrap = FF7.el("div", { className: "flex items-center justify-center h-[340px] w-[720px] left-[53px] right-[220px] top-[294px] absolute" }, [bio]);
@@ -3419,8 +3686,8 @@ function createLandingPage() {
         dataset: { label: "metaInfo" },
         children: [
             FF7.el("ul", { className: "flex justify-between flex-col h-full" }, [
-                FF7.el("li", { className: "flex justify-between" }, [FF7.el("span", { className: "mr-3" }, [FF7.textToSprite("Time")]), timeSpan]),
-                FF7.el("li", { className: "flex justify-between" }, [FF7.el("span", {}, [FF7.textToSprite("Gil")]), FF7.textToSprite("300887", true)]),
+                FF7.el("li", { className: "flex justify-between" }, [FF7.el("span", { className: "mr-3" }, [FF7.textToSprite(FF7.t("landing.time"))]), timeSpan]),
+                FF7.el("li", { className: "flex justify-between" }, [FF7.el("span", {}, [FF7.textToSprite(FF7.t("landing.gil"))]), FF7.textToSprite("300887", true)]),
             ]),
         ],
     });
@@ -3482,28 +3749,35 @@ function createLandingPage() {
 // "Aplicaciones" esta lista (mecanismo completo) pero vacia todavia — a la
 // espera de que Matias diga que apps van ahi.
 const PROJECT_TABS = [
-    { key: "projects", label: "Proyectos" },
-    { key: "aplicaciones", label: "Aplicaciones" },
+    { key: "projects", labelKey: "projects.tabProjects" },
+    { key: "aplicaciones", labelKey: "projects.tabApps" },
 ];
 
 // TODO: falta confirmar el año de cada proyecto (date). Se deja vacio y el
 // panel de detalle simplemente no dibuja esa linea hasta que se rellene.
 // skills: inferidos de la propia descripcion/moreInfo de cada proyecto ya
 // existente, con los mismos nombres que usa skillsJSON (para heredar color).
+// `description`/`moreInfo` guardan {es, en} en vez de texto plano: se
+// resuelven con projectText()/projectMoreInfo() más abajo, según el idioma
+// activo en el momento de renderizar (createProjectsPage se reconstruye
+// entera en cada cambio de idioma, ver mountApp).
 const PROJECTS = [
-    { key: "lordmagician", name: "Lord Magician", date: "", skills: ["Dart", "Kotlin"], icon: "assets/imagenes/icon_item.png", link: "https://maerga.itch.io/lord-magician", description: "Juego desarrollado con Dart y Kotlin, migrado a Godot", screenshots: ["assets/imagenes/capturas/LordMagician.jpg", "assets/imagenes/capturas/LordMagician2.jpg", "assets/imagenes/capturas/LordMagician3.jpg"], moreInfo: ["Juego desarrollado", "con Dart y Kotlin", "con colaboración Chipiron Studios"] },
-    { key: "dualmind2048", name: "Dualmind2048", date: "", skills: ["Kotlin", "Supabase"], icon: "assets/imagenes/icon_item.png", link: "https://maerga.itch.io/dualmind2048", description: "Aplicacion nativa Android desarrollada con Kotlin y Supabase.", screenshots: ["assets/imagenes/capturas/Dualmind.jpg", "assets/imagenes/capturas/Dualmind2.jpg", "assets/imagenes/capturas/Dualmind3.jpg"], moreInfo: ["Aplicacion nativa", "Android desarrollada", "con Kotlin y Supabase."] },
-    { key: "duelcalc", name: "Duel Calculator", date: "", skills: ["Html", "Css","JavaScript"], icon: "assets/imagenes/icon_item.png", link: "https://MaErGa.github.io/duelcalculator/", description: "Calculadora interactiva de puntos de vida para Yu-Gi-Oh!", screenshots: ["assets/imagenes/capturas/DuelCalculator.jpg"], moreInfo: ["Calculadora interactiva", "de puntos de vida (LP)", "para Yu-Gi-Oh! con", "diseno responsivo.", "Desarrollada con HTML,", "CSS y JavaScript nativo", "para ofrecer un control", "rapido y preciso durante", "los duelos."] },
-    { key: "PortFolio", name: "PortFolio", date: "", skills: ["Html", "Css","JavaScript"], icon: "assets/imagenes/icon_item.png", link: "https://maerga.github.io", description: "Portfolio estilo FFVII desarrollado con HTML, CSS, JS.", screenshots: ["assets/imagenes/capturas/Portfolio.png"], moreInfo: ["PortFolio desarrollado", "con HTML, CSS, JS."] },
-    { key: "dragonquest", name: "DQ -Minstrel Song-", date: "", skills: ["Unity", "C#"], icon: "assets/imagenes/icon_item.png", link: "https://maerga.itch.io/dragon-quest-mistreal-song", description: "RPG basado en Dragon Quest III de SNES.", screenshots: ["assets/imagenes/capturas/MinstrealSong2.png", "assets/imagenes/capturas/MinstrealSong3.png", "assets/imagenes/capturas/MinstrealSong4.png"], moreInfo: ["RPG basado en Dragon", "Quest III de SNES.", "Proyecto final de", "evaluacion para el curso", "de programacion de", "videojuegos con Unity."] },
-    { key: "pirate", name: "Pirate Plataformer", date: "", skills: ["Unity", "C#"], icon: "assets/imagenes/icon_item.png", link: "https://maerga.itch.io/pirate-plataformer-alpha-version", description: "Juego de plataformas en 2D", screenshots: ["assets/imagenes/capturas/PiratePlataformer.png", "assets/imagenes/capturas/PiratePlataformer2.png"], moreInfo: ["Juego de plataformas", "para la segunda", "evaluacion del curso", "Programacion de", "Videojuegos con Unity."] },
+    { key: "lordmagician", name: "Lord Magician", date: "", skills: ["Dart", "Kotlin"], icon: "assets/imagenes/icon_item.png", link: "https://maerga.itch.io/lord-magician", description: { es: "Juego desarrollado con Dart y Kotlin, migrado a Godot", en: "Game built with Dart and Kotlin, later migrated to Godot" }, screenshots: ["assets/imagenes/capturas/LordMagician.jpg", "assets/imagenes/capturas/LordMagician2.jpg", "assets/imagenes/capturas/LordMagician3.jpg"], moreInfo: { es: ["Juego desarrollado", "con Dart y Kotlin", "con colaboración Chipiron Studios"], en: ["Game built with", "Dart and Kotlin,", "made in collaboration with Chipiron Studios"] } },
+    { key: "dualmind2048", name: "Dualmind2048", date: "", skills: ["Kotlin", "Supabase"], icon: "assets/imagenes/icon_item.png", link: "https://maerga.itch.io/dualmind2048", description: { es: "Aplicacion nativa Android desarrollada con Kotlin y Supabase.", en: "Native Android app built with Kotlin and Supabase." }, screenshots: ["assets/imagenes/capturas/Dualmind.jpg", "assets/imagenes/capturas/Dualmind2.jpg", "assets/imagenes/capturas/Dualmind3.jpg"], moreInfo: { es: ["Aplicacion nativa", "Android desarrollada", "con Kotlin y Supabase."], en: ["Native Android app", "built with Kotlin", "and Supabase."] } },
+    { key: "duelcalc", name: "Duel Calculator", date: "", skills: ["Html", "Css","JavaScript"], icon: "assets/imagenes/icon_item.png", link: "https://MaErGa.github.io/duelcalculator/", description: { es: "Calculadora interactiva de puntos de vida para Yu-Gi-Oh!", en: "Interactive Life Points calculator for Yu-Gi-Oh!" }, screenshots: ["assets/imagenes/capturas/DuelCalculator.jpg"], moreInfo: { es: ["Calculadora interactiva", "de puntos de vida (LP)", "para Yu-Gi-Oh! con", "diseno responsivo.", "Desarrollada con HTML,", "CSS y JavaScript nativo", "para ofrecer un control", "rapido y preciso durante", "los duelos."], en: ["Interactive Life", "Points (LP) calculator", "for Yu-Gi-Oh! with", "responsive design.", "Built with plain HTML,", "CSS and JavaScript", "for fast and precise", "control during duels."] } },
+    { key: "PortFolio", name: "PortFolio", date: "", skills: ["Html", "Css","JavaScript"], icon: "assets/imagenes/icon_item.png", link: "https://maerga.github.io", description: { es: "Portfolio estilo FFVII desarrollado con HTML, CSS, JS.", en: "FFVII-style portfolio built with HTML, CSS and JS." }, screenshots: ["assets/imagenes/capturas/Portfolio.png"], moreInfo: { es: ["PortFolio desarrollado", "con HTML, CSS, JS."], en: ["Portfolio built", "with HTML, CSS and JS."] } },
+    { key: "dragonquest", name: "DQ -Minstrel Song-", date: "", skills: ["Unity", "C#"], icon: "assets/imagenes/icon_item.png", link: "https://maerga.itch.io/dragon-quest-mistreal-song", description: { es: "RPG basado en Dragon Quest III de SNES.", en: "RPG based on the SNES game Dragon Quest III." }, screenshots: ["assets/imagenes/capturas/MinstrealSong2.png", "assets/imagenes/capturas/MinstrealSong3.png", "assets/imagenes/capturas/MinstrealSong4.png"], moreInfo: { es: ["RPG basado en Dragon", "Quest III de SNES.", "Proyecto final de", "evaluacion para el curso", "de programacion de", "videojuegos con Unity."], en: ["RPG based on the SNES", "game Dragon Quest III.", "Final evaluation", "project for the Unity", "video game programming", "course."] } },
+    { key: "pirate", name: "Pirate Plataformer", date: "", skills: ["Unity", "C#"], icon: "assets/imagenes/icon_item.png", link: "https://maerga.itch.io/pirate-plataformer-alpha-version", description: { es: "Juego de plataformas en 2D", en: "2D platformer game" }, screenshots: ["assets/imagenes/capturas/PiratePlataformer.png", "assets/imagenes/capturas/PiratePlataformer2.png"], moreInfo: { es: ["Juego de plataformas", "para la segunda", "evaluacion del curso", "Programacion de", "Videojuegos con Unity."], en: ["Platformer game made", "for the second", "evaluation of the Unity", "video game programming", "course."] } },
 ];
 
 const APPS = [
-    { key: "pixeltrade", name: "Pixel Trade", date: "", skills: ["Kotlin", "Supabase"], icon: "assets/imagenes/icon_item.png", link: "https://appetize.io/app/b_hvuuaaqrdg724jxv4ecla5jejy", description: "Aplicacion nativa Android desarrollada con Kotlin y Supabase.", screenshots: ["assets/imagenes/capturas/PixelTrade.jpg", "assets/imagenes/capturas/PixelTrade2.jpg", "assets/imagenes/capturas/PixelTrade3.jpg"], moreInfo: ["Aplicacion nativa", "Android desarrollada", "con Kotlin y Supabase."] },
+    { key: "pixeltrade", name: "Pixel Trade", date: "", skills: ["Kotlin", "Supabase"], icon: "assets/imagenes/icon_item.png", link: "https://appetize.io/app/b_hvuuaaqrdg724jxv4ecla5jejy", description: { es: "Aplicacion nativa Android desarrollada con Kotlin y Supabase.", en: "Native Android app built with Kotlin and Supabase." }, screenshots: ["assets/imagenes/capturas/PixelTrade.jpg", "assets/imagenes/capturas/PixelTrade2.jpg", "assets/imagenes/capturas/PixelTrade3.jpg"], moreInfo: { es: ["Aplicacion nativa", "Android desarrollada", "con Kotlin y Supabase."], en: ["Native Android app", "built with Kotlin", "and Supabase."] } },
 ];
 
 const PROJECT_ENTRIES = { projects: PROJECTS, aplicaciones: APPS };
+
+const projectText = (entry) => entry?.description?.[FF7.store.getState().language] ?? entry?.description?.es ?? "";
+const projectMoreInfo = (entry) => entry?.moreInfo?.[FF7.store.getState().language] ?? entry?.moreInfo?.es ?? [];
 
 // Cada skill se busca por nombre en skillsJSON para heredar su color de
 // materia — el mismo dato que ya usa la pagina de Materia/Skills.
@@ -3648,7 +3922,7 @@ function createProjectsPage() {
                 className: "projects-tab",
                 onClick: () => selectTab(t.key),
                 onPointerEnter: (event) => { if (tabsSettled && event.pointerType === "mouse" && FF7.isPointerMoving()) selectTab(t.key); },
-            }, [FF7.textToSprite(t.label)]);
+            }, [FF7.textToSprite(FF7.t(t.labelKey))]);
             li.dataset.active = (t.key === tab) ? "true" : "false";
             li.dataset.focused = nav.isFocused("tabs", index) ? "true" : "false";
             list.appendChild(li);
@@ -3657,7 +3931,7 @@ function createProjectsPage() {
     }
 
     function renderDetail() {
-        descBox.setChildren([FF7.textToSprite(selected?.description ?? "")]);
+        descBox.setChildren([FF7.textToSprite(projectText(selected))]);
 
         if (!selected) { contentLeft.setChildren([]); return; }
 
@@ -3681,7 +3955,7 @@ function createProjectsPage() {
             selected.skills.map((name) => FF7.el("span", { className: "projects-skill", "data-color": PROJECT_SKILL_BY_NAME.get(name)?.color ?? "blue" }, [FF7.textToSprite(name)])));
 
         const infoBlock = FF7.el("div", { className: "projects-detail-info" },
-            selected.moreInfo.map((item) => FF7.el("div", {}, [FF7.textToSprite(item)])));
+            projectMoreInfo(selected).map((item) => FF7.el("div", {}, [FF7.textToSprite(item)])));
 
         const links = FF7.el("div", { className: "projects-detail-links" }, [
             selected.link ? FF7.el("a", {
@@ -3691,13 +3965,13 @@ function createProjectsPage() {
                 rel: "noreferrer",
                 "data-text-color": "yellow",
                 onClick: () => FF7.playSound("select", FF7.store.getState().isSoundEnabled),
-            }, [FF7.textToSprite("Ver", false, "yellow"), FF7.el("span", { className: "font-glyph ml-2", "data-sprite": "external-link-icon" })]) : null,
+            }, [FF7.textToSprite(FF7.t("projects.view"), false, "yellow"), FF7.el("span", { className: "font-glyph ml-2", "data-sprite": "external-link-icon" })]) : null,
             selected.screenshots?.length ? FF7.el("button", {
                 type: "button",
                 className: "projects-view-button",
                 "data-text-color": "yellow",
                 onClick: () => { FF7.playSound("select", FF7.store.getState().isSoundEnabled); openImages(selected); },
-            }, [FF7.textToSprite("Capturas", false, "yellow")]) : null,
+            }, [FF7.textToSprite(FF7.t("projects.screenshots"), false, "yellow")]) : null,
         ]);
 
         contentLeft.setChildren([FF7.el("div", { className: "projects-detail" }, [
@@ -3852,7 +4126,7 @@ function createImageCarousel({ entry, onClose }) {
         const shot = shots[index];
         if (!shot) {
             stage.style.width = `calc(var(--stage-h) * ${16 / 9})`;
-            stage.appendChild(FF7.el("span", { className: "projects-carousel-empty" }, [FF7.textToSprite("Todavía no hay capturas")]));
+            stage.appendChild(FF7.el("span", { className: "projects-carousel-empty" }, [FF7.textToSprite(FF7.t("projects.noScreenshots"))]));
             return;
         }
 
@@ -3961,7 +4235,7 @@ function createImageCarousel({ entry, onClose }) {
         rel: "noreferrer",
         "data-text-color": "yellow",
         onClick: () => FF7.playSound("select", FF7.store.getState().isSoundEnabled),
-    }, [FF7.textToSprite("Ver", false, "yellow"), FF7.el("span", { className: "font-glyph ml-2", "data-sprite": "external-link-icon" })]) : null;
+    }, [FF7.textToSprite(FF7.t("projects.view"), false, "yellow"), FF7.el("span", { className: "font-glyph ml-2", "data-sprite": "external-link-icon" })]) : null;
     const controls = FF7.el("div", { className: "projects-carousel-controls" }, [pagination, viewLink]);
 
     const panel = FF7.createContentBox({ className: "projects-carousel-panel", children: [head, stage, controls] });
@@ -4000,21 +4274,26 @@ function createImageCarousel({ entry, onClose }) {
 // nunca se quita del DOM y su animación de aparición no se reinicia cada
 // vez que el ratón pasa por encima de un item.
 const CATEGORIES = [
-    { key: "weapon", label: "Arma." },
-    { key: "armor", label: "Armad." },
-    { key: "accessory", label: "Acc." },
+    { key: "weapon", label: "equip.weapon" },
+    { key: "armor", label: "equip.armor" },
+    { key: "accessory", label: "equip.accessory" },
 ];
 
 const STAT_ROWS = [
-    { key: "attack", label: "Ataque" },
-    { key: "attackPct", label: "Ataque%" },
-    { key: "defense", label: "Defensa" },
-    { key: "defensePct", label: "Defensa%" },
-    { key: "magicAtk", label: "Atq. mág." },
-    { key: "magicDefPct", label: "Def. mág.%" },
+    { key: "attack", label: "stat.attack" },
+    { key: "attackPct", label: "stat.attackPct" },
+    { key: "defense", label: "stat.defense" },
+    { key: "defensePct", label: "stat.defensePct" },
+    { key: "magicAtk", label: "stat.magicAtk" },
+    { key: "magicDefPct", label: "stat.magicDefPct" },
 ];
 
 const itemsOfCategory = (category) => equipmentJSON.filter((item) => item.type === category);
+// Igual patrón que skillName()/skillText(): item.name sigue siendo la clave
+// interna estable, displayName.en solo existe para los 3 objetos cuyo
+// nombre estaba en español (Raton/Teclado/Auriculares).
+const itemName = (item) => (item && FF7.store.getState().language === "en" ? item.displayName?.en : null) ?? item?.name ?? "";
+const itemText = (item) => item?.description?.[FF7.store.getState().language] ?? item?.description?.es ?? "";
 
 function createEquipPage() {
     const root = FF7.el("div", {});
@@ -4204,8 +4483,8 @@ function createEquipPage() {
                 onPointerEnter: (event) => { if (event.pointerType === "mouse") nav.focus({ group: "categories", index }); },
                 onClick: () => toggleCategory(key),
             }, [
-                FF7.el("span", { className: "w-[150px] mr-3 shrink-0" }, [FF7.textToSprite(label, false, "blue")]),
-                FF7.el("span", { className: "flex" }, [FF7.textToSprite(equipped?.name ?? "")]),
+                FF7.el("span", { className: "w-[150px] mr-3 shrink-0" }, [FF7.textToSprite(FF7.t(label), false, "blue")]),
+                FF7.el("span", { className: "flex" }, [FF7.textToSprite(itemName(equipped))]),
             ]);
             li.dataset.active = key === selectedCategory ? "true" : "false";
             li.dataset.focused = nav.isFocused("categories", index) ? "true" : "false";
@@ -4217,7 +4496,7 @@ function createEquipPage() {
             categoryRows,
         ])]);
 
-        descriptionBox.setChildren([FF7.el("p", {}, [FF7.textToSprite(previewItem?.description ?? "")])]);
+        descriptionBox.setChildren([FF7.el("p", {}, [FF7.textToSprite(itemText(previewItem))])]);
 
         const slotsChildren = [];
         if (slotItem) {
@@ -4237,7 +4516,7 @@ function createEquipPage() {
         const statsList = FF7.el("ul", {});
         STAT_ROWS.forEach(({ key, label }) => {
             const li = FF7.el("li", { className: "flex items-center mb-1.5" }, [
-                FF7.el("span", { className: "w-[230px]" }, [FF7.textToSprite(label, false, "blue")]),
+                FF7.el("span", { className: "w-[230px]" }, [FF7.textToSprite(FF7.t(label), false, "blue")]),
                 FF7.el("span", { className: "w-[80px] flex justify-end" }, [FF7.textToSprite(String(currentStats[key]), true)]),
             ]);
             if (hoveredItem) {
@@ -4251,7 +4530,7 @@ function createEquipPage() {
         const itemsList = FF7.el("ul", {});
         equipItemEls = [];
         categoryItems.forEach((item, index) => {
-            const span = FF7.el("span", { className: "equip-equipmentItem flex" }, [FF7.textToSprite(item.name)]);
+            const span = FF7.el("span", { className: "equip-equipmentItem flex" }, [FF7.textToSprite(itemName(item))]);
             span.dataset.focused = nav.isFocused("items", index) ? "true" : "false";
             const li = FF7.el("li", {
                 className: "flex h-[44px] snap-start items-center",
@@ -4536,10 +4815,10 @@ function createSkillsPage() {
             FF7.el("div", { className: "mt-9 mr-2" }, [wpnSlots, armSlots]),
         ])]);
 
-        descriptionBox.setChildren([FF7.el("p", {}, [FF7.textToSprite(skill.description)])]);
+        descriptionBox.setChildren([FF7.el("p", {}, [FF7.textToSprite(skillText(skill))])]);
 
         const nameRow = FF7.el("div", { className: "flex justify-between items-center" });
-        const nameSpan = FF7.el("p", { className: "skillsContent-skill flex" }, [FF7.textToSprite(skill.name)]);
+        const nameSpan = FF7.el("p", { className: "skillsContent-skill flex" }, [FF7.textToSprite(skillName(skill))]);
         if (skill.color) nameSpan.dataset.color = skill.color;
         nameRow.appendChild(nameSpan);
         if (skill.id !== 0) {
@@ -4562,12 +4841,12 @@ function createSkillsPage() {
                     FF7.el("span", {}, [FF7.textToSprite(skill.ap.toString(), true)]),
                 ]),
                 FF7.el("div", { className: "skillsContent-statRow" }, [
-                    FF7.el("span", {}, [FF7.textToSprite("Para subir de nivel", false, "blue")]),
-                    FF7.el("span", {}, [FF7.textToSprite(skill.score >= 5 ? "MÁXIMO" : skill.toNextLevel.toString(), true)]),
+                    FF7.el("span", {}, [FF7.textToSprite(FF7.t("skills.toNextLevel"), false, "blue")]),
+                    FF7.el("span", {}, [FF7.textToSprite(skill.score >= 5 ? FF7.t("skills.max") : skill.toNextLevel.toString(), true)]),
                 ]),
                 FF7.el("div", { className: "skillsContent-abilityList" }, [
-                    FF7.el("p", {}, [FF7.textToSprite("Lista de habilidades", false, "blue")]),
-                    FF7.el("ul", { className: "ml-8" }, skill.abilities.map((ability) => FF7.el("li", {}, [FF7.textToSprite(ability)]))),
+                    FF7.el("p", {}, [FF7.textToSprite(FF7.t("skills.abilityList"), false, "blue")]),
+                    FF7.el("ul", { className: "ml-8" }, skillAbilities(skill).map((ability) => FF7.el("li", {}, [FF7.textToSprite(ability)]))),
                 ]),
             ]));
         }
@@ -4576,7 +4855,7 @@ function createSkillsPage() {
         const materiaList = FF7.el("ul", {});
         materiaItemEls = [];
         skills.forEach((skillItem, index) => {
-            const span = FF7.el("span", { className: "skillsContent-skill flex" }, [FF7.textToSprite(skillItem.name)]);
+            const span = FF7.el("span", { className: "skillsContent-skill flex" }, [FF7.textToSprite(skillName(skillItem))]);
             if (skillItem.color) span.dataset.color = skillItem.color;
             span.dataset.active = skillItem.id === selectedMateria ? "true" : "false";
             span.dataset.focused = nav.isFocused("materia", index) ? "true" : "false";
@@ -4634,11 +4913,19 @@ function createSkillsPage() {
 // actualizan los atributos data-focused/data-disabled de los botones ya
 // existentes, y el selector de color vive dentro de forma permanente.
 const CORNERS = ["topLeft", "topRight", "bottomLeft", "bottomRight"];
-const ROW_DESCRIPTIONS = {
-    corners: "Elige los colores de la ventana",
-    sound: "Activa o desactiva el sonido",
-    crt: "Activa o desactiva el efecto CRT",
-};
+// Función en vez de objeto literal: si fuera un `const` fijo, se calcularía
+// una sola vez con el idioma que hubiera activo al cargar el script, y ya
+// no cambiaría aunque el idioma cambie luego (createConfigPage() sí se
+// vuelve a llamar en cada cambio de idioma — ver remountMenu/renderPage en
+// mountApp — pero esto vive fuera de esa función).
+function rowDescriptions() {
+    return {
+        corners: FF7.t("config.desc.corners"),
+        sound: FF7.t("config.desc.sound"),
+        crt: FF7.t("config.desc.crt"),
+        language: FF7.t("config.desc.language"),
+    };
+}
 
 function createConfigPage() {
     const root = FF7.el("div", {});
@@ -4670,11 +4957,21 @@ function createConfigPage() {
         localStorage.setItem("isCRTEnabled", JSON.stringify(value));
     };
 
+    // A diferencia de sound/crt, el idioma sí dispara un remount completo de
+    // la página (ver el subscribe de "language" en mountApp), así que no
+    // hace falta duplicar dispatch+localStorage aquí: FF7.setLanguage ya lo
+    // hace, igual que el resto de helpers del store.
+    const setLanguageValue = (value) => {
+        FF7.playSound("select", FF7.store.getState().isSoundEnabled);
+        FF7.setLanguage(value);
+    };
+
     const buildNavConfig = () => ({
         groups: [
             { id: "corners", size: CORNERS.length },
             { id: "sound", size: 2 },
             { id: "crt", size: 2 },
+            { id: "language", size: 2 },
             { id: "close", size: 1 },
         ],
         initial: null,
@@ -4683,7 +4980,7 @@ function createConfigPage() {
         resolveMove: (current, dir, { wrap }) => {
             if (current.group === "close") {
                 if (dir === "down") return { group: "corners", index: 0 };
-                if (dir === "up") return { group: "crt", index: 0 };
+                if (dir === "up") return { group: "language", index: 0 };
                 return null;
             }
 
@@ -4701,17 +4998,19 @@ function createConfigPage() {
                 if (current.group === "corners" && current.index < 2) return { group: "corners", index: current.index + 2 };
                 if (current.group === "corners") return { group: "sound", index: column };
                 if (current.group === "sound") return { group: "crt", index: column };
+                if (current.group === "crt") return { group: "language", index: column };
                 return { group: "close", index: 0 };
             }
 
             if (current.group === "corners" && current.index >= 2) return { group: "corners", index: current.index - 2 };
             if (current.group === "corners") return { group: "close", index: 0 };
             if (current.group === "sound") return { group: "corners", index: column + 2 };
-            return { group: "sound", index: column };
+            if (current.group === "crt") return { group: "sound", index: column };
+            return { group: "crt", index: column };
         },
         onFocus: (current) => {
             FF7.closeNav.setFocus(current.group === "close");
-            windowDescription = ROW_DESCRIPTIONS[current.group] ?? "";
+            windowDescription = rowDescriptions()[current.group] ?? "";
             headerBox.setChildren([FF7.textToSprite(windowDescription)]);
             updateToggleVisuals();
         },
@@ -4728,8 +5027,10 @@ function createConfigPage() {
                 openColorPicker(CORNERS[current.index], true);
             } else if (current.group === "sound") {
                 setSoundEnabled(current.index === 0);
-            } else {
+            } else if (current.group === "crt") {
                 setCRTEnabled(current.index === 0);
+            } else {
+                setLanguageValue(current.index === 0 ? "es" : "en");
             }
         },
     });
@@ -4739,16 +5040,16 @@ function createConfigPage() {
     const headerWrap = FF7.el("div", { className: "relative h-[84px] mb-[10px]" }, [headerBox]);
     const bodyBox = FF7.createContentBox({ dataset: { label: "configBody" }, className: "h-[45.1rem]" });
 
-    function buildToggleRow(groupId, title, activate) {
-        const onBtn = FF7.el("button", { onClick: () => activate(true) }, [FF7.textToSprite("Sí")]);
+    function buildToggleRow(groupId, title, activate, onLabel, offLabel) {
+        const onBtn = FF7.el("button", { onClick: () => activate(true) }, [FF7.textToSprite(onLabel)]);
         onBtn.addEventListener("mouseenter", () => nav.focus({ group: groupId, index: 0 }));
 
-        const offBtn = FF7.el("button", { onClick: () => activate(false) }, [FF7.textToSprite("No")]);
+        const offBtn = FF7.el("button", { onClick: () => activate(false) }, [FF7.textToSprite(offLabel)]);
         offBtn.addEventListener("mouseenter", () => nav.focus({ group: groupId, index: 1 }));
 
         const li = FF7.el("li", {
             className: "config-optionToggle ml-24 mb-8 flex",
-            onMouseEnter: () => { windowDescription = ROW_DESCRIPTIONS[groupId]; headerBox.setChildren([FF7.textToSprite(windowDescription)]); },
+            onMouseEnter: () => { windowDescription = rowDescriptions()[groupId]; headerBox.setChildren([FF7.textToSprite(windowDescription)]); },
         }, [
             FF7.el("div", { className: "w-[24rem] flex items-end pb-1" }, [FF7.textToSprite(title, false, "blue")]),
             FF7.el("div", { className: "w-[18rem] flex justify-between" }, [onBtn, offBtn]),
@@ -4757,11 +5058,15 @@ function createConfigPage() {
         return { li, onBtn, offBtn };
     }
 
-    const soundRow = buildToggleRow("sound", "Sonido", setSoundEnabled);
-    const crtRow = buildToggleRow("crt", "Efecto CRT", setCRTEnabled);
+    const soundRow = buildToggleRow("sound", FF7.t("config.sound"), setSoundEnabled, FF7.t("common.yes"), FF7.t("common.no"));
+    const crtRow = buildToggleRow("crt", FF7.t("config.crt"), setCRTEnabled, FF7.t("common.yes"), FF7.t("common.no"));
+    // Etiquetas cortas ("ES"/"EN") en vez de "Español"/"English" completos:
+    // el ancho de fila lo comparten dos botones y ya está pensado para
+    // textos cortos como "Sí"/"No".
+    const languageRow = buildToggleRow("language", FF7.t("config.language"), (isEs) => setLanguageValue(isEs ? "es" : "en"), "ES", "EN");
 
-    const cornersLi = FF7.el("li", { className: "ml-24 mb-8 flex", onMouseEnter: () => { windowDescription = ROW_DESCRIPTIONS.corners; headerBox.setChildren([FF7.textToSprite(windowDescription)]); } }, [
-        FF7.el("div", { className: "w-[24rem] flex items-end pb-1" }, [FF7.textToSprite("Color de ventana", false, "blue")]),
+    const cornersLi = FF7.el("li", { className: "ml-24 mb-8 flex", onMouseEnter: () => { windowDescription = rowDescriptions().corners; headerBox.setChildren([FF7.textToSprite(windowDescription)]); } }, [
+        FF7.el("div", { className: "w-[24rem] flex items-end pb-1" }, [FF7.textToSprite(FF7.t("config.windowColor"), false, "blue")]),
     ]);
 
     // nav se crea aquí (no más arriba, junto a buildNavConfig) porque su
@@ -4774,7 +5079,7 @@ function createConfigPage() {
     // headerBox más abajo.
     const nav = FF7.createCursorNav(buildNavConfig());
 
-    bodyBox.setChildren([FF7.el("ul", {}, [cornersLi, soundRow.li, crtRow.li])]);
+    bodyBox.setChildren([FF7.el("ul", {}, [cornersLi, soundRow.li, crtRow.li, languageRow.li])]);
 
     function pickerProps() {
         const focusedCorner = !activeColorPicker ? (CORNERS.find((_, index) => nav.isFocused("corners", index)) ?? null) : null;
@@ -4809,10 +5114,9 @@ function createConfigPage() {
     // nunca reconstruye la lista, así el selector de color no se
     // desmonta/remonta con cada hover.
     function updateToggleVisuals() {
-        const { isSoundEnabled, isCRTEnabled } = FF7.store.getState();
+        const { isSoundEnabled, isCRTEnabled, language } = FF7.store.getState();
 
-        [[soundRow, isSoundEnabled], [crtRow, isCRTEnabled]].forEach(([row, stateValue], i) => {
-            const groupId = i === 0 ? "sound" : "crt";
+        [[soundRow, isSoundEnabled, "sound"], [crtRow, isCRTEnabled, "crt"], [languageRow, language === "es", "language"]].forEach(([row, stateValue, groupId]) => {
             row.onBtn.dataset.disabled = !stateValue ? "true" : "false";
             row.onBtn.dataset.focused = nav.isFocused(groupId, 0) ? "true" : "false";
             row.offBtn.dataset.disabled = stateValue ? "true" : "false";
@@ -4827,7 +5131,7 @@ function createConfigPage() {
     root.appendChild(bodyBox);
 
     const unsubNav = nav.subscribe(() => { updateToggleVisuals(); updatePicker(); });
-    const unsubStore = FF7.store.subscribe(updateToggleVisuals, ["isSoundEnabled", "isCRTEnabled"]);
+    const unsubStore = FF7.store.subscribe(updateToggleVisuals, ["isSoundEnabled", "isCRTEnabled", "language"]);
 
     root.destroy = () => {
         unsubNav(); unsubStore();
@@ -4845,37 +5149,45 @@ function createConfigPage() {
     "use strict";
 
 // Puerto de pages/Resume/Resume.tsx.
-const TITLE = ["Programador de Videojuegos con Unity", "(Junior) y Tecnico en Microinformatica"];
+//
+// TITLE/CONTACT/LINKS/INTRO eran arrays fijos con texto literal. Ahora son
+// funciones: createResumePage() se vuelve a llamar entera en cada cambio de
+// idioma (remount forzado, ver mountApp), así que basta con que estas
+// funciones lean FF7.t() en el momento en que se invocan dentro de render().
 const HEADING_COLOR = "white";
 
-const CONTACT = [
-    ["Location", "Gran Canaria, España"],
-    ["Email", "matiaserrigar87@gmail.com"],
-    ["Experience", "Junior"],
+const getTitle = () => [FF7.t("resume.title1"), FF7.t("resume.title2")];
+
+const getContact = () => [
+    [FF7.t("resume.location"), `Gran Canaria, ${FF7.t("resume.country")}`],
+    [FF7.t("resume.email"), "matiaserrigar87@gmail.com"],
+    [FF7.t("resume.experience"), FF7.t("resume.experienceValue")],
 ];
 
-const LINKS = [
-    ["Descargar PDF", "assets/cv/Matías_Errico_CV.pdf"],
+const getLinks = () => [
+    [FF7.t("resume.downloadPdf"), "assets/cv/Matías_Errico_CV.pdf"],
     ["GitHub", "https://github.com/MaErGa"],
     ["LinkedIn", "https://www.linkedin.com/in/matias-errico-garcia-474387402/"],
 ];
 
-const INTRO = [
-    "Programador de Videojuegos Unity (Junior) y Técnico Microinformático.",
-    "Bienvenido a mi portafolio interactivo. Aquí encontrarás mis proyectos y prototipos,",
-    "desarrollados principalmente en Unity e integrados en este menú estilo FF7 (PS1).",
-];
+const getIntro = () => [FF7.t("resume.intro1"), FF7.t("resume.intro2"), FF7.t("resume.intro3")];
 
 const WORK_DESC = {};
 
+// `desc` guarda las dos versiones en vez de una clave de FF7.STRINGS: es
+// texto específico de cada proyecto (no texto de interfaz reutilizable en
+// otro sitio), así que vive junto al resto de sus datos en vez de mezclarse
+// en el diccionario general.
 const PROJECTS = [
-    { name: "Lord Magician", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/lord-magician", sub: "Dart, Kotlin", desc: "Juego desarrollado con Dart y Kotlin. Es un proyecto realizado en colaboración con Chipiron Studios" },
-    { name: "Dualmind2048", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/dualmind2048", sub: "Kotlin, Supabase", desc: "Aplicacion nativa Android desarrollada con Kotlin y Supabase." },
-    { name: "Duel Calculator", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://MaErGa.github.io/duelcalculator/", sub: "HTML, CSS y JavaScript", desc: "Calculadora interactiva de puntos de vida (LP) para Yu-Gi-Oh! con diseno responsivo." },
-    { name: "PortFolio", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.github.io/", sub: "Html, Css, JavaScript", desc: "Portfolio estilo FFVII desarrollado con HTML, CSS, JS." },
-    { name: "Dragon Quest -Minstrel Song-", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/dragon-quest-mistreal-song", sub: "Unity, C#", desc: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluacion del curso de Unity." },
-    { name: "Pirate Plataformer", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/pirate-plataformer-alpha-version", sub: "Unity, C#", desc: "Juego de plataformas para la segunda evaluacion del curso Programacion de Videojuegos con Unity." },
+    { name: "Lord Magician", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/lord-magician", sub: "Dart, Kotlin", desc: { es: "Juego desarrollado con Dart y Kotlin. Es un proyecto realizado en colaboración con Chipiron Studios", en: "Game built with Dart and Kotlin, developed in collaboration with Chipiron Studios." } },
+    { name: "Dualmind2048", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/dualmind2048", sub: "Kotlin, Supabase", desc: { es: "Aplicacion nativa Android desarrollada con Kotlin y Supabase.", en: "Native Android app built with Kotlin and Supabase." } },
+    { name: "Duel Calculator", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://MaErGa.github.io/duelcalculator/", sub: "HTML, CSS y JavaScript", desc: { es: "Calculadora interactiva de puntos de vida (LP) para Yu-Gi-Oh! con diseno responsivo.", en: "Interactive Life Points (LP) calculator for Yu-Gi-Oh! with responsive design." } },
+    { name: "PortFolio", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.github.io/", sub: "Html, Css, JavaScript", desc: { es: "Portfolio estilo FFVII desarrollado con HTML, CSS, JS.", en: "FFVII-style portfolio built with HTML, CSS and JS." } },
+    { name: "Dragon Quest -Minstrel Song-", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/dragon-quest-mistreal-song", sub: "Unity, C#", desc: { es: "RPG basado en Dragon Quest III de SNES. Proyecto final de evaluacion del curso de Unity.", en: "RPG based on the SNES game Dragon Quest III. Final evaluation project for the Unity course." } },
+    { name: "Pirate Plataformer", icon: "assets/imagenes/icon_item.png", iconSize: 52, link: "https://maerga.itch.io/pirate-plataformer-alpha-version", sub: "Unity, C#", desc: { es: "Juego de plataformas para la segunda evaluacion del curso Programacion de Videojuegos con Unity.", en: "Platformer game made for the second evaluation of the Unity Video Game Programming course." } },
 ];
+
+const projectDesc = (pr) => pr.desc[FF7.store.getState().language] ?? pr.desc.es;
 
 const wrap = (text, max) => {
     const lines = [];
@@ -4943,7 +5255,7 @@ function createResumePage() {
                 FF7.el("span", {}, [FF7.textToSprite(item.name)]),
                 FF7.el("span", {}, [FF7.textToSprite(item.year, false, "blue")]),
             ]),
-            FF7.el("p", { className: "resume-role" }, [FF7.textToSprite(item.role, false, "blue")]),
+            FF7.el("p", { className: "resume-role" }, [FF7.textToSprite(roleText(item), false, "blue")]),
             ...(desc ? wrap(desc, 46).map((l) => FF7.el("p", { className: "resume-line" }, [FF7.textToSprite(l)])) : []),
         ]),
     ]);
@@ -4956,7 +5268,7 @@ function createResumePage() {
         FF7.el("div", { className: "resume-recordBody" }, [
             FF7.el("p", { className: "resume-projectName" }, [FF7.textToSprite(pr.name)]),
             FF7.el("p", { className: "resume-role" }, [FF7.textToSprite(pr.sub, false, "blue")]),
-            ...wrap(pr.desc, 52).map((l) => FF7.el("p", { className: "resume-line" }, [FF7.textToSprite(l)])),
+            ...wrap(projectDesc(pr), 52).map((l) => FF7.el("p", { className: "resume-line" }, [FF7.textToSprite(l)])),
         ]),
     ]);
 
@@ -4967,18 +5279,22 @@ function createResumePage() {
         const skills = skillsJSON.filter((s) => s.name !== "PostgreSQL");
         const work = historyJSON;
         const education = educationJSON;
+        const title = getTitle();
+        const contact = getContact();
+        const links = getLinks();
+        const intro = getIntro();
 
         const doc = FF7.el("div", { className: "resume-doc" });
 
         const profile = FF7.el("div", { className: "resume-profile" }, [
             FF7.el("div", { className: "resume-profileTop" }, [
-                FF7.createContentBox({ dataset: { label: "resumeTitle" }, children: TITLE.map((l) => FF7.el("p", { className: "resume-title" }, [FF7.textToSprite(l, false, HEADING_COLOR)])) }),
-                FF7.el("ul", { className: "resume-links" }, LINKS.map(([label, href]) => FF7.el("li", {}, [externalLink(label, href)]))),
+                FF7.createContentBox({ dataset: { label: "resumeTitle" }, children: title.map((l) => FF7.el("p", { className: "resume-title" }, [FF7.textToSprite(l, false, HEADING_COLOR)])) }),
+                FF7.el("ul", { className: "resume-links" }, links.map(([label, href]) => FF7.el("li", {}, [externalLink(label, href)]))),
             ]),
             separator(),
             FF7.el("div", { className: "resume-profileRow" }, [
                 FF7.el("img", { src: "assets/imagenes/portrait.png", alt: "Portrait", className: "resume-portrait" }),
-                FF7.el("ul", { className: "resume-stats" }, CONTACT.map(([label, value]) => FF7.el("li", { className: "flex justify-between" }, [
+                FF7.el("ul", { className: "resume-stats" }, contact.map(([label, value]) => FF7.el("li", { className: "flex justify-between" }, [
                     FF7.el("span", {}, [FF7.textToSprite(label, false, "blue")]),
                     FF7.el("span", {}, [FF7.textToSprite(value)]),
                 ]))),
@@ -4987,16 +5303,16 @@ function createResumePage() {
         doc.appendChild(profile);
 
         doc.appendChild(separator());
-        INTRO.forEach((para) => {
+        intro.forEach((para) => {
             doc.appendChild(FF7.el("div", { className: "resume-paragraph" }, wrap(para, 55).map((l) => FF7.el("p", { className: "resume-line" }, [FF7.textToSprite(l)]))));
         });
 
         doc.appendChild(separator());
-        doc.appendChild(heading("Habilidades"));
+        doc.appendChild(heading(FF7.t("resume.skills")));
         const materiaGrid = FF7.el("div", { className: "resume-materiaGrid" });
         skills.forEach((skill) => {
             const row = FF7.el("div", { className: "resume-materiaRow" });
-            const materiaSpan = FF7.el("span", { className: "resume-materia flex items-center" }, [FF7.textToSprite(skill.name)]);
+            const materiaSpan = FF7.el("span", { className: "resume-materia flex items-center" }, [FF7.textToSprite(skillName(skill))]);
             if (skill.color) materiaSpan.dataset.color = skill.color;
             const stars = FF7.el("ul", { className: "resume-stars flex" });
             for (let i = 0; i < 5; i++) {
@@ -5013,24 +5329,24 @@ function createResumePage() {
         doc.appendChild(materiaGrid);
 
         doc.appendChild(separator());
-        doc.appendChild(heading("Historial Laboral"));
+        doc.appendChild(heading(FF7.t("resume.workHistory")));
         withSeparators(work.map((item) => record(item, WORK_DESC[item.id]))).forEach((node) => doc.appendChild(node));
 
         doc.appendChild(separator());
-        doc.appendChild(heading("Educación"));
+        doc.appendChild(heading(FF7.t("resume.education")));
         withSeparators(education.map((item) => record(item, undefined, true))).forEach((node) => doc.appendChild(node));
 
         doc.appendChild(separator());
-        doc.appendChild(heading("Proyectos Personales"));
+        doc.appendChild(heading(FF7.t("resume.personalProjects")));
         withSeparators(PROJECTS.map((pr) => projectRecord(pr))).forEach((node) => doc.appendChild(node));
 
         doc.appendChild(separator());
         doc.appendChild(FF7.el("div", { className: "resume-footerLinks" }, [
-            externalLink("Descargar PDF", LINKS[0][1], "Matias_Errico_CV.pdf"),
+            externalLink(FF7.t("resume.downloadPdf"), links[0][1], "Matias_Errico_CV.pdf"),
             FF7.el("div", { className: "resume-footerRight" }, [
-                externalLink("GitHub", LINKS[1][1]),
+                externalLink("GitHub", links[1][1]),
                 FF7.el("span", { className: "resume-pipe" }, [FF7.textToSprite("|", false, "grey")]),
-                externalLink("LinkedIn", LINKS[2][1]),
+                externalLink("LinkedIn", links[2][1]),
             ]),
         ]));
 
@@ -5090,8 +5406,8 @@ function createResumePage() {
 const CONTACT_EMAIL = "matiaserrigar87@gmail.com";
 const FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
 
-const HEADING = "PHS";
-const DESCRIPTION = "Envíame un mensaje por el sistema PHS.";
+const HEADING = "PHS"; // nombre propio del sistema in-game (ver FF7 original), no se traduce
+const getDescription = () => FF7.t("contact.description");
 
 // Solo perfiles externos aquí — el email se manda por el formulario, no
 // hace falta un link "Email" aparte (igual que en el original: el panel de
@@ -5101,7 +5417,7 @@ const CONTACT_LINKS = [
     { label: "LinkedIn", href: "https://www.linkedin.com/in/matias-errico-garcia-474387402/" },
 ];
 
-const LABELS = ["Nombre", "Email", "Mensaje"];
+const getLabels = () => [FF7.t("contact.name"), FF7.t("contact.email"), FF7.t("contact.message")];
 const FIELD_IDS = ["name", "email", "message"];
 const LIMITS = { name: 60, email: 254, message: 2000 };
 
@@ -5109,13 +5425,13 @@ const LIMITS = { name: 60, email: 254, message: 2000 };
 // FormSubmit de backend — el original tiene, además, mensajes específicos del
 // handler en PHP (sesión caducada, límite de envíos, reenvío) que aquí no
 // tienen forma de ocurrir.
-const MESSAGES = {
-    sending: "Enviando...",
-    sent: "¡Mensaje enviado! Gracias.",
-    emptyFields: "Completa todos los campos.",
-    sendFailed: "No se pudo enviar el mensaje.",
-    unreachable: "No se pudo contactar con el servidor.",
-};
+const getMessages = () => ({
+    sending: FF7.t("contact.sending"),
+    sent: FF7.t("contact.sent"),
+    emptyFields: FF7.t("contact.emptyFields"),
+    sendFailed: FF7.t("contact.sendFailed"),
+    unreachable: FF7.t("contact.unreachable"),
+});
 
 // Vive fuera de createContactPage (no en memoria del navegador, ver
 // draft.ts en el original): así sobrevive a salir de la página y volver,
@@ -5134,6 +5450,9 @@ function createContactPage() {
     const root = FF7.el("div", { className: "panel-group" });
 
     const links = CONTACT_LINKS;
+    const description = getDescription();
+    const labels = getLabels();
+    const messages = getMessages();
     const values = { ...contactDraft.get() };
     let status = "idle"; // idle | sending | sent | error
     let error = "";
@@ -5204,8 +5523,8 @@ function createContactPage() {
     function renderStatus() {
         FF7.clear(statusEl);
         let sprite = null;
-        if (status === "sending") sprite = FF7.textToSprite(MESSAGES.sending, false, "grey");
-        else if (status === "sent") sprite = FF7.textToSprite(MESSAGES.sent, false, "blue");
+        if (status === "sending") sprite = FF7.textToSprite(messages.sending, false, "grey");
+        else if (status === "sent") sprite = FF7.textToSprite(messages.sent, false, "blue");
         else if (status === "error" && error) sprite = FF7.textToSprite(error, false, "red");
         if (sprite) statusEl.appendChild(sprite);
     }
@@ -5317,7 +5636,7 @@ function createContactPage() {
         if (missing.length) {
             invalid = missing;
             status = "error";
-            error = MESSAGES.emptyFields;
+            error = messages.emptyFields;
             FF7.playSound("error", FF7.store.getState().isSoundEnabled);
             renderFieldsValidity();
             renderStatus();
@@ -5357,7 +5676,7 @@ function createContactPage() {
 
             if (!ok) {
                 status = "error";
-                error = (data && data.message) || MESSAGES.sendFailed;
+                error = (data && data.message) || messages.sendFailed;
                 FF7.playSound("error", FF7.store.getState().isSoundEnabled);
                 renderStatus();
                 renderSendVisuals();
@@ -5378,7 +5697,7 @@ function createContactPage() {
             renderSendVisuals();
         } catch {
             status = "error";
-            error = MESSAGES.unreachable;
+            error = messages.unreachable;
             FF7.playSound("error", FF7.store.getState().isSoundEnabled);
             renderStatus();
             renderSendVisuals();
@@ -5390,7 +5709,7 @@ function createContactPage() {
     const headerBox = FF7.createContentBox({ dataset: { label: "header" }, className: "h-[84px] absolute", children: [FF7.textToSprite(HEADING)] });
     // Alturas y offsets calcados de Projects: cabecera 0-84, esta franja
     // 93-180, los paneles desde 190.
-    const descriptionBox = FF7.createContentBox({ className: "contact-descriptionPanel h-[87px] absolute top-[93px]", children: [FF7.textToSprite(DESCRIPTION)] });
+    const descriptionBox = FF7.createContentBox({ className: "contact-descriptionPanel h-[87px] absolute top-[93px]", children: [FF7.textToSprite(description)] });
 
     // ---- panel del formulario (841px, izquierda) ----
     const formPanel = FF7.createContentBox({ dataset: { label: "contactForm" }, className: "contact-formPanel absolute top-[190px] bottom-0" });
@@ -5408,7 +5727,7 @@ function createContactPage() {
 
     function buildFieldRow(index) {
         const id = FIELD_IDS[index];
-        const label = LABELS[index];
+        const label = labels[index];
         const multiline = id === "message";
 
         const spriteInput = FF7.createSpriteInput({
@@ -5677,7 +5996,7 @@ function createNameEntryPage() {
     const closeBox = FF7.createContentBox({ dataset: { label: "nameClose" }, className: "nameEntry-closeBox", children: [FF7.textToSprite("X")] });
     const closeWrap = FF7.el("div", { className: "nameEntry-close absolute", onClick: goBack }, [closeBox]);
     const headerWrap = FF7.el("div", { className: "relative h-[84px] mb-[10px]" }, [
-        FF7.createContentBox({ dataset: { label: "nameHeader" }, className: "h-full absolute top-0 left-0 right-0", children: [FF7.textToSprite("Introduce un nombre.")] }),
+        FF7.createContentBox({ dataset: { label: "nameHeader" }, className: "h-full absolute top-0 left-0 right-0", children: [FF7.textToSprite(FF7.t("nameEntry.header"))] }),
         closeWrap,
     ]);
 
@@ -5802,9 +6121,11 @@ function mountApp() {
     let currentPage = null;
     let currentPathname = null;
 
-    function renderPage() {
+    // `force` reconstruye la página aunque la ruta no haya cambiado — lo usa
+    // el cambio de idioma, ya que un dispatch de idioma no es una navegación.
+    function renderPage(force) {
         const pathname = FF7.router.getPathname();
-        if (pathname === currentPathname) return;
+        if (pathname === currentPathname && !force) return;
         currentPathname = pathname;
         if (currentPage) currentPage.destroy?.();
         pageSlot.innerHTML = "";
@@ -5813,13 +6134,36 @@ function mountApp() {
         pageSlot.appendChild(currentPage);
     }
 
-    FF7.router.subscribe(renderPage);
-    renderPage();
+    FF7.router.subscribe(() => renderPage(false));
+    renderPage(true);
 
-    const menu = FF7.createMenu();
+    const menuSlot = document.createElement("div");
+    let menu = null;
+
+    // El menú se construye una sola vez para toda su vida normalmente (sus
+    // textos nunca cambian solos); al cambiar de idioma no hay forma barata
+    // de "releer" los rótulos ya montados, así que se reconstruye entero
+    // igual que la página actual.
+    function remountMenu() {
+        if (menu) menu.destroy?.();
+        menuSlot.innerHTML = "";
+        menu = FF7.createMenu();
+        menuSlot.appendChild(menu);
+    }
+
+    remountMenu();
+
+    // Un cambio de idioma no es ni una navegación ni un dato de UI puntual:
+    // afecta a todo lo que hay en pantalla, así que aquí se fuerza un
+    // remount completo de página + menú en vez de intentar parchear cada
+    // módulo para que "escuche" el idioma por separado.
+    const unsubLanguage = FF7.store.subscribe(() => {
+        renderPage(true);
+        remountMenu();
+    }, ["language"]);
 
     inner.appendChild(pageSlot);
-    inner.appendChild(menu);
+    inner.appendChild(menuSlot);
     container.appendChild(inner);
 
     const crtOverlay = document.createElement("div");
