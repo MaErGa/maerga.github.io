@@ -936,6 +936,7 @@ const STRINGS = {
         "contact.emptyFields": "Completa todos los campos.",
         "contact.sendFailed": "No se pudo enviar el mensaje.",
         "contact.unreachable": "No se pudo contactar con el servidor.",
+        "contact.send": "Enviar",
 
         // Historial (selector de archivo)
         "history.chooseFile": "Elige un archivo.",
@@ -964,6 +965,10 @@ const STRINGS = {
 
         // Introducir nombre (pantalla /name)
         "nameEntry.header": "Introduce un nombre.",
+        "nameEntry.space": "Espacio",
+        "nameEntry.delete": "Borrar",
+        "nameEntry.choose": "Elegir",
+        "nameEntry.default": "Predet.",
     },
     en: {
         "menu.projects": "Projects",
@@ -1033,6 +1038,7 @@ const STRINGS = {
         "contact.emptyFields": "Fill in all the fields.",
         "contact.sendFailed": "Couldn't send the message.",
         "contact.unreachable": "Couldn't reach the server.",
+        "contact.send": "Send",
 
         "history.chooseFile": "Choose a file.",
         "history.chooseSaveFile": "Choose a save file.",
@@ -1058,6 +1064,10 @@ const STRINGS = {
         "stat.magicDefPct": "Magic Def.%",
 
         "nameEntry.header": "Enter a name.",
+        "nameEntry.space": "Space",
+        "nameEntry.delete": "Delete",
+        "nameEntry.choose": "Choose",
+        "nameEntry.default": "Default",
     },
 };
 
@@ -5784,7 +5794,7 @@ function createContactPage() {
         className: "contact-send",
         onClick: send,
         onPointerEnter: (event) => { if (event.pointerType === "mouse") nav.focus({ group: "send", index: 0 }); },
-    }, [FF7.textToSprite("Enviar", false, "white")]);
+    }, [FF7.textToSprite(FF7.t("contact.send"), false, "white")]);
 
     // Estado primero, Enviar al final: la fila está alineada a la derecha,
     // así que lo último en el DOM es lo que queda a ras del borde — con
@@ -5871,7 +5881,7 @@ const KEY_ROWS = [
 ];
 const ROWS = KEY_ROWS.length;
 
-const CONTROLS = ["Espacio", "Borrar", "Elegir", "Predet."];
+const CONTROLS = ["nameEntry.space", "nameEntry.delete", "nameEntry.choose", "nameEntry.default"];
 
 const cellAt = (row, col) => (row >= 0 && row < ROWS && col >= 0 && col < COLS) ? KEY_ROWS[row][col] : null;
 
@@ -6033,7 +6043,7 @@ function createNameEntryPage() {
             className: "nameEntry-control",
             onMouseEnter: () => nav.focus({ group: "controls", index: i }),
             onClick: () => runControl(i),
-        }, [FF7.textToSprite(label)]);
+        }, [FF7.textToSprite(FF7.t(label))]);
         controlRefs[i] = btn;
         controlsList.appendChild(btn);
     });
