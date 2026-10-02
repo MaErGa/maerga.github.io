@@ -877,11 +877,12 @@ const STRINGS = {
         "menu.myGithub": "Mi GitHub",
 
         // Landing / bio
-        "landing.title1": "Programador de Videojuegos Unity",
-        "landing.title2": "(Junior) y Técnico en Sistemas Microinformáticos.",
-        "landing.bio1": "Bienvenido a mi portafolio interactivo.",
-        "landing.bio2": "Explora mis proyectos, habilidades y experiencia",
-        "landing.bio3": "a través de este menú inspirado en FF7 para PS1.",
+        "landing.title1": "Programador de Videojuegos",
+"landing.title2": "Unity (Junior) · Técnico Micro",
+"landing.bio1": "Bienvenido a mi portafolio.",
+"landing.bio2": "Explora mis proyectos,",
+"landing.bio3": "habilidades y experiencia",
+"landing.bio4": "en un menú inspirado en FF7.",
         "landing.time": "Time",
         "landing.gil": "Gil",
         "landing.revive": "Revivir",
