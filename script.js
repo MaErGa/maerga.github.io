@@ -878,10 +878,10 @@ const STRINGS = {
 
         // Landing / bio
         "landing.title1": "Programador de Videojuegos Unity",
-        "landing.title2": "(Junior) y Técnico Microinformático.",
+        "landing.title2": "(Junior) y Técnico en Sistemas Microinformáticos.",
         "landing.bio1": "Bienvenido a mi portafolio interactivo.",
-        "landing.bio2": "Aquí encontrarás mis proyectos.",
-        "landing.bio3": "integrados en este menú estilo FF7 (PS1).",
+        "landing.bio2": "Explora mis proyectos, habilidades y experiencia",
+        "landing.bio3": "a través de este menú inspirado en FF7 para PS1.",
         "landing.time": "Time",
         "landing.gil": "Gil",
         "landing.revive": "Revivir",
