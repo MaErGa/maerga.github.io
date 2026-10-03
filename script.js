@@ -885,6 +885,9 @@ const STRINGS = {
 "landing.bio2": "Explora mis proyectos,",
 "landing.bio3": "habilidades y experiencia",
 "landing.bio4": "en un menú inspirado en FF7.",
+        "landing.intro1": "Soy un programador junior de videojuegos en Unity y técnico en sistemas microinformáticos afincado en Valsequillo de GC, España.",
+        "landing.intro2": "Bienvenidos a mi portafolio personal.",
+        "landing.intro3": "Planeo añadir aquí una colección en constante crecimiento de prototipos de juegos y proyectos técnicos, construidos en su mayoría con una estética nostálgica en mente.",
         "landing.time": "Time",
         "landing.gil": "Gil",
         "landing.revive": "Revivir",
@@ -990,6 +993,9 @@ const STRINGS = {
         "landing.bio1": "Welcome to my interactive portfolio.",
         "landing.bio2": "Here you'll find my projects,",
         "landing.bio3": "built into this FF7-style (PS1) menu.",
+        "landing.intro1": "I'm a junior Unity video game programmer and IT support technician based in Valsequillo de GC, Spain.",
+        "landing.intro2": "Welcome to my personal portfolio.",
+        "landing.intro3": "I plan to add a constantly growing collection of game prototypes and technical projects here, mostly built with a nostalgic aesthetic in mind.",
         "landing.time": "Time",
         "landing.gil": "Gil",
         "landing.revive": "Revive",
@@ -3677,15 +3683,26 @@ function createLandingPage() {
     // barrido ni timers que cancelar.
     const bioReveal = bioIntroPlayed ? null : { count: 0, baseMs: BIO_GROW_DONE_MS, stepMs: BIO_LETTER_MS, timers: [] };
     bioIntroPlayed = true;
+    // Cada frase es un párrafo flex-wrap con una palabra por sprite: el salto
+    // de línea lo decide el navegador midiendo el ancho real de cada glifo
+    // (la fuente de sprites es proporcional), así no hay que partir el texto
+    // a mano ni se corta ninguna palabra, en español ni en inglés. El
+    // contador del barrido sube 1 por cada espacio para que el ritmo letra a
+    // letra sea el mismo que con el texto en una sola pieza.
+    const bioParagraph = (key) => {
+        const words = FF7.t(key).split(" ");
+        return FF7.el("p", { className: "landing-bioParagraph" }, words.map((word) => {
+            const sprite = FF7.textToSprite(word, false, "white", bioReveal);
+            if (bioReveal) bioReveal.count++;
+            return sprite;
+        }));
+    };
     const bio = FF7.createContentBox({ dataset: { label: "bio" }, children: [
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite(FF7.t("landing.title1"), false, "white", bioReveal)]),
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite(FF7.t("landing.title2"), false, "white", bioReveal)]),
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite(FF7.t("landing.bio1"), false, "white", bioReveal)]),
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite(FF7.t("landing.bio2"), false, "white", bioReveal)]),
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite(FF7.t("landing.bio3"), false, "white", bioReveal)]),
-    FF7.el("p", { className: "mb-2" }, [FF7.textToSprite("")]),
-] });
-    const bioWrap = FF7.el("div", { className: "flex items-center justify-center h-[340px] w-[720px] left-[53px] right-[220px] top-[294px] absolute" }, [bio]);
+        bioParagraph("landing.intro1"),
+        bioParagraph("landing.intro2"),
+        bioParagraph("landing.intro3"),
+    ] });
+    const bioWrap = FF7.el("div", { className: "landing-bioWrap flex items-center justify-center absolute" }, [bio]);
 
     const partyBox = FF7.createContentBox({
         className: "w-[1000px] h-[720px] m-auto absolute top-[44px]",

@@ -1074,9 +1074,32 @@ body.crt-effect * {
   right: 6rem;
 }
 [data-active=true] [data-label=bio] {
-  height: 340px;
-  width: 720px;
+  height: 428px;
+  width: 725px;
   opacity: 1;
+}
+
+/* Contenedor de la caja de bio de Landing (antes con clases de Tailwind
+   h-[340px] w-[720px] top-[294px]; tailwind.css está precompilado y no
+   tiene los valores nuevos, por eso van aquí). Ancho 720 -> 725 (+5px). */
+.landing-bioWrap {
+  height: 428px;
+  width: 725px;
+  left: 53px;
+  top: 228px;
+}
+
+/* Párrafo de la bio: una palabra-sprite por elemento, salto de línea
+   automático. column-gap = ancho del glifo espacio (6.5px). */
+.landing-bioParagraph {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 6.5px;
+  row-gap: 0;
+  margin-bottom: 8px;
+}
+.landing-bioParagraph:last-child {
+  margin-bottom: 0;
 }
 
 @keyframes fadeIn {
