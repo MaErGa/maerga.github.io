@@ -1482,6 +1482,21 @@ body.crt-effect * {
   display: flex;
   justify-content: center;
 }
+/* Botón Revivir: superpuesto sobre la parte baja de la foto, centrado.
+   Antes colgaba debajo del retrato (top-full) y la caja de la biografía,
+   ahora más grande, lo tapaba. z-index alto para quedar por encima de ella. */
+.partyMember-reviveWrap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -14px;
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+}
+.partyMember-reviveWrap .contentBox[data-label=healButton] {
+  margin-top: 0;
+}
 .partyMember-portrait[data-interactive=true]:not([data-health="0"]) {
   cursor: pointer;
 }

@@ -2666,7 +2666,7 @@ function createPartyMember({ memberId, showProgressBars = false, healthReduction
     ]);
     const damageP = FF7.el("p", { className: "absolute" });
     const reviveBtnWrap = FF7.el("div", {
-        className: "absolute top-full",
+        className: "partyMember-reviveWrap",
         onClick: handleHealClick,
         onMouseEnter: () => FF7.landingNav.actions.focusTarget?.("revive"),
     });
