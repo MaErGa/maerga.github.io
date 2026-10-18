@@ -5416,31 +5416,21 @@ function createResumePage() {
 // propio — subir el .php no serviría de nada, GitHub Pages lo serviría como
 // texto plano en vez de ejecutarlo.
 //
-// En vez de eso, el formulario manda el mensaje a FormSubmit
-// (https://formsubmit.co), un servicio gratuito pensado justo para esto:
+// En vez de eso, el formulario manda el mensaje a Web3Forms
+// (https://web3forms.com), un servicio gratuito pensado justo para esto:
 // sitios estáticos sin servidor propio. El navegador hace un POST directo a
-// su endpoint de AJAX (JSON) y ellos reenvían el mensaje al email indicado
-// en la propia URL del endpoint — no hace falta ninguna key ni registro
-// previo. Nada pasa por un servidor de Matias. El resto — los tres campos
-// con fuente de sprites, la navegación por cursor entre ellos, Enviar y los
+// su API y ellos reenvían el mensaje al email con el que se creó la access
+// key. Nada pasa por un servidor de Matias. El resto — los tres campos con
+// fuente de sprites, la navegación por cursor entre ellos, Enviar y los
 // enlaces, el borrador que sobrevive a salir y volver a la página — es fiel
 // al original.
 //
-// DOS COSAS A SABER sobre FormSubmit, no son bugs de este código:
-//   1. El PRIMER mensaje real que llegue no se entrega al momento: FormSubmit
-//      manda un correo de confirmación a CONTACT_EMAIL con un enlace
-//      "Activate Form" que hay que pulsar una única vez. A partir de ahí
-//      entrega todos los mensajes siguientes con normalidad. Sin pulsar ese
-//      enlace, ese primer mensaje se pierde (no da error, pero no llega).
-//   2. _captcha:"false" en el body: FormSubmit trae reCAPTCHA activado por
-//      defecto, pensado para pintar su propio widget dentro de un <form>
-//      HTML normal. Este formulario no es un <form> nativo (son inputs con
-//      sprites propios, sin ningún hueco donde ellos puedan insertar nada),
-//      así que hay que desactivarlo explícitamente o los envíos se
-//      bloquean/limitan por no encontrar el captcha que esperan.
+// La access key de Web3Forms NO es un secreto: está pensada para ir en el
+// código del navegador (en el HTML/JS de cualquier web que la use). Lo único
+// que permite es enviar mensajes al email asociado a ella.
 
-const CONTACT_EMAIL = "matiaserrigar87@gmail.com";
-const FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
+const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
+const WEB3FORMS_ACCESS_KEY = "7660393a-901e-40b5-aea1-4cc4634f4649";
 
 const HEADING = "PHS"; // nombre propio del sistema in-game (ver FF7 original), no se traduce
 const getDescription = () => FF7.t("contact.description");
@@ -5458,7 +5448,7 @@ const FIELD_IDS = ["name", "email", "message"];
 const LIMITS = { name: 60, email: 254, message: 2000 };
 
 // Subconjunto de public/contact-messages.json que de verdad puede darse con
-// FormSubmit de backend — el original tiene, además, mensajes específicos del
+// Web3Forms — el original tiene, además, mensajes específicos del
 // handler en PHP (sesión caducada, límite de envíos, reenvío) que aquí no
 // tienen forma de ocurrir.
 const getMessages = () => ({
@@ -5509,7 +5499,7 @@ function createContactPage() {
     let keyboardMode = false;
 
     // Bug real encontrado al probar el envío (ya estaba antes de este
-    // cambio, no lo introduce formsubmit.co): tras un envío correcto se
+    // cambio, no lo introduce Web3Forms): tras un envío correcto se
     // vacían los 3 campos disparando un evento "input" sintético por cada
     // uno (ver más abajo, para que se sincronice también su representación
     // visual en sprites). Cada uno de esos "input" pasa por el mismo
@@ -5668,7 +5658,7 @@ function createContactPage() {
         const missing = FIELD_IDS.filter((id) => !values[id].trim());
         // Comprobado aquí igual que en el original (allá, además, en el
         // handler): así un formulario vacío no cuesta un viaje de ida y
-        // vuelta a FormSubmit para nada.
+        // vuelta a Web3Forms para nada.
         if (missing.length) {
             invalid = missing;
             status = "error";
@@ -5687,25 +5677,16 @@ function createContactPage() {
         renderSendVisuals();
 
         try {
-            const res = await window.fetch(FORMSUBMIT_ENDPOINT, {
+            const formData = new FormData();
+            formData.append("access_key", WEB3FORMS_ACCESS_KEY);
+            formData.append("name", values.name);
+            formData.append("email", values.email);
+            formData.append("message", values.message);
+            formData.append("subject", "Nuevo mensaje desde el portfolio");
+
+            const res = await window.fetch(WEB3FORMS_ENDPOINT, {
                 method: "POST",
-                headers: { "Content-Type": "application/json", "Accept": "application/json" },
-                body: JSON.stringify({
-                    name: values.name,
-                    email: values.email,
-                    message: values.message,
-                    _subject: "Nuevo mensaje desde el portfolio",
-                    _template: "table",
-                    _captcha: "false",
-                    // Recomendado por la propia documentación de FormSubmit: con la
-                    // política de referrer estricta que traen por defecto los
-                    // navegadores modernos (strict-origin-when-cross-origin), a veces
-                    // no les llega el header Referer y el email sale en blanco. _url
-                    // se lo da explícito. En local abriendo index.html con doble clic
-                    // (file://) esto NO evita el aviso rojo — FormSubmit exige un
-                    // origen http/https real para eso; en la web publicada sí.
-                    _url: "https://maerga.github.io/",
-                }),
+                body: formData,
             });
             const data = await res.json().catch(() => null);
             const ok = res.ok && (data?.success === true || data?.success === "true");
