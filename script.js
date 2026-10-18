@@ -49,7 +49,9 @@ const educationJSON = [
     { id: 2, name: "E-Talent (Telde)", link: "", user: "Matias Errico", level: 38, role: "IFCD57", year: "2026", image_path: "assets/imagenes/logos/Etalent.png" },
     { id: 3, name: "Instituto Focan", link: "", user: "Matias Errico", level: 38, role: "IFCT45", year: "2026", image_path: "assets/imagenes/logos/Focan.jpg" },
     { id: 4, name: "Escuela de Hosteleria Europea", link: "", user: "Matias Errico", level: 35, role: "IFCT0209", year: "2024", image_path: "assets/imagenes/logos/Escuela.png" },
-    { id: 5, name: "Centro de Formacion Empresarial Aura, SL", link: "", user: "Matias Errico", level: 34, role: "IFCT0108", year: "2022", image_path: "assets/imagenes/logos/Aura.png" }
+    { id: 5, name: "Centro de Formacion Empresarial Aura, SL", link: "", user: "Matias Errico", level: 34, role: "IFCT0108", year: "2022", image_path: "assets/imagenes/logos/Aura.png" },
+    { id: 6, name: "Google Actívate", link: "assets/certificados/Google_Activate_Desarrollo_Web_II.pdf", user: "Matias Errico", level: 31, role: "Desarrollo Web II", year: "2018", image_path: "assets/imagenes/logos/GoogleActivate.png" },
+    { id: 7, name: "Google Actívate", link: "assets/certificados/Google_Activate_Desarrollo_Web_I.pdf", user: "Matias Errico", level: 31, role: "Desarrollo Web I", year: "2018", image_path: "assets/imagenes/logos/GoogleActivate.png" }
 ];
 // Equipo real de Matias (antes "equipoItems" en MenuFF7.js).
 // IDs: armas 1-3, armaduras 101-102, accesorios 201-208 (mismo esquema que
